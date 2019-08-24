@@ -1,0 +1,43 @@
+/**
+177. 第N高的薪水
+编写一个 SQL 查询，获取 Employee 表中第 n 高的薪水（Salary）。
++----+--------+
+| Id | Salary |
++----+--------+
+| 1  | 100    |
+| 2  | 200    |
+| 3  | 300    |
++----+--------+
+例如上述 Employee 表，n = 2 时，应返回第二高的薪水 200。如果不存在第 n 高的薪水，那么查询应返回 null。
++------------------------+
+| getNthHighestSalary(2) |
++------------------------+
+| 200                    |
++------------------------+
+ */
+
+# Write your MySQL query statement below
+
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  DECLARE P1 INT; -- 第P1高的薪水
+  DECLARE P2 INT; -- 取P1-1后的P2个值
+  -- 当N<1时，P1会为负数，采用IF调整为0，另此时结果不存在，设置P2为0
+  IF (N<1)
+    THEN SET P1 = 0, P2 = 0;
+  ELSE SET P1 = N-1, P2 = 1;
+  END IF;
+
+  RETURN (
+    -- 若不存在第N高的薪水，取NULL
+    SELECT IFNULL(
+      (
+        -- 去除重复值，倒序取第P1大的值后P2个值
+        SELECT DISTINCT Salary
+          FROM Employee
+          ORDER BY Salary DESC
+          LIMIT P1, P2
+      ), NULL
+    )
+  );
+END
