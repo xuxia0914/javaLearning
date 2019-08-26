@@ -34,6 +34,9 @@ public class RemoveKDigites {
                     result = result.substring(0, j)+result.substring(j+1);
                 }
                 i++;
+                if(j!=0) {
+                    j--;
+                }
             }else {
                 j++;
             }
@@ -44,14 +47,15 @@ public class RemoveKDigites {
         while(result.startsWith("0")) {
             result = result.substring(1);
         }
-        return result;
+        return result.equals("")?"0":result;
     }
 
     public static void main(String[] args) {
-        System.out.println(solution("1432219", 3));
-        System.out.println(solution("10200", 1));
-        System.out.println(solution("10", 2));
-        System.out.println(solution("10200123456", 4));
+//        System.out.println(solution("1432219", 3));
+//        System.out.println(solution("10200", 1));
+//        System.out.println(solution("10", 2));
+//        System.out.println(solution("10200123456", 4));
+        System.out.println(solution("1234567890", 9));
     }
 
 }
