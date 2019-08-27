@@ -1,9 +1,9 @@
 package cn.xux.spring;
 
-import cn.xux.spring.bean.Car;
 import cn.xux.spring.bean.collection.DataSource;
 import cn.xux.spring.bean.collection.NewPerson;
 import cn.xux.spring.bean.collection.Person;
+import cn.xux.spring.hello.Car;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

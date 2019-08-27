@@ -1,22 +1,17 @@
-package cn.xux.spring.bean.collection;
+package cn.xux.spring.hello;
 
-import cn.xux.spring.hello.Car;
-
-import java.util.List;
-import java.util.Map;
-
-public class NewPerson {
+public class Person {
 
     private String name;
     private int age;
-    private Map<String, Car> cars;
+    private Car car;
 
-    public NewPerson() {}
+    public Person() {}
 
-    public NewPerson(String name, int age, Map<String, Car> cars) {
+    public Person(String name, int age, Car car) {
         this.name = name;
         this.age = age;
-        this.cars = cars;
+        this.car = car;
     }
 
     public String getName() {
@@ -35,12 +30,12 @@ public class NewPerson {
         this.age = age;
     }
 
-    public Map<String, Car> getCars() {
-        return cars;
+    public Car getCar() {
+        return car;
     }
 
-    public void setCars(Map<String, Car> cars) {
-        this.cars = cars;
+    public void setCar(Car car) {
+        this.car = car;
     }
 
     @Override
@@ -48,7 +43,7 @@ public class NewPerson {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
-                ", cars=" + cars +
+                ", car=" + car +
                 '}';
     }
 

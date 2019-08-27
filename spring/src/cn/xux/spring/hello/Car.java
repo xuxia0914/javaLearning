@@ -1,4 +1,4 @@
-package cn.xux.spring.bean;
+package cn.xux.spring.hello;
 
 public class Car {
 
@@ -6,6 +6,10 @@ public class Car {
     private String corp;
     private double price;
     private int maxSpeed;
+
+    public Car() {
+        System.out.println("Car's constructor");
+    }
 
     public Car(String brand, String corp, double price) {
         this.brand = brand;

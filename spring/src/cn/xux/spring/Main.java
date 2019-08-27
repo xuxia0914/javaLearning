@@ -1,7 +1,7 @@
 package cn.xux.spring;
 
-import cn.xux.spring.bean.Car;
-import cn.xux.spring.bean.Person;
+import cn.xux.spring.hello.Person;
+import cn.xux.spring.hello.Car;
 import cn.xux.spring.hello.HelloWorld;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

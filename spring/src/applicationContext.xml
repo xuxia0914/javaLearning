@@ -14,7 +14,7 @@
         <property name="name2" value="Spring"></property>
     </bean>
 
-    <bean id="car" class="cn.xux.spring.bean.Car">
+    <bean id="car" class="cn.xux.spring.hello.Car">
         <!-- 属性注释的三种方法之二：构造器注入,。（第三种是工厂方法注入(很少使用，不推荐)） -->
         <constructor-arg value="Audi" index="0"></constructor-arg>
         <constructor-arg value="Shanghai" index="1"></constructor-arg>
@@ -22,7 +22,7 @@
     </bean>
 
     <!-- 使用构造器注入属性值可以指定参数的位置和参数的类型！以区分重载的构造器 -->
-    <bean id="car2" class="cn.xux.spring.bean.Car">
+    <bean id="car2" class="cn.xux.spring.hello.Car">
         <!-- 属性注释的三种方法之二：构造器注入,。（第三种是工厂方法注入(很少使用，不推荐)） -->
         <constructor-arg value="Baoma" type="java.lang.String"></constructor-arg>
         <!-- 如果字面值包含特殊字符可以使用<![CDATA[]]>包裹起来 -->
@@ -43,7 +43,7 @@
         </property>-->
         <!--也可以创建一个内部bean，内部bean不能被外部引用，只能在内部使用-->
         <property name="car">
-            <bean class="cn.xux.spring.bean.Car">
+            <bean class="cn.xux.spring.hello.Car">
                 <constructor-arg value="Ford"></constructor-arg>
                 <constructor-arg value="Changan"></constructor-arg>
                 <constructor-arg value="200000" type="double"></constructor-arg>
@@ -51,7 +51,7 @@
         </property>
     </bean>
 
-    <bean id="person2" class="cn.xux.spring.bean.Person">
+    <bean id="person2" class="cn.xux.spring.hello.Person">
         <constructor-arg name="name" value="Jerry"></constructor-arg>
         <constructor-arg name="age" value="30"></constructor-arg>
         <!--<property name="car" ref="car2"></property>-->
@@ -76,7 +76,7 @@
             <list>
                 <ref bean="car"></ref>
                 <ref bean="car2"></ref>
-                <bean class="cn.xux.spring.bean.Car">
+                <bean class="cn.xux.spring.hello.Car">
                     <constructor-arg value="Ford"></constructor-arg>
                     <constructor-arg value="Changan"></constructor-arg>
                     <constructor-arg value="200000" type="double"></constructor-arg>

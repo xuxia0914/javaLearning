@@ -1,6 +1,6 @@
 package cn.xux.spring.bean.collection;
 
-import cn.xux.spring.bean.Car;
+import cn.xux.spring.hello.Car;
 
 import java.util.List;
 
