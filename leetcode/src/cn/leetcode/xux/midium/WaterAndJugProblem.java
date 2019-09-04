@@ -22,10 +22,38 @@ import java.util.Set;
  */
 public class WaterAndJugProblem {
 
+    /**
+     * 本题先判断所需要的水量是否大于两个桶的容量之和，如果不大于，判断所需要的水量是否是两个桶容量的最大公约数的倍数，根据裴蜀定理可以证明：
+     * 如果所需要的水量是两个水壶容量的最大公约数的倍数，且水量不大于两个水壶的容量之和，那么必然可以用这两个水壶操作得到所需要的水量。
+     * */
+    public boolean canMeasureWater(int x, int y, int z) {
+        if(z<0||z>x+y) {
+            return false;
+        }
+        if(x>y) {
+            x = x^y;
+            y = x^y;
+            x = x^y;
+        }
+        if(x==0) {
+            return z==0||z==y;
+        }
+        if(y%x==0) {
+            return z%x==0;
+        }else {
+            for(int i=x/2;i>0;i--) {
+                if(x%i==0&&y%i==0) {
+                    return z%i==0;
+                }
+            }
+        }
+        return false;
+    }
+
     Set<String> mem;
 
-    /**TLE TODO*/
-    public boolean canMeasureWater(int x, int y, int z) {
+    /**TLE*/
+    public boolean canMeasureWater1(int x, int y, int z) {
         mem = new HashSet<String>();
         if(z<0||z>x+y) {
             return false;

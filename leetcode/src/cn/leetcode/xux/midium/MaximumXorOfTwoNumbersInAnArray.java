@@ -17,8 +17,51 @@ import java.util.Set;
  */
 public class MaximumXorOfTwoNumbersInAnArray {
 
-    // a^b = c ->a^c=b,b^c=a
+    //二叉树
     public int findMaximumXOR(int[] nums) {
+        if(nums==null||nums.length<2) {
+            return 0;
+        }
+        TreeNode1 root = new TreeNode1();
+        TreeNode1 curr;
+        for(int num : nums) {
+            curr = root;
+            for(int i=30;i>=0;i--) {
+                if((num>>i)%2==0) {
+                    if(curr.left==null) {
+                        curr.left = new TreeNode1();
+                    }
+                    curr = curr.left;
+                }else {
+                    if(curr.right==null) {
+                        curr.right = new TreeNode1();
+                    }
+                    curr = curr.right;
+                }
+            }
+        }
+        return helper(root, root, 30);
+    }
+
+    public int helper(TreeNode1 node1, TreeNode1 node2, int n) {
+        if(n<0) {
+            return 0;
+        }
+        if(node1==null||node2==null) {
+            return 0;
+        }
+        int res = 0;
+        int next = 0;
+        if((node1.left!=null&&node2.right!=null)
+                ||(node1.right!=null&&node2.left!=null)) {
+            res += 1<<n;
+            return res+Math.max(helper(node1.left, node2.right, n-1), helper(node1.right, node2.left, n-1));
+        }
+        return Math.max(helper(node1.left, node2.left, n-1), helper(node1.right, node2.right, n-1));
+    }
+
+    // a^b = c ->a^c=b,b^c=a
+    public int findMaximumXOR1(int[] nums) {
         int max = 0, mask = 0;
         for(int i = 31; i >= 0; i--){
             //mask从0x01 ->0x03等一直变化，取后i位
@@ -42,7 +85,12 @@ public class MaximumXorOfTwoNumbersInAnArray {
 
     public static void main(String[] args) {
         MaximumXorOfTwoNumbersInAnArray mx = new MaximumXorOfTwoNumbersInAnArray();
-        System.out.println(mx.findMaximumXOR(new int[]{3, 10, 5}));
+        System.out.println(mx.findMaximumXOR1(new int[]{3, 10, 5, 25, 2, 8}));
     }
 
+}
+
+class TreeNode1 {
+    TreeNode1 left; //左子树不为空表示下一位有0
+    TreeNode1 right; //右子树不为空表示下一位有1
 }
