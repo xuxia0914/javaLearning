@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--指定Spring IOC 容器扫描的包-->
+    <!--<context:component-scan base-package="cn.xux.spring.bean.annotation"></context:component-scan>-->
+
+    <!--可以通过resource-pattern指定扫描的资源-->
+    <!--<context:component-scan
+            base-package="cn.xux.spring.bean.annotation"
+            resource-pattern="repository/*.class">
+    </context:component-scan>-->
+
+    <!--
+            context:exclude-filter 子节点指定排除哪些指定表达式的组件
+            type="annotation" 表示不包含以expression属性指定的类来注解的类
+    -->
+    <!--<context:component-scan
+            base-package="cn.xux.spring.bean.annotation">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"></context:exclude-filter>
+    </context:component-scan>-->
+
+    <!--
+            context:exclude-filter 子节点指定排除哪些指定表达式的组件
+            type="assignable" 表示不包含以expression属性指定的接口的实现类
+    -->
+    <!--<context:component-scan
+            base-package="cn.xux.spring.bean.annotation">
+        <context:exclude-filter type="assignable" expression="cn.xux.spring.bean.annotation.repository.UserRepository"></context:exclude-filter>
+    </context:component-scan>-->
+
+    <!--
+            context:include-filter 子节点指定包含哪些指定表达式的组件
+            需要先设置use-default-filters属性为false，表示不适用默认的扫描过滤器
+            type="annotation" 表示只包含以expression属性指定的类来注解的类
+    -->
+    <!--<context:component-scan
+            base-package="cn.xux.spring.bean.annotation"
+            use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"></context:include-filter>
+    </context:component-scan>-->
+
+    <!--
+            context:include-filter 子节点指定包含哪些指定表达式的组件
+            需要先设置use-default-filters属性为false，表示不适用默认的扫描过滤器
+            type="assignable" 表示只包含以expression属性指定的接口的实现类
+    -->
+    <context:component-scan
+            base-package="cn.xux.spring.bean.annotation"
+            use-default-filters="false">
+        <context:include-filter type="assignable" expression="cn.xux.spring.bean.annotation.repository.UserRepository"></context:include-filter>
+    </context:component-scan>
+
+</beans>
