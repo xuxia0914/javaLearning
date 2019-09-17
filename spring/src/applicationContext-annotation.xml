@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
     <!--指定Spring IOC 容器扫描的包-->
-    <!--<context:component-scan base-package="cn.xux.spring.bean.annotation"></context:component-scan>-->
+    <context:component-scan base-package="cn.xux.spring.bean.annotation"></context:component-scan>
 
     <!--可以通过resource-pattern指定扫描的资源-->
     <!--<context:component-scan
@@ -47,10 +47,10 @@
             需要先设置use-default-filters属性为false，表示不适用默认的扫描过滤器
             type="assignable" 表示只包含以expression属性指定的接口的实现类
     -->
-    <context:component-scan
+    <!--<context:component-scan
             base-package="cn.xux.spring.bean.annotation"
             use-default-filters="false">
         <context:include-filter type="assignable" expression="cn.xux.spring.bean.annotation.repository.UserRepository"></context:include-filter>
-    </context:component-scan>
+    </context:component-scan>-->
 
 </beans>
