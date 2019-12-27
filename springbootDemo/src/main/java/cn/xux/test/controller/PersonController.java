@@ -1,17 +1,22 @@
 package cn.xux.test.controller;
 
+import cn.xux.common.controller.BaseController;
 import cn.xux.test.model.Person;
 import cn.xux.test.service.PersonService;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-public class PersonController {
+public class PersonController extends BaseController {
 
     @Autowired
     PersonService personService;
@@ -22,8 +27,8 @@ public class PersonController {
         return personService.get();
     }
 
-    /*@RequestMapping("/insert")
-    @ResponseBody
+    //@RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @RequestMapping("/insert")
     public String insert() {
         Person person = new Person();
         person.setName("xux21");
@@ -34,7 +39,6 @@ public class PersonController {
     }
 
     @RequestMapping("/getById")
-    @ResponseBody
     public String getById(HttpServletRequest request) {
         String id = request.getParameter("id");
         Person person = personService.get(Integer.parseInt(id));
@@ -42,11 +46,16 @@ public class PersonController {
     }
 
     @RequestMapping("/deleteById")
-    @ResponseBody
     public String deleteById(HttpServletRequest request) {
         String id = request.getParameter("id");
         personService.delete(Integer.parseInt(id));
         return "result from PersonController.deleteById()";
-    }*/
+    }
+
+    @RequestMapping("/selectPageByParams")
+    public PageInfo<Person> selectPageByParams(HttpServletRequest request) {
+        Map<String, Object> params = getRequestMap();
+        return personService.selectPageByParams(params);
+    }
 
 }

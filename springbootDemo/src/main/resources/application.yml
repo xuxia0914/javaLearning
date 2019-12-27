@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: @package.environment@
 
 mybatis:
   mapper-locations: classpath*:cn/xux/**/mapper/*Mapper.xml

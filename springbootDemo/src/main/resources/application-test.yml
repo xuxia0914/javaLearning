@@ -14,7 +14,7 @@ logging:
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=utf8&useSSL=false
       username: xux21
       password: xuxia_01724552
       initial-size: 5
