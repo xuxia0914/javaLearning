@@ -5,38 +5,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 找出数组中两个数是它们之和等于给定的值
+ * 1. 两数之和
+ * 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+ *
+ * 你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
+ *
+ * 示例:
+ *
+ * 给定 nums = [2, 7, 11, 15], target = 9
+ *
+ * 因为 nums[0] + nums[1] = 2 + 7 = 9
+ * 所以返回 [0, 1]
  */
 public class TwoSumI {
 
-    public static int[] solution1(int[] A, int sum) {
-        for(int i=0;i<A.length-1;i++) {
-            for(int j=i+1;j<A.length;j++) {
-                if(A[i]+A[j]==sum) {
-                    return new int[]{i, j};
-                }
-            }
-        }
-        return null;
-    }
-
-    public static int[] solution2(int[] A, int sum) {
-        if(A==null||A.length<2) {
+    public int[] twoSum(int[] nums, int target) {
+        if(nums==null||nums.length<2) {
             return null;
         }
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-        for(int i=0;i<A.length;i++) {
-            int tmp = sum-A[i];
-            if(map.containsKey(tmp)) {
-                return new int[]{map.get(tmp), i};
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i=0;i<nums.length;i++) {
+            if(map.containsKey(nums[i])) {
+                return new int[]{map.get(nums[i]), i};
+            }else {
+                map.put(target-nums[i], i);
             }
-            map.put(A[i], i);
         }
         return null;
     }
 
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(solution2(new int[]{2,7,11,15}, 9)));
+        System.out.println(Arrays.toString(new TwoSumI().twoSum(new int[]{2,7,11,15}, 9)));
     }
 
 }

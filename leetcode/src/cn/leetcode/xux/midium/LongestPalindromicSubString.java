@@ -13,7 +13,7 @@ package cn.leetcode.xux.midium;
 
 public class LongestPalindromicSubString {
 
-    public static String solution(String s) {
+    public String longestPalindrome(String s) {
         if(s==null||s.length()<2) {
             return s;
         }
@@ -48,9 +48,10 @@ public class LongestPalindromicSubString {
     }
 
     public static void main(String[] args) {
-        System.out.println(solution("ababad"));
-        System.out.println(solution("dcbbcd"));
-        System.out.println(solution("cbdfghbd"));
+        LongestPalindromicSubString lps = new LongestPalindromicSubString();
+        System.out.println(lps.longestPalindrome("ababad"));
+        System.out.println(lps.longestPalindrome("dcbbcd"));
+        System.out.println(lps.longestPalindrome("cbdfghbd"));
     }
 
 }
