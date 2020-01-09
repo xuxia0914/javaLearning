@@ -13,39 +13,33 @@ import java.util.List;
  */
 public class LetterCombinationsOfAPhoneNumber {
 
-    public static List<String> letterCombinations(String digits) {
-        List<String> res = new ArrayList<String>();
+    String[] dict = new String[]{"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+
+    List<String> list = new ArrayList<>();
+
+    public List<String> letterCombinations(String digits) {
+        list.clear();
         if(digits==null||digits.length()==0) {
-            return res;
+            return list;
         }
-        char[][] phoneNum = new char[][]{
-                {'a','b','c'},
-                {'d','e','f'},
-                {'g','h','i'},
-                {'j','k','l'},
-                {'m','n','o'},
-                {'p','q','r','s'},
-                {'t','u','v'},
-                {'w','x','y','z'}
-        };
-        if(digits.length()==1) {
-            for(char c : phoneNum[digits.charAt(0)-'2']) {
-                res.add(c+"");
-            }
-            return res;
+        helper(0, "", digits);
+        return list;
+    }
+
+    public void helper(int i, String curr, String digits) {
+        if(i==digits.length()) {
+            list.add(curr);
+            return;
         }
-        List<String> postRes = letterCombinations(digits.substring(1));
-        int index = digits.charAt(0)-'2';
-        for(char c : phoneNum[index]) {
-            for(String s : postRes) {
-                res.add(c+s);
-            }
+        String s = dict[digits.charAt(i)-'2'];
+        for(char c : s.toCharArray()) {
+            helper(i+1, curr+c, digits);
         }
-        return res;
     }
 
     public static void main(String[] args) {
-        System.out.println(letterCombinations("23"));
+        LetterCombinationsOfAPhoneNumber lc = new LetterCombinationsOfAPhoneNumber();
+        System.out.println(lc.letterCombinations("23"));
     }
 
 }
