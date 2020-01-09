@@ -1,5 +1,6 @@
 package cn.leetcode.xux.common;
 
+import javax.management.openmbean.InvalidOpenTypeException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,6 +24,39 @@ public class Test {
         }
         left.next = left.next.next;
         return newHead.next;
+    }
+
+    public boolean isValid(String s) {
+        if(s==null) {
+            return false;
+        }
+        Stack<Character> stack = new Stack<>();
+        for(char c : s.toCharArray()) {
+            if(c=='('||c=='['||c=='{') {
+                stack.push(c);
+            }else {
+                switch (c) {
+                    case ')' :
+                        if(stack.isEmpty()||stack.pop()!='(') {
+                            return false;
+                        }
+                        break;
+                    case ']' :
+                        if(stack.isEmpty()||stack.pop()!='[') {
+                            return false;
+                        }
+                        break;
+                    case '}' :
+                        if(stack.isEmpty()||stack.pop()!='{') {
+                            return false;
+                        }
+                        break;
+                    default :
+                        return false;
+                }
+            }
+        }
+        return stack.isEmpty();
     }
 
     public static void main(String[] args) {
