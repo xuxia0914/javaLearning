@@ -6,59 +6,43 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Generate Parentheses生成圆括号
- * Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
- * For example, given n = 3, a solution set is:
+ * 括号生成
+ * 给出 n 代表生成括号的对数，请你写出一个函数，使其能够生成所有可能的并且有效的括号组合。
+ * 例如，给出 n = 3，生成结果为：
+ *
  * [
- * “((()))”,
- * “(()())”,
- * “(())()”,
- * “()(())”,
- * “()()()”
+ *   "((()))",
+ *   "(()())",
+ *   "(())()",
+ *   "()(())",
+ *   "()()()"
  * ]
- * Subscribe to see which companies asked this question
+ *
  */
 public class GenerateParentheses {
 
-    public static Set<String> solution1(int n) {
-        Set<String> result = new HashSet<String>();
-        if(n==0) {
-            return result;
-        }
-        if(n==1) {
-            result.add("()");
-            return result;
-        }
-        Set<String> postResult = solution1(n-1);
-        for(String s : postResult) {
-            result.add("()"+s);
-            result.add("("+s+")");
-            result.add(s+"()");
-        }
-        return result;
+    List<String> list = new ArrayList<>();
+
+    public List<String> generateParenthesis(int n) {
+        list.clear();
+        helper(n, n, "");
+        return list;
     }
 
-    public static List<String> solution2(int n) {
-        List<String> res = new ArrayList<String>();
-        helper(n, n, "", res);
-        return res;
-    }
-
-    public static void helper(int left, int right, String str, List<String> res) {
-        if (left == 0 && right == 0) {
-            res.add(str);
+    private void helper(int left, int right, String curr) {
+        if(left==0&&right==0) {
+            list.add(curr);
             return;
         }
-        if (left > 0) {
-            helper(left - 1, right, str + '(', res);
+        if(left==right) {
+            helper(left-1, right, curr+'(');
         }
-        if (right > left) {
-            helper(left, right - 1, str + ')', res);
+        if(left<right) {
+            if(left!=0) {
+                helper(left-1, right, curr+'(');
+            }
+            helper(left, right-1, curr+')');
         }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(solution2(3));
     }
 
 }

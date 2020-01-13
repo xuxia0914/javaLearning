@@ -7,60 +7,33 @@ import java.util.*;
 
 public class Test {
 
-    public ListNode removeNthFromEnd(ListNode head, int n) {
-        if(head==null) {
-            return null;
-        }
-        ListNode newHead = new ListNode(0);
-        newHead.next = head;
-        ListNode left = newHead;
-        ListNode right = newHead;
-        while(n-->0) {
-            right = right.next;
-        }
-        while(right.next!=null) {
-            left = left.next;
-            right = right.next;
-        }
-        left.next = left.next.next;
-        return newHead.next;
+    List<String> list = new ArrayList<>();
+
+    public List<String> generateParenthesis(int n) {
+        list.clear();
+        helper(n, n, "");
+        return list;
     }
 
-    public boolean isValid(String s) {
-        if(s==null) {
-            return false;
+    private void helper(int left, int right, String curr) {
+        if(left==0&&right==0) {
+            list.add(curr);
+            return;
         }
-        Stack<Character> stack = new Stack<>();
-        for(char c : s.toCharArray()) {
-            if(c=='('||c=='['||c=='{') {
-                stack.push(c);
-            }else {
-                switch (c) {
-                    case ')' :
-                        if(stack.isEmpty()||stack.pop()!='(') {
-                            return false;
-                        }
-                        break;
-                    case ']' :
-                        if(stack.isEmpty()||stack.pop()!='[') {
-                            return false;
-                        }
-                        break;
-                    case '}' :
-                        if(stack.isEmpty()||stack.pop()!='{') {
-                            return false;
-                        }
-                        break;
-                    default :
-                        return false;
-                }
+        if(left==right) {
+            helper(left-1, right, curr+'(');
+        }
+        if(left<right) {
+            if(left!=0) {
+                helper(left-1, right, curr+'(');
             }
+            helper(left, right-1, curr+')');
         }
-        return stack.isEmpty();
     }
 
     public static void main(String[] args) {
         Test test = new Test();
+        System.out.println(test.generateParenthesis(3));
         /*Chopsticks chopsticks = new Chopsticks();
         Bowl bowl = new Bowl();
         User user1 = new User(chopsticks, bowl, false);
