@@ -10,39 +10,39 @@ public class NextPermutation {
 
     public void nextPermutation(int[] nums) {
         if(nums==null||nums.length<2) {
-            return ;
+            return;
         }
-        int len = nums.length;
-        boolean flag = true;
-        for(int i=len-1;i>0;i--) {
-            if(nums[i-1]<nums[i]) {
-                for(int j=len-1;j>=0;j--) {
-                    if(nums[j]>nums[i-1]) {
-                        nums[j] = nums[j]^nums[i-1];
-                        nums[i-1] = nums[j]^nums[i-1];
-                        nums[j] = nums[j]^nums[i-1];
-                        reverse(nums, i, len-1);
-                        flag = false;
-                        break;
-                    }
-                }
-            }
-            if(!flag) {
+        int n = nums.length;
+        int left = n;
+        for(int i=n-1;i>0;i--) {
+            if(nums[i]>nums[i-1]) {
+                left = i-1;
                 break;
             }
         }
-        if(flag) {
-            reverse(nums, 0, len-1);
+        if(left==n) {
+            reverse(nums, 0, n-1);
+            return;
         }
+        int right = left+1;
+        for(int j=left+1;j<n;j++) {
+            if(nums[j]>nums[left]&&nums[j]<=nums[right]) {
+                right = j;
+            }
+        }
+        swap(nums, left, right);
+        reverse(nums, left+1, n-1);
     }
 
-    public void reverse(int[] nums, int start, int end) {
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+
+    private void reverse(int[] nums, int start, int end) {
         while(start<end) {
-            nums[start] = nums[start]^nums[end];
-            nums[end] = nums[start]^nums[end];
-            nums[start] = nums[start]^nums[end];
-            start++;
-            end--;
+            swap(nums, start++, end--);
         }
     }
 
@@ -52,7 +52,7 @@ public class NextPermutation {
         System.out.println(Arrays.toString(solution(new int[]{1, 2, 3})));
         System.out.println(Arrays.toString(solution(new int[]{3, 2, 1})));
         System.out.println(Arrays.toString(solution(new int[]{1, 1, 5})));*/
-        int[] nums = new int[]{1, 3, 2};
+        int[] nums = new int[]{2, 3, 1, 3, 3};
         new NextPermutation().nextPermutation(nums);
         for(int i : nums) {
             System.out.print(i + ", ");
