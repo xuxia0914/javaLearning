@@ -3,53 +3,45 @@ package cn.leetcode.xux.midium;
 import java.util.*;
 
 /**
- * Given an array of strings, group anagrams together.
- * Example:
- * Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
- * Output:
+ * 字母异位词分组
+ * 给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+ *
+ * 示例:
+ * 输入: ["eat", "tea", "tan", "ate", "nat", "bat"],
+ * 输出:
  * [
  *   ["ate","eat","tea"],
  *   ["nat","tan"],
  *   ["bat"]
  * ]
- * Note:
- * All inputs will be in lowercase.
- * The order of your output does not matter.
+ *
+ * 说明：
+ * 所有输入均为小写字母。
+ * 不考虑答案输出的顺序。
  */
 public class GroupAnagrams {
 
-    /**
-     * Runtime: 1135 ms, faster than 5.00% of Java online submissions for Group Anagrams.
-     * Memory Usage: 45 MB, less than 34.16% of Java online submissions for Group Anagrams.
-     * @param strs
-     * @return
-     */
     public List<List<String>> groupAnagrams(String[] strs) {
-        List<List<String>> result = new ArrayList<List<String>>();
-        Map<int[], List<String>> map = new HashMap<>();
-        for(String str : strs) {
-            int[] array = new int[26];
-            for(int i=0;i<str.length();i++) {
-                array[str.charAt(i)-'a']++;
-            }
-            boolean flag = false;
-            for(int[] tmp : map.keySet()) {
-                if(Arrays.equals(tmp, array)) {
-                    List<String> list = map.get(tmp);
-                    list.add(str);
-                    map.put(tmp, list);
-                    flag = true;
-                    break;
-                }
-            }
-            if(!flag) {
-                List<String> list = new ArrayList<>();
-                list.add(str);
-                map.put(array, list);
-            }
-
+        List<List<String>> result = new ArrayList<>();
+        if(strs==null||strs.length==0) {
+            return result;
         }
-        for(Map.Entry<int[], List<String>> entry : map.entrySet()) {
+        Map<String, List<String>> map = new HashMap<>();
+        for(String str : strs) {
+            int[] mem = new int[26];
+            for(char c : str.toCharArray()) {
+                mem[c-'a']++;
+            }
+            StringBuilder sb = new StringBuilder();
+            for(int i : mem) {
+                sb.append('#').append(i);
+            }
+            if(!map.containsKey(sb.toString())) {
+                map.put(sb.toString(), new ArrayList<>());
+            }
+            map.get(sb.toString()).add(str);
+        }
+        for(Map.Entry<String, List<String>> entry : map.entrySet()) {
             result.add(entry.getValue());
         }
         return result;

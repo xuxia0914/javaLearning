@@ -28,7 +28,8 @@ public class FindFirstAndLastPositionOfElementInSortedArray {
                 left = mid;
             }
         }
-        int low = left==0&&nums[left]>=target?left-1:left;  //考虑left=right=0的情况
+        //考虑left=right=0的情况
+        int low = left==0&&nums[left]>=target?left-1:left;
         left = 0;
         right = nums.length-1;
         while(left<right) {
@@ -39,7 +40,8 @@ public class FindFirstAndLastPositionOfElementInSortedArray {
                 right = mid;
             }
         }
-        int high = left==nums.length-1&&nums[left]<=target?left+1:left; //考虑left=right=nums.length-1的情况
+        //考虑left=right=nums.length-1的情况
+        int high = left==nums.length-1&&nums[left]<=target?left+1:left;
         if(low+1>high-1) {
             return new int[]{-1, -1};
         }else {

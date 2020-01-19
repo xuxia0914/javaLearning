@@ -1,60 +1,48 @@
 package cn.leetcode.xux.hard;
 
 /**
- *Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
- * For example,
- * Given [0,1,0,2,1,0,1,3,2,1,2,1], return 6.
- * The above elevation map is represented by array [0,1,0,2,1,0,1,3,2,1,2,1].
- * In this case, 6 units of rain water (blue section) are being trapped.
- * Thanks Marcos for contributing this image!
+ *接雨水
+ * 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+ * 上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。 感谢 Marcos 贡献此图。
+ *
+ * 示例:
+ * 输入: [0,1,0,2,1,0,1,3,2,1,2,1]
+ * 输出: 6
  */
 public class TrappingRainWater {
 
-    int res = 0;
+    int sum = 0;
 
     public int trap(int[] height) {
-        if(height==null||height.length<3) {
-            return 0;
-        }
-        helper(height, 0, height.length-1);
-        return res;
+        sum = 0;
+        trap(height, 0, height.length-1);
+        return sum;
     }
 
-    public void helper(int[] height, int start, int end) {
-        if(start+1>=end) {
+    private void trap(int[] height, int start, int end) {
+        if(end-start<2) {
             return;
         }
-        int[] idxs = findHighestTwo(height, start, end);
-        for(int i=Math.min(idxs[0],idxs[1])+1;i<Math.max(idxs[0],idxs[1]);i++) {
-            res += height[idxs[0]] - height[i];
+        int index1 = start;
+        int index2 = start+1;
+        if(height[index1]<height[index2]) {
+            int tmp = index1;
+            index1 = index2;
+            index2 = tmp;
         }
-        helper(height, start, Math.min(idxs[0],idxs[1]));
-        helper(height, Math.max(idxs[0],idxs[1]), end);
-    }
-
-    //找出最高的两个柱子的idx
-    public int[] findHighestTwo(int[] height, int start, int end) {
-        if(start+1>=end) {
-            return new int[]{start, end};
-        }
-        int idx0 = start;
-        int idx1 = start+1;
-        if(height[idx0]>height[idx1]) {
-            int tmp = idx0;
-            idx0 = idx1;
-            idx1 = tmp;
-        }
-        for(int i=start+1;i<=end;i++) {
-            if(height[i]>height[idx0]) {
-                idx0 = i;
-            }
-            if(height[idx0]>height[idx1]) {
-                int tmp = idx0;
-                idx0 = idx1;
-                idx1 = tmp;
+        for(int i=start+2;i<=end;i++) {
+            if(height[i]>height[index1]) {
+                index2 = index1;
+                index1 = i;
+            }else if(height[i]>height[index2]) {
+                index2 = i;
             }
         }
-        return new int[]{idx0, idx1};
+        for(int i=Math.min(index1, index2)+1;i<=Math.max(index1, index2)-1;i++) {
+            sum += height[index2]-height[i];
+        }
+        trap(height, start, Math.min(index1, index2));
+        trap(height, Math.max(index1, index2), end);
     }
 
     public static void main(String[] args) {

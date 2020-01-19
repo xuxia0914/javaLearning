@@ -7,33 +7,21 @@ import java.util.*;
 
 public class Test {
 
-    List<String> list = new ArrayList<>();
-
-    public List<String> generateParenthesis(int n) {
-        list.clear();
-        helper(n, n, "");
-        return list;
-    }
-
-    private void helper(int left, int right, String curr) {
-        if(left==0&&right==0) {
-            list.add(curr);
-            return;
-        }
-        if(left==right) {
-            helper(left-1, right, curr+'(');
-        }
-        if(left<right) {
-            if(left!=0) {
-                helper(left-1, right, curr+'(');
+    public boolean canJump(int[] nums) {
+        int n = nums.length;
+        int nearly = n-1;
+        for(int i=n-1;i>=0;i--) {
+            if(nearly-i<=nums[i]) {
+                nearly = i;
             }
-            helper(left, right-1, curr+')');
         }
+        return nearly==0;
     }
 
     public static void main(String[] args) {
         Test test = new Test();
-        System.out.println(test.generateParenthesis(3));
+        System.out.println(test.canJump(new int[]{2,3,1,1,4}));
+        System.out.println(test.canJump(new int[]{3,2,1,0,4}));
         /*Chopsticks chopsticks = new Chopsticks();
         Bowl bowl = new Bowl();
         User user1 = new User(chopsticks, bowl, false);

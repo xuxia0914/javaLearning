@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Given a collection of distinct integers, return all possible permutations.
- * Example:
- * Input: [1,2,3]
- * Output:
+ * 全排列
+ * 给定一个没有重复数字的序列，返回其所有可能的全排列。
+ *
+ * 示例:
+ * 输入: [1,2,3]
+ * 输出:
  * [
  *   [1,2,3],
  *   [1,3,2],
@@ -19,59 +21,29 @@ import java.util.List;
  */
 public class Permutations {
 
-    public static List<List<Integer>> solution(List<Integer> intList) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if(intList.size()<2) {
-            result.add(intList);
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(nums==null||nums.length==0) {
             return result;
         }
-        Integer value = intList.get(0);
-        List<List<Integer>> pre = solution(intList.subList(1, intList.size()));
-        for(int i=0;i<pre.size();i++) {
-            List<Integer> tmp1 = pre.get(i);
-            for(int j=0;j<=tmp1.size();j++) {
-                List<Integer> tmp2 = new ArrayList<Integer>();
-                tmp2.addAll(tmp1);
-                tmp2.add(j, value);
-                result.add(tmp2);
-            }
-        }
+        helper(result, new ArrayList<>(), new boolean[nums.length], nums);
         return result;
     }
 
-    public static List<List<Integer>> solution2(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        if(nums==null||nums.length==0) {
-            return res;
-        }
-        helper(res, new ArrayList<Integer>(), new boolean[nums.length], nums);
-        return res;
-    }
-
-    public static void helper(List<List<Integer>> res, List<Integer> curr, boolean[] flags, int[] nums) {
+    public void helper(List<List<Integer>> result, List<Integer> curr, boolean[] flags, int[] nums) {
         if(curr.size()==nums.length) {
-            res.add(new ArrayList<>(curr));
+            result.add(curr);
             return;
         }
-        for(int i=0;i<nums.length;i++) {
+        for(int i=0;i<flags.length;i++) {
             if(!flags[i]) {
-                curr.add(nums[i]);
+                List<Integer> tmp = new ArrayList<>(curr);
+                tmp.add(nums[i]);
                 flags[i] = true;
-                helper(res, curr, flags, nums);
-                curr.remove(curr.size()-1);
+                helper(result, tmp, flags, nums);
                 flags[i] = false;
             }
         }
-    }
-
-    public static void main(String[] args) {
-        /*List<Integer> intList = new ArrayList<Integer>();
-        intList.add(1);
-        intList.add(2);
-        intList.add(3);
-        intList.add(4);
-        System.out.println(solution(intList));*/
-        System.out.println(solution2(new int[]{1,2,3,4}));
     }
 
 }
