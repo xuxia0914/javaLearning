@@ -1,16 +1,16 @@
 package cn.leetcode.xux.midium;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Given a set of distinct integers, S, return all possible subsets.
- * Note:
- * Elements in a subset must be in non-descending order.
- * The solution set must not contain duplicate subsets.
- * For example,
- * If S = [1,2,3], a solution is:
+ * 子集
+ * 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+ * 说明：解集不能包含重复的子集。
  *
+ * 示例:
+ * 输入: nums = [1,2,3]
+ * 输出:
  * [
  *   [3],
  *   [1],
@@ -24,28 +24,25 @@ import java.util.List;
  */
 public class Subsets {
 
-    public static List<List<Integer>> solution(List<Integer> list) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if(list.size()==0) {
-            result.add(new ArrayList<Integer>());
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new LinkedList<>();
+        if(nums==null||nums.length==0) {
             return result;
         }
-        List<List<Integer>> post = solution(list.subList(1, list.size()));
-        result.addAll(post);
-        for(List<Integer> li : post) {
-            List<Integer> newList = new ArrayList<Integer>(li);
-            newList.add(list.get(0));
-            result.add(newList);
-        }
+        subsets(result, new LinkedList<Integer>(), nums, 0);
         return result;
     }
 
-    public static void main(String[] args) {
-        List<Integer> list = new ArrayList<Integer>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        System.out.println(solution(list));
+    private void subsets(List<List<Integer>> result, List<Integer> curr, int[] nums, int index) {
+        if(index==nums.length) {
+            result.add(curr);
+            return;
+        }
+        List<Integer> list1 = new LinkedList<>(curr);
+        subsets(result, list1, nums, index+1);
+        List<Integer> list2 = new LinkedList<>(curr);
+        list2.add(nums[index]);
+        subsets(result, list2, nums, index+1);
     }
 
 }

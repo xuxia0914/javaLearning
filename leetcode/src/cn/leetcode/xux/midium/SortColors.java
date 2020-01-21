@@ -14,30 +14,50 @@ package cn.leetcode.xux.midium;
  */
 public class SortColors {
 
-    public static void solution(int[] colors) {
-        int left = 0, right = colors.length-1;
-        int i = 0, tmp;
+    public void sortColors(int[] nums) {
+        if(nums==null||nums.length<2) {
+            return;
+        }
+        int n = nums.length;
+        int left = 0;
+        int right = n-1;
+        while(left<n&&nums[left]==0) {
+            left++;
+        }
+        while(right>=0&&nums[right]==2) {
+            right--;
+        }
+        int i=left;
         while(i<=right) {
-            if(colors[i]==0&&i>left) {
-                tmp = colors[i];
-                colors[i] = colors[left];
-                colors[left] = tmp;
-                left++;
-            }else if(colors[i]==2&&i<right) {
-                tmp = colors[i];
-                colors[i] = colors[right];
-                colors[right] = tmp;
-                right--;
-            }else {
+            if(nums[i]==1) {
                 i++;
+            }else {
+                if(nums[i]==0) {
+                    swap(nums, left++, i);
+                }else {
+                    swap(nums, i, right--);
+                }
+                while(left<n&&nums[left]==0) {
+                    left++;
+                }
+                while(right>=0&&nums[right]==2) {
+                    right--;
+                }
+                i=left;
             }
         }
     }
 
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+
     public static void main(String[] args) {
 //        int[] colors = new int[]{2, 0, 2, 0, 1, 1, 2, 0, 2, 1, 0};
-        int[] colors = new int[]{0,1,0};
-        solution(colors);
+        int[] colors = new int[]{0,0};
+        new SortColors().sortColors(colors);
         for(int i : colors) {
             System.out.print(i+" ");
         }
