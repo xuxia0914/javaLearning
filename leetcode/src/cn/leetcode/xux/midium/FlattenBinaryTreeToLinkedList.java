@@ -28,13 +28,31 @@ import java.util.Stack;
  *           6
  */
 public class FlattenBinaryTreeToLinkedList {
+
+    public void flatten(BinaryTreeNode root) {
+        while(root!=null) {
+            if(root.left==null) {
+                root = root.right;
+                continue;
+            }
+            BinaryTreeNode pre = root.left;
+            while(pre.right!=null) {
+                pre = pre.right;
+            }
+            pre.right = root.right;
+            root.right = root.left;
+            root.left = null;
+            root = root.right;
+        }
+    }
+
     /**
      * 递归
      * 执行用时 :2 ms, 在所有 Java 提交中击败了86.92%的用户
      * 内存消耗 :36.3 MB, 在所有 Java 提交中击败了80.92%的用户
      * @param root
      */
-    public void flatten(BinaryTreeNode root) {
+    public void flatten1(BinaryTreeNode root) {
         if(root==null||(root.left==null&&root.right==null)) {
             return;
         }
@@ -62,7 +80,7 @@ public class FlattenBinaryTreeToLinkedList {
      * 内存消耗 :35.5 MB, 在所有 Java 提交中击败了82.25%的用户
      * @param root
      */
-    public void flatten1(BinaryTreeNode root) {
+    public void flatten2(BinaryTreeNode root) {
         if(root==null) {
             return;
         }

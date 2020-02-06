@@ -7,7 +7,109 @@ import java.util.*;
 
 public class Test {
 
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int len = s.length();
+        boolean[] dp = new boolean[len+1];
+        dp[0] = true;
+        for(int i=1;i<=len;i++) {
+            for(int j=0;j<i;j++) {
+                if(dp[j]&&wordDict.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[len];
+    }
+
     int result;
+
+    public int maxPathSum(BinaryTreeNode root) {
+        result = Integer.MIN_VALUE;
+        helper(root);
+        return result;
+    }
+
+    public int helper(BinaryTreeNode root) {
+        if(root==null) {
+            return 0;
+        }
+        int left = helper(root.left);
+        int right = helper(root.right);
+        int sum = root.val;
+        if(left>0) {
+            sum += left;
+        }
+        if(right>0) {
+            sum += right;
+        }
+        result = Math.max(result, sum);
+        return Math.max(Math.max(left, right), 0) + root.val;
+    }
+
+    public int maxProfit(int[] prices) {
+        if(prices==null||prices.length<2) {
+            return 0;
+        }
+        int min = prices[0];
+        int result = 0;
+        for(int i=1;i<prices.length;i++) {
+            if(prices[i]>min) {
+                result = Math.max(result, prices[i]-min);
+            }
+            if(prices[i]<min) {
+                min = prices[i];
+            }
+        }
+        return result;
+    }
+
+    public void flatten(BinaryTreeNode root) {
+        while(root!=null) {
+            if(root.left==null) {
+                root = root.right;
+                continue;
+            }
+            BinaryTreeNode pre = root.left;
+            while(pre.right!=null) {
+                pre = pre.right;
+            }
+            pre.right = root.right;
+            root.right = root.left;
+            root.left = null;
+            root = root.right;
+        }
+    }
+
+    public BinaryTreeNode buildTree(int[] preorder, int[] inorder) {
+        if(preorder==null||preorder.length==0) {
+            return null;
+        }
+        int n = preorder.length;
+        return buildTree(preorder, 0, n-1, inorder, 0, n-1);
+    }
+
+    public BinaryTreeNode buildTree(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
+        if(preStart>preEnd||inStart>inEnd) {
+            return null;
+        }
+        BinaryTreeNode result = new BinaryTreeNode(preorder[preStart]);
+        for(int i=inStart;i<=inEnd;i++) {
+            if(inorder[i]==preorder[preStart]) {
+                result.left = buildTree(preorder, preStart+1, preStart+i-inStart, inorder, inStart, i-1);
+                result.right = buildTree(preorder, preStart+i-inStart+1, preEnd, inorder, i+1, inEnd);
+                break;
+            }
+        }
+        return result;
+    }
+
+    public int maxDepth(BinaryTreeNode root) {
+        if(root==null) {
+            return 0;
+        }
+        return 1+Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
 
     public int largestRectangleArea(int[] heights) {
         result = 0;
