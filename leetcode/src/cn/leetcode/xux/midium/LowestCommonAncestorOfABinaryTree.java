@@ -38,7 +38,6 @@ public class LowestCommonAncestorOfABinaryTree {
         if(root==p||root==q) {
             return root;
         }
-
         BinaryTreeNode left = lowestCommonAncestor(root.left, p, q);
         BinaryTreeNode right = lowestCommonAncestor(root.right, p, q);
         if(left==null) {

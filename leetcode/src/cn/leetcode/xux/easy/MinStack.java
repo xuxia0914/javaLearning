@@ -20,24 +20,25 @@ import java.util.Stack;
  */
 public class MinStack {
 
-    Stack<Integer> stack1 = new Stack<>();
-    Stack<Integer> stack2 = new Stack<>();
+    Stack<Integer> stack1;
+    Stack<Integer> stack2;
 
     /** initialize your data structure here. */
     public MinStack() {
-
+        stack1 = new Stack<>();
+        stack2 = new Stack<>();
     }
 
     public void push(int x) {
         this.stack1.push(x);
-        if(this.stack2.isEmpty()||this.stack2.peek()>x) {
+        if(this.stack2.isEmpty()||this.stack2.peek()>=x) {
             this.stack2.push(x);
         }
     }
 
     public void pop() {
         int x = this.stack1.pop();
-        if(this.stack2.isEmpty()&&x==stack2.peek()) {
+        if(!this.stack2.isEmpty()&&x==stack2.peek()) {
             stack2.pop();
         }
     }
@@ -49,6 +50,7 @@ public class MinStack {
     public int getMin() {
         return this.stack2.peek();
     }
+
 }
 
 /**

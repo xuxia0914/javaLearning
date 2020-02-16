@@ -7,6 +7,120 @@ import java.util.*;
 
 public class Test {
 
+
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] inDegrees = new int[numCourses];
+        for(int[] prerequisite : prerequisites) {
+            inDegrees[prerequisite[0]]++;
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i=0;i<numCourses;i++) {
+            if(inDegrees[i]==0) {
+                queue.offer(i);
+            }
+        }
+        int course;
+        while(!queue.isEmpty()) {
+            course = queue.poll();
+            numCourses--;
+            for(int[] prerequisite : prerequisites) {
+                if(prerequisite[1]==course&&--inDegrees[prerequisite[0]]==0) {
+                    queue.offer(prerequisite[0]);
+                }
+            }
+        }
+        return numCourses==0;
+    }
+
+    public ListNode reverseList(ListNode head) {
+        ListNode pre = null;
+        ListNode curr = head;
+        ListNode tmp;
+        while(curr!=null) {
+            tmp = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = tmp;
+        }
+        return pre;
+    }
+
+    public int rob(int[] nums) {
+        if(nums==null||nums.length==0) {
+            return 0;
+        }
+        int len = nums.length;
+        if(len==1) {
+            return nums[0];
+        }
+        if(len==2) {
+            return Math.max(nums[0], nums[1]);
+        }
+        int max1 = nums[0];
+        int max2 = Math.max(nums[0], nums[1]);
+        int tmp;
+        for(int i=2;i<len;i++) {
+            tmp = max2;
+            max2 = Math.max(max2, max1+nums[i]);
+            max1 = tmp;
+        }
+        return max2;
+    }
+
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if(headA==null||headB==null) {
+            return null;
+        }
+        int lenA = 0;
+        int lenB = 0;
+        ListNode currA = headA;
+        while(currA!=null) {
+            lenA++;
+            currA = currA.next;
+        }
+        ListNode currB = headB;
+        while(currB!=null) {
+            lenB++;
+            currB = currB.next;
+        }
+        currA = headA;
+        currB = headB;
+        while(lenA>lenB) {
+            currA = currA.next;
+            lenA--;
+        }
+        while(lenB>lenA) {
+            currB = currB.next;
+            lenB--;
+        }
+        while(currA!=null) {
+            if(currA==currB) {
+                return currA;
+            }else {
+                currA = currA.next;
+                currB = currB.next;
+            }
+        }
+        return null;
+    }
+
+    public int maxProduct(int[] nums) {
+        int len = nums.length;
+        int max = nums[0];
+        int min = nums[0];
+        int res = nums[0];
+        int curr, tmp;
+        for(int i=1;i<len;i++) {
+            curr = nums[i];
+            tmp = max;
+            max = Math.max(curr, Math.max(max*curr, min*curr));
+            min = Math.min(curr, Math.min(min*curr, tmp*curr));
+            res = Math.max(res, max);
+        }
+        return res;
+    }
+
     public boolean wordBreak(String s, List<String> wordDict) {
         int len = s.length();
         boolean[] dp = new boolean[len+1];
@@ -232,6 +346,7 @@ public class Test {
 
     public static void main(String[] args) {
         Test test = new Test();
+        System.out.println(test.canFinish(2, new int[0][0]));
         /*Chopsticks chopsticks = new Chopsticks();
         Bowl bowl = new Bowl();
         User user1 = new User(chopsticks, bowl, false);
