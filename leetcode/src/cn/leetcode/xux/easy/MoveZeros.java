@@ -5,56 +5,32 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Given an array nums, write a function to move all 0's to the end of it while maintaining the relative order of the non-zero elements.
- * For example, given nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].
- * Note:
- * You must do this in-place without making a copy of the array.
- * Minimize the total number of operations.
+ * 283. 移动零
+ * 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+ *
+ * 示例:
+ * 输入: [0,1,0,3,12]
+ * 输出: [1,3,12,0,0]
+ * 说明:
+ * 必须在原数组上操作，不能拷贝额外的数组。
+ * 尽量减少操作次数。
  */
 public class MoveZeros {
 
-    public static void solution1(Integer[] array) {
-        if(array==null||array.length<2) {
+    public void moveZeroes(int[] nums) {
+        if(nums==null||nums.length==0) {
             return;
         }
-        int index=0;
-        for(int i=0;i<array.length;i++) {
-            if(array[i]!=0) {
-                array[index++] = array[i];
+        int index = 0;
+        int tmp;
+        for(int i=0;i<nums.length;i++) {
+            if(nums[i]!=0) {
+                tmp = nums[i];
+                nums[i] = nums[index];
+                nums[index] = tmp;
+                index++;
             }
         }
-        for(int i=index;i<array.length;i++) {
-            array[i] = 0;
-        }
-
-    }
-
-    public static void solution2(Integer[] array) {
-        if(array==null||array.length<2) {
-            return;
-        }
-        int left=0, right=1;
-        while(left<array.length&&right<array.length&&left<right) {
-            if(array[left]==0&&array[right]!=0) {
-                int tmp = array[left];
-                array[left] = array[right];
-                array[right] = tmp;
-            }
-            if(array[left]!=0) {
-                left++;
-            }
-            if(array[right]==0) {
-                right++;
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        Integer[] array = new Integer[]{0, 1, 0, 3, 12};
-        solution1(array);
-        List<Integer> list = new ArrayList<Integer>();
-        list = Arrays.asList(array);
-        System.out.println(list);
     }
 
 }

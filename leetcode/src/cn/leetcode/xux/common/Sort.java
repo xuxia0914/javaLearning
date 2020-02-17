@@ -42,7 +42,7 @@ public class Sort {
             return;
         }
         int i,j,temp,t;
-        if(low>high){
+        if(low>=high){
             return;
         }
         i=low;
