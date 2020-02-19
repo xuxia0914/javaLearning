@@ -6,6 +6,210 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Test {
+
+    /**
+     * 416. 分割等和子集
+     * 给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+     * 注意:
+     * 每个数组中的元素不会超过 100
+     * 数组的大小不会超过 200
+     * 示例 1:
+     * 输入: [1, 5, 11, 5]
+     * 输出: true
+     * 解释: 数组可以分割成 [1, 5, 5] 和 [11].
+     * 示例 2:
+     * 输入: [1, 2, 3, 5]
+     * 输出: false
+     * 解释: 数组不能分割成两个元素和相等的子集.
+     */
+    public boolean canPartition(int[] nums) {
+        if(nums==null||nums.length<2) {
+            return false;
+        }
+        int sum = 0;
+        for(int i : nums) {
+            sum += i;
+        }
+        if(sum%2==1) {
+            return false;
+        }
+        int target = sum/2;
+        boolean[] dp = new boolean[target+1];
+        dp[0] = true;
+        for(int num : nums) {
+            for(int i=target-num;i>=0;i--) {
+                if(dp[i]) {
+                    if(i+num<target) {
+                        dp[i+num] = true;
+                    }else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 406. 根据身高重建队列
+     * 假设有打乱顺序的一群人站成一个队列。 每个人由一个整数对(h, k)表示，其中h是这个人的身高，k是排在这个人前面且身高大于或等于h的人数。 编写一个算法来重建这个队列。
+     * 注意：
+     * 总人数少于1100人。
+     * 示例
+     * 输入:[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+     * 输出:[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+     */
+    public int[][] reconstructQueue(int[][] people) {
+        if(people==null||people.length<2) {
+            return people;
+        }
+        int len = people.length;
+        //sort(people, 0, len-1);
+        Arrays.sort(people, (o1, o2) -> o1[0]==o2[0]?o1[1]-o2[1]:o2[0]-o1[0]);
+        int[] tmp;
+        for(int i=0;i<len;i++) {
+            tmp = people[i];
+            if(tmp[1]<i) {
+                for(int j=i;j>tmp[1];j--) {
+                    people[j] = people[j-1];
+                }
+                people[tmp[1]] = tmp;
+            }
+        }
+        return people;
+    }
+    //按照先matrix[i][0]降序，后matrx[i][1]升序排列，快速
+    public void sort(int[][] matrix, int start, int end) {
+        if(start>=end) {
+            return;
+        }
+        int left = start;
+        int right = end;
+        int[] key = matrix[start];
+        int[] tmp;
+        while(left<right) {
+            while(left<right&&(matrix[right][0]<key[0]||(matrix[right][0]==key[0]&&matrix[right][1]>=key[1]))) {
+                right--;
+            }
+            while(left<right&&(matrix[left][0]>key[0]||(matrix[left][0]==key[0]&&matrix[left][1]<=key[1]))) {
+                left++;
+            }
+            if(left<right) {
+                tmp = matrix[left];
+                matrix[left] = matrix[right];
+                matrix[right] = tmp;
+            }
+        }
+        matrix[start] = matrix[right];
+        matrix[right] = key;
+        sort(matrix, start, right-1);
+        sort(matrix, right+1, end);
+    }
+
+    /**
+     * 394. 字符串解码
+     * 给定一个经过编码的字符串，返回它解码后的字符串。
+     * 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+     * 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+     * 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+     * 示例:
+     * s = "3[a]2[bc]", 返回 "aaabcbc".
+     * s = "3[a2[c]]", 返回 "accaccacc".
+     * s = "2[abc]3[cd]ef", 返回 "abcabccdcdcdef".
+     */
+    public String decodeString(String s) {
+        return null;
+    }
+
+    /**
+     * 338. 比特位计数
+     * 给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。
+     * 示例 1:
+     * 输入: 2
+     * 输出: [0,1,1]
+     * 示例 2:
+     * 输入: 5
+     * 输出: [0,1,1,2,1,2]
+     * 进阶:
+     * 给出时间复杂度为O(n*sizeof(integer))的解答非常容易。但你可以在线性时间O(n)内用一趟扫描做到吗？
+     * 要求算法的空间复杂度为O(n)。
+     * 你能进一步完善解法吗？要求在C++或任何其他语言中不使用任何内置函数（如 C++ 中的 __builtin_popcount）来执行此操作。
+     */
+    public int[] countBits(int num) {
+        int[] result = new int[num+1];
+        result[0] = 0;
+        int curr = 1;
+        for(int i=1;i<=num;i++) {
+            if(i==curr*2) {
+                result[i] = 1;
+                curr *= 2;
+            }else {
+                result[i] = 1+result[i-curr];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 337. 打家劫舍 III
+     * 在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。
+     * 除了“根”之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。
+     * 如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。
+     * 计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
+     *
+     * 示例 1:
+     * 输入: [3,2,3,null,3,null,1]
+     *      3
+     *     / \
+     *    2   3
+     *     \   \
+     *      3   1
+     * 输出: 7
+     * 解释: 小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
+     * 示例 2:
+     * 输入: [3,4,5,1,3,null,1]
+     *      3
+     *     / \
+     *    4   5
+     *   / \   \
+     *  1   3   1
+     * 输出: 9
+     * 解释: 小偷一晚能够盗取的最高金额 = 4 + 5 = 9.
+     * @param root
+     * @return
+     */
+    Map<BinaryTreeNode, Integer> mem = new HashMap<>();
+    public int rob(BinaryTreeNode root) {
+        int result = 0;
+        if(root==null) {
+            return 0;
+        }
+        if(mem.containsKey(root)) {
+            return mem.get(root);
+        }
+        int left = rob(root.left);
+        int right = rob(root.right);
+
+        result = Math.max(result, left+right);
+        int leftLeft = 0;
+        int leftRight = 0;
+        if(root.left!=null) {
+            leftLeft = rob(root.left.left);
+            leftRight = rob(root.left.right);
+        }
+
+        int rightLeft = 0;
+        int rightRight = 0;
+        if(root.right!=null) {
+            rightLeft = rob(root.right.left);
+            rightRight = rob(root.right.right);
+        }
+
+        result = Math.max(result, root.val+leftLeft+leftRight+rightLeft+rightRight);
+        mem.put(root, result);
+        return result;
+    }
+
     /**
      * 279. 完全平方数
      * 给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
@@ -31,6 +235,40 @@ public class Test {
             }
         }
         return dp[n];
+    }
+
+    /**
+     * 322. 零钱兑换
+     * 给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
+     *
+     * 示例 1:
+     * 输入: coins = [1, 2, 5], amount = 11
+     * 输出: 3
+     * 解释: 11 = 5 + 5 + 1
+     * 示例 2:
+     * 输入: coins = [2], amount = 3
+     * 输出: -1
+     * 说明:
+     * 你可以认为每种硬币的数量是无限的。
+     * @param coins
+     * @param amount
+     * @return
+     */
+    public int coinChange(int[] coins, int amount) {
+        if(coins==null||coins.length==0) {
+            return -1;
+        }
+        int[] dp = new int[amount+1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        for(int i=1;i<=amount;i++) {
+            for(int coin : coins) {
+                if(i-coin>=0&&dp[i-coin]!=Integer.MAX_VALUE) {
+                    dp[i] = Math.min(dp[i-coin]+1, dp[i]);
+                }
+            }
+        }
+        return dp[amount]==Integer.MAX_VALUE?-1:dp[amount];
     }
 
     /**
@@ -407,7 +645,9 @@ public class Test {
 
     public static void main(String[] args) {
         Test test = new Test();
-        System.out.println(test.canFinish(2, new int[0][0]));
+        int[][] people = new int[][]{{7,0}, {4,4}, {7,1}, {5,0}, {6,1}, {5,2}};
+        test.reconstructQueue(people);
+        //System.out.println(test.canFinish(2, new int[0][0]));
         /*Chopsticks chopsticks = new Chopsticks();
         Bowl bowl = new Bowl();
         User user1 = new User(chopsticks, bowl, false);

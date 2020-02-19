@@ -31,4 +31,36 @@ public class BestTimeToBuyAndSellStockWithCooldown {
         return sold[len-1];
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public int maxProfit1(int[] prices) {
+        if(prices==null||prices.length<2) {
+            return 0;
+        }
+        int n = prices.length;
+        int[] holds = new int[n];
+        int[] solds = new int[n];
+        holds[0] = -prices[0];
+        holds[1] = Math.max(holds[0], -prices[1]);
+        solds[0] = 0;
+        solds[1] = Math.max(prices[1]+holds[0], solds[0]);
+        for(int i=2;i<n;i++) {
+            holds[i] = Math.max(holds[i-1], solds[i-2]-prices[i]);
+            solds[i] = Math.max(holds[i-1]+prices[i], solds[i-1]);
+        }
+        return solds[n-1];
+    }
+
 }
