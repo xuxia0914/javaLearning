@@ -1,5 +1,8 @@
 package cn.leetcode.xux.midium;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 494. 目标和
  * 给定一个非负整数数组，a1, a2, ..., an, 和一个目标数，S。现在你有两个符号 + 和 -。对于数组中的任意一个整数，你都可以从 + 或 -中选择一个符号添加在前面。
@@ -23,35 +26,52 @@ package cn.leetcode.xux.midium;
  */
 public class TargetSum {
 
-    int res = 0;
-
-    /**
-     * 执行用时 :410 ms, 在所有 Java 提交中击败了46.85%的用户
-     * 内存消耗 :35.1 MB, 在所有 Java 提交中击败了81.70%的用户
-     * @param nums
-     * @param S
-     * @return
-     */
-    public int findTargetSumWays(int[] nums, int S) {
-        if(nums==null||nums.length==0) {
-            return 0;
-        }
-        helper(nums, S, 0, 0);
-        return res;
+    public static void main(String[] args) {
+        TargetSum ts = new TargetSum();
+        System.out.println(ts.findTargetSumWays(new int[]{1,1,1,1,1}, 3));
     }
 
-    void helper(int[] nums, int S, int idx, int curr) {
-        if(idx==nums.length-1) {
-            if(curr+nums[idx]==S) {
-                res++;
-            }
-            if(curr-nums[idx]==S) {
-                res++;
-            }
-            return;
+    public int findTargetSumWays(int[] nums, int S) {
+        if(nums==null||nums.length==0||S<-1000||S>1000) {
+            return 0;
         }
-        helper(nums, S, idx+1, curr+nums[idx]);
-        helper(nums, S, idx+1, curr-nums[idx]);
+        int[] dp = new int[2001];
+        dp[-nums[0]+1000]++;
+        dp[nums[0]+1000]++;
+        int[] tmp;
+        for(int i=1;i<nums.length;i++) {
+            tmp = new int[2001];
+            for(int j=0;j<2001;j++) {
+                if(dp[j]>0) {
+                    if(j-nums[i]>=0) {
+                        tmp[j-nums[i]] += dp[j];
+                    }
+                    if(j+nums[i]<2001) {
+                        tmp[j+nums[i]] += dp[j];
+                    }
+                }
+            }
+            dp = tmp;
+        }
+        return dp[S+1000];
+    }
+
+    Map<String, Integer> mem = new HashMap<>();
+    public int findTargetSumWays1(int[] nums, int S) {
+        return helper(nums, 0, S);
+    }
+
+    public int helper(int[] nums, int start, int sum) {
+        if(start>=nums.length) {
+            return sum==0?1:0;
+        }
+        if(mem.containsKey(""+start+"#"+sum)) {
+            return mem.get(""+start+"#"+sum);
+        }
+        int result = helper(nums, start+1, sum-nums[start])
+                +helper(nums, start+1, sum+nums[start]);
+        mem.put(""+start+"#"+sum, result);
+        return result;
     }
 
 }

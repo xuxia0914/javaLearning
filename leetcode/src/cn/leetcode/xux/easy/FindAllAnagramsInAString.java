@@ -1,58 +1,69 @@
 package cn.leetcode.xux.easy;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
- * Strings consists of lowercase English letters only and the length of both strings s and p will not be larger than 20,100.
- * The order of output does not matter.
- * Example 1:
- * Input:
- * s: "cbaebabacd" p: "abc"
- * Output:
- * [0, 6]
- * Explanation:
- * The substring with start index = 0 is "cba", which is an anagram of "abc".
- * The substring with start index = 6 is "bac", which is an anagram of "abc".
- * Example 2:
- * Input:
- * s: "abab" p: "ab"
- * Output:
- * [0, 1, 2]
- * Explanation:
- * The substring with start index = 0 is "ab", which is an anagram of "ab".
- * The substring with start index = 1 is "ba", which is an anagram of "ab".
- * The substring with start index = 2 is "ab", which is an anagram of "ab".
+ * 438. 找到字符串中所有字母异位词
+ * 给定一个字符串 s 和一个非空字符串 p，找到 s 中所有是 p 的字母异位词的子串，返回这些子串的起始索引。
+ * 字符串只包含小写英文字母，并且字符串 s 和 p 的长度都不超过 20100。
+ * 说明：
+ * 字母异位词指字母相同，但排列不同的字符串。
+ * 不考虑答案输出的顺序。
+ * 示例 1:
+ * 输入:s: "cbaebabacd" p: "abc"
+ * 输出:[0, 6]
+ * 解释:
+ * 起始索引等于 0 的子串是 "cba", 它是 "abc" 的字母异位词。
+ * 起始索引等于 6 的子串是 "bac", 它是 "abc" 的字母异位词。
+ * 示例 2:
+ * 输入:s: "abab" p: "ab"
+ * 输出:[0, 1, 2]
+ * 解释:
+ * 起始索引等于 0 的子串是 "ab", 它是 "ab" 的字母异位词。
+ * 起始索引等于 1 的子串是 "ba", 它是 "ab" 的字母异位词。
+ * 起始索引等于 2 的子串是 "ab", 它是 "ab" 的字母异位词。
  */
 public class FindAllAnagramsInAString {
 
     public List<Integer> findAnagrams(String s, String p) {
-        List<Integer> res = new ArrayList<>();
-        if(s==null||s.length()<p.length()) {
-            return res;
+        List<Integer> result = new LinkedList<>();
+        if(s==null||p==null||p.length()==0||p.length()>s.length()) {
+            return result;
         }
-        int lens = s.length();
-        int lenp = p.length();
-        for(int i=0;i<=lens-lenp;i++) {
-            if(isAnagrams(s.substring(i, i+lenp), p)) {
-                res.add(i);
+        int[] key = new int[26];
+        for(char c : p.toCharArray()) {
+            key[c-'a']++;
+        }
+        int[] curr = new int[26];
+        int lenP = p.length();
+        int lenS = s.length();
+        int i = 0;
+        for(;i<lenP;i++) {
+            curr[s.charAt(i)-'a']++;
+        }
+        if(equals(key, curr)) {
+            result.add(0);
+        }
+        for(;i<lenS;i++) {
+            curr[s.charAt(i-lenP)-'a']--;
+            curr[s.charAt(i)-'a']++;
+            if(equals(key, curr)) {
+                result.add(i-lenP+1);
             }
         }
-        return res;
+        return result;
     }
 
-    public boolean isAnagrams(String s, String t) {
-        if(s==null||t==null||s.length()!=t.length()) {
+    public boolean equals(int[] a, int[] b) {
+        if(a==null&&b==null) {
+            return true;
+        }
+        if(a==null||b==null||a.length!=b.length) {
             return false;
         }
-        int[] flags = new int[26];
-        for(int i=0;i<s.length();i++) {
-            flags[s.charAt(i)-'a']++;
-            flags[t.charAt(i)-'a']--;
-        }
-        for(int i : flags) {
-            if(i!=0) {
+        for(int i=0;i<a.length;i++) {
+            if(a[i]!=b[i]) {
                 return false;
             }
         }

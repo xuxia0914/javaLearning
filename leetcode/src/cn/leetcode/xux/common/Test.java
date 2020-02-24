@@ -8,6 +8,401 @@ import java.util.*;
 public class Test {
 
     /**
+     * 739. 每日温度
+     * 根据每日 气温 列表，请重新生成一个列表，对应位置的输入是你需要再等待多久温度才会升高超过该日的天数。如果之后都不会升高，请在该位置用 0 来代替。
+     * 例如，给定一个列表 temperatures = [73, 74, 75, 71, 69, 72, 76, 73]，你的输出应该是 [1, 1, 4, 2, 1, 1, 0, 0]。
+     * 提示：气温 列表长度的范围是 [1, 30000]。每个气温的值的均为华氏度，都是在 [30, 100] 范围内的整数。
+     */
+    public int[] dailyTemperatures(int[] T) {
+        if(T==null) {
+            return null;
+        }
+        if(T.length==0) {
+            return new int[0];
+        }
+        int len = T.length;
+        int[] result = new int[len];
+        Stack<Integer> stack = new Stack<>();
+        for(int i=1;i<len;i++) {
+            while(!stack.isEmpty()&&T[stack.peek()]<T[i]) {
+                int pre = stack.pop();
+                result[pre] = i-pre;
+            }
+            stack.push(i);
+        }
+        return result;
+    }
+
+    /**
+     * 647. 回文子串
+     * 给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。
+     * 具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被计为是不同的子串。
+     *
+     * 示例 1:
+     * 输入: "abc"
+     * 输出: 3
+     * 解释: 三个回文子串: "a", "b", "c".
+     * 示例 2:
+     * 输入: "aaa"
+     * 输出: 6
+     * 说明: 6个回文子串: "a", "a", "a", "aa", "aa", "aaa".
+     *
+     * 注意:
+     * 输入的字符串长度不会超过1000。
+     */
+    public int countSubstrings(String s) {
+        if(s==null||s=="") {
+            return 0;
+        }
+        int len = s.length();
+        int result = 0;
+        for(int i=0;i<len;i++) {
+            for(int j=0;i-j>=0&&i+j<len;j++) {
+                if(s.charAt(i-j)==s.charAt(i+j)) {
+                    result++;
+                }else {
+                    break;
+                }
+            }
+        }
+        for(int i=0;i>=0&&i+1<len;i++) {
+            for(int j=0;i-j>=0&&i+1+j<len;j++) {
+                if(s.charAt(i-j)==s.charAt(i+1+j)) {
+                    result++;
+                }else {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 621. 任务调度器
+     * 给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，或者在待命状态。
+     * 然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。
+     * 你需要计算完成所有任务所需要的最短时间。
+     * 示例 1：
+     * 输入: tasks = ["A","A","A","B","B","B"], n = 2
+     * 输出: 8
+     * 执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
+     * 注：
+     * 任务的总个数为 [1, 10000]。
+     * n 的取值范围为 [0, 100]。
+     */
+    public int leastInterval(char[] tasks, int n) {
+        if(tasks==null||tasks.length==0) {
+            return 0;
+        }
+        int len = tasks.length;
+        if(n==0) {
+            return len;
+        }
+        int[] cnt = new int[26];
+        for(char c : tasks) {
+            cnt[c-'A']++;
+        }
+        int[] preIndexs = new int[26];
+        Arrays.fill(preIndexs, -1);
+        int result = 0;
+        while(len>0) {
+            int curr = -1;
+            int max = 0;
+            for(int i=0;i<26;i++) {
+                if(cnt[i]>max&&(preIndexs[i]==-1||result-preIndexs[i]>n)) {
+                    curr = i;
+                }
+            }
+            if(curr!=-1) {
+                cnt[curr]--;
+                len--;
+                preIndexs[curr] = result;
+            }
+            result++;
+        }
+        return result;
+    }
+
+    /**
+     * 581. 最短无序连续子数组
+     * 给定一个整数数组，你需要寻找一个连续的子数组，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+     * 你找到的子数组应是最短的，请输出它的长度。
+     * 示例 1:
+     * 输入: [2, 6, 4, 8, 10, 9, 15]
+     * 输出: 5
+     * 解释: 你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
+     * 说明 :
+     * 输入的数组长度范围在 [1, 10,000]。
+     * 输入的数组可能包含重复元素 ，所以升序的意思是<=。
+     */
+    public int findUnsortedSubarray(int[] nums) {
+        if(nums==null||nums.length==0) {
+            return 0;
+        }
+        int len = nums.length;
+        int[] mins = new int[len];
+        mins[len-1] = nums[len-1];
+        for(int i=len-2;i>=0;i--) {
+            mins[i] = Math.min(mins[i+1], nums[i]);
+        }
+        int start = len-1;
+        for(int i=0;i<len-1;i++) {
+            if(nums[i]>mins[i+1]) {
+                start = i;
+                break;
+            }
+        }
+        if(start==len-1) {
+            return 0;
+        }
+        int[] maxs = new int[len];
+        maxs[0] = nums[0];
+        for(int i=1;i<len;i++) {
+            maxs[i] = Math.max(maxs[i-1], nums[i]);
+        }
+        int end = 0;
+        for(int i=len-1;i>0;i--) {
+            if(nums[i]<maxs[i-1]) {
+                end = i;
+                break;
+            }
+        }
+        return end-start+1;
+    }
+
+    /**
+     * 560. 和为K的子数组
+     * 给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数。
+     * 示例 1 :
+     * 输入:nums = [1,1,1], k = 2
+     * 输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
+     * 说明 :
+     * 数组的长度为 [1, 20,000]。
+     * 数组中元素的范围是 [-1000, 1000] ，且整数 k 的范围是 [-1e7, 1e7]。
+     */
+    public int subarraySum(int[] nums, int k) {
+        if(nums==null||nums.length==0) {
+            return 0;
+        }
+        int sum = 0;
+        int result = 0;
+        Map<Integer, Integer> mem = new HashMap<>();
+        mem.put(0, 1);
+        for(int num : nums) {
+            sum += num;
+            if(mem.containsKey(sum-k)) {
+                result += mem.get(sum-k);
+            }
+            mem.put(sum, mem.getOrDefault(sum-k, 0)+1);
+        }
+        return result;
+    }
+
+    /**
+     * 494. 目标和
+     * 给定一个非负整数数组，a1, a2, ..., an, 和一个目标数，S。现在你有两个符号 + 和 -。对于数组中的任意一个整数，你都可以从 + 或 -中选择一个符号添加在前面。
+     * 返回可以使最终数组和为目标数 S 的所有添加符号的方法数。
+     * 示例 1:
+     * 输入: nums: [1, 1, 1, 1, 1], S: 3
+     * 输出: 5
+     * 解释:
+     * -1+1+1+1+1 = 3
+     * +1-1+1+1+1 = 3
+     * +1+1-1+1+1 = 3
+     * +1+1+1-1+1 = 3
+     * +1+1+1+1-1 = 3
+     * 一共有5种方法让最终目标和为3。
+     * 注意:
+     * 数组非空，且长度不会超过20。
+     * 初始的数组的和不会超过1000。
+     * 保证返回的最终结果能被32位整数存下。
+     */
+    Map<String, Integer> mem1 = new HashMap<>();
+    public int findTargetSumWays(int[] nums, int S) {
+        return helper(nums, 0, S);
+    }
+
+    public int helper(int[] nums, int start, int sum) {
+        if(start>=nums.length) {
+            return sum==0?1:0;
+        }
+        if(mem1.containsKey(""+start+"#"+sum)) {
+            return mem1.get(""+start+"#"+sum);
+        }
+        int result = helper(nums, start+1, sum-nums[start])
+                +helper(nums, start+1, sum+nums[start]);
+        mem1.put(""+start+"#"+sum, result);
+        return result;
+    }
+
+    /**
+     * 448. 找到所有数组中消失的数字
+     * 给定一个范围在  1 ≤ a[i] ≤ n ( n = 数组大小 ) 的 整型数组，数组中的元素一些出现了两次，另一些只出现一次。
+     * 找到所有在 [1, n] 范围之间没有出现在数组中的数字。
+     * 您能在不使用额外空间且时间复杂度为O(n)的情况下完成这个任务吗? 你可以假定返回的数组不算在额外空间内。
+     * 示例:
+     * 输入:[4,3,2,7,8,2,3,1]
+     * 输出:[5,6]
+     */
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> result = new LinkedList<>();
+        if(nums==null||nums.length==0) {
+            return result;
+        }
+        int len = nums.length;
+        int[] mem = new int[len];
+        for(int num : nums) {
+            mem[num-1] = num;
+        }
+        for(int i=0;i<len;i++) {
+            if(mem[i]!=i+1) {
+                result.add(i+1);
+            }
+        }
+        return result;
+    }
+
+    public List<Integer> findDisappearedNumbers1(int[] nums) {
+        List<Integer> result = new LinkedList<>();
+        if(nums==null||nums.length==0) {
+            return result;
+        }
+        int len = nums.length;
+        int tmp;
+        for(int i=0;i<len;i++) {
+            if(nums[i]==0) {
+                continue;
+            }else {
+                int j = i;
+                while(nums[j-1]!=0) {
+                    tmp = nums[j-1];
+                    nums[j-1] = 0;
+                    j = tmp;
+                }
+            }
+        }
+        for(int i=0;i<len;i++) {
+            if(nums[i]!=0) {
+                result.add(i+1);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 438. 找到字符串中所有字母异位词
+     * 给定一个字符串 s 和一个非空字符串 p，找到 s 中所有是 p 的字母异位词的子串，返回这些子串的起始索引。
+     * 字符串只包含小写英文字母，并且字符串 s 和 p 的长度都不超过 20100。
+     * 说明：
+     * 字母异位词指字母相同，但排列不同的字符串。
+     * 不考虑答案输出的顺序。
+     * 示例 1:
+     * 输入:s: "cbaebabacd" p: "abc"
+     * 输出:[0, 6]
+     * 解释:
+     * 起始索引等于 0 的子串是 "cba", 它是 "abc" 的字母异位词。
+     * 起始索引等于 6 的子串是 "bac", 它是 "abc" 的字母异位词。
+     * 示例 2:
+     * 输入:s: "abab" p: "ab"
+     * 输出:[0, 1, 2]
+     * 解释:
+     * 起始索引等于 0 的子串是 "ab", 它是 "ab" 的字母异位词。
+     * 起始索引等于 1 的子串是 "ba", 它是 "ab" 的字母异位词。
+     * 起始索引等于 2 的子串是 "ab", 它是 "ab" 的字母异位词。
+     */
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new LinkedList<>();
+        if(s==null||p==null||p.length()==0||p.length()>s.length()) {
+            return result;
+        }
+        int[] key = new int[26];
+        for(char c : p.toCharArray()) {
+            key[c-'a']++;
+        }
+        int[] curr = new int[26];
+        int lenP = p.length();
+        int lenS = s.length();
+        int i = 0;
+        for(;i<lenP;i++) {
+            curr[s.charAt(i)-'a']++;
+        }
+        if(equals(key, curr)) {
+            result.add(0);
+        }
+        for(;i<lenS;i++) {
+            curr[s.charAt(i-lenP)-'a']--;
+            curr[s.charAt(i)-'a']++;
+            if(equals(key, curr)) {
+                result.add(s.charAt(i-lenP)-'a'+1);
+            }
+        }
+        return result;
+    }
+
+    public boolean equals(int[] a, int[] b) {
+        if(a==null&&b==null) {
+            return true;
+        }
+        if(a==null||b==null||a.length!=b.length) {
+            return false;
+        }
+        for(int i=0;i<a.length;i++) {
+            if(a[i]!=b[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 437. 路径总和 III
+     * 给定一个二叉树，它的每个结点都存放着一个整数值。
+     * 找出路径和等于给定数值的路径总数。
+     * 路径不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+     * 二叉树不超过1000个节点，且节点数值范围是 [-1000000,1000000] 的整数。
+     * 示例：
+     * root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
+     *       10
+     *      /  \
+     *     5   -3
+     *    / \    \
+     *   3   2   11
+     *  / \   \
+     * 3  -2   1
+     * 返回 3。和等于 8 的路径有:
+     * 1.  5 -> 3
+     * 2.  5 -> 2 -> 1
+     * 3.  -3 -> 11
+     */
+    public int pathSum(BinaryTreeNode root, int sum) {
+        if(root==null) {
+            return 0;
+        }
+        int result = 0;
+        result += helper1(root, sum);
+        result += pathSum(root.left, sum);
+        result += pathSum(root.right, sum);
+        return result;
+    }
+
+    public int helper1(BinaryTreeNode root, int sum) {
+        if(root==null) {
+            return 0;
+        }
+        int res = 0;
+        if(root.val==sum) {
+            res++;
+        }
+        if(root.left!=null) {
+            res += helper1(root.left, sum-root.val);
+        }
+        if(root.right!=null) {
+            res += helper1(root.right, sum-root.val);
+        }
+        return res;
+    }
+
+    /**
      * 416. 分割等和子集
      * 给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
      * 注意:

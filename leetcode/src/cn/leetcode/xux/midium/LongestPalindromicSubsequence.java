@@ -1,37 +1,19 @@
 package cn.leetcode.xux.midium;
 
 /**
- * Given a string s, find the longest palindromic subsequence's length in s. You may assume that the maximum length of s is 1000.
- * Example 1:
- * Input:
- * "bbbab"
- * Output:
- * 4
- * One possible longest palindromic subsequence is "bbbb".
- * Example 2:
- * Input:
- * "cbbd"
- * Output:
- * 2
- * One possible longest palindromic subsequence is "bb".
+ * 5. 最长回文子串
+ * 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+ *
+ * 示例 1：
+ * 输入: "babad"
+ * 输出: "bab"
+ * 注意: "aba" 也是一个有效答案。
+ *
+ * 示例 2：
+ * 输入: "cbbd"
+ * 输出: "bb"
  */
 public class LongestPalindromicSubsequence {
-
-    /**Time Limit Exceeded 复杂度过高*/
-    public int solution1(String s) {
-        if(s==null) {
-            return 0;
-        }
-        int len = s.length();
-        if(len<2) {
-            return len;
-        }
-        if(s.charAt(0)==s.charAt(len-1)) {
-            return 2+solution1(s.substring(1, len-1));
-        }else {
-            return Math.max(solution1(s.substring(1)), solution1(s.substring(0, len-1)));
-        }
-    }
 
     /**
      * 我们建立一个二维的DP数组，其中dp[i][j]表示[i,j]区间内的字符串的最长回文子序列，那么对于递推公式我们分析一下，如果s[i]==s[j]，那么i和j就可以增加2个回文串的长度，我们知道中间dp[i + 1][j - 1]的值，那么其加上2就是dp[i][j]的值。如果s[i] != s[j]，那么我们可以去掉i或j其中的一个字符，然后比较两种情况下所剩的字符串谁dp值大，就赋给dp[i][j]，那么递推公式如下：
@@ -43,7 +25,7 @@ public class LongestPalindromicSubsequence {
      * @param s
      * @return
      */
-    public static int solution2(String s) {
+    public int longestPalindrome(String s) {
         if(s==null) {
             return 0;
         }
@@ -66,9 +48,35 @@ public class LongestPalindromicSubsequence {
         return dp[0][n-1];
     }
 
-    public static void main(String[] args) {
-        //输出：159
-        System.out.println(solution2("euazbipzncptldueeuechubrcourfpftcebikrxhybkymimgvldiwqvkszfycvqyvtiwfckexmowcxztkfyzqovbtmzpxojfofbvwnncajvrvdbvjhcrameamcfmcoxryjukhpljwszknhiypvyskmsujkuggpztltpgoczafmfelahqwjbhxtjmebnymdyxoeodqmvkxittxjnlltmoobsgzdfhismogqfpfhvqnxeuosjqqalvwhsidgiavcatjjgeztrjuoixxxoznklcxolgpuktirmduxdywwlbikaqkqajzbsjvdgjcnbtfksqhquiwnwflkldgdrqrnwmshdpykicozfowmumzeuznolmgjlltypyufpzjpuvucmesnnrwppheizkapovoloneaxpfinaontwtdqsdvzmqlgkdxlbeguackbdkftzbnynmcejtwudocemcfnuzbttcoew"));
+    public String longestPalindrome1(String s) {
+        if(s==null||s.length()<2) {
+            return s;
+        }
+        int n = s.length();
+        String result = "";
+        for(int i=0;i<n;i++) {
+            int left = i;
+            int right = i;
+            while(left>=0&&right<n&&s.charAt(left)==s.charAt(right)) {
+                left--;
+                right++;
+            }
+            if(right-left-1>result.length()) {
+                result = s.substring(left+1, right);
+            }
+        }
+        for(int i=0;i<n;i++) {
+            int left = i;
+            int right = i+1;
+            while(left>=0&&right<n&&s.charAt(left)==s.charAt(right)) {
+                left--;
+                right++;
+            }
+            if(right-left-1>result.length()) {
+                result = s.substring(left+1, right);
+            }
+        }
+        return result;
     }
 
 }

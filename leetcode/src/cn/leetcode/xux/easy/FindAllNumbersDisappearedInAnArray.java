@@ -1,6 +1,7 @@
 package cn.leetcode.xux.easy;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,6 +19,33 @@ import java.util.List;
 public class FindAllNumbersDisappearedInAnArray {
 
     public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> result = new LinkedList<>();
+        if(nums==null||nums.length==0) {
+            return result;
+        }
+        int len = nums.length;
+        int tmp;
+        for(int i=0;i<len;i++) {
+            if(nums[i]==0) {
+                continue;
+            }else {
+                int j = nums[i];
+                while(nums[j-1]!=0) {
+                    tmp = nums[j-1];
+                    nums[j-1] = 0;
+                    j = tmp;
+                }
+            }
+        }
+        for(int i=0;i<len;i++) {
+            if(nums[i]!=0) {
+                result.add(i+1);
+            }
+        }
+        return result;
+    }
+
+    public List<Integer> findDisappearedNumbers1(int[] nums) {
         List<Integer> res = new ArrayList<>();
         for(int i=0;i<nums.length;i++) {
             helper(nums, nums[i]);
