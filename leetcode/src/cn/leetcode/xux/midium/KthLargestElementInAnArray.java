@@ -3,66 +3,81 @@ package cn.leetcode.xux.midium;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
- *Find the kth largest element in an unsorted array.
- * Note that it is the kth largest element in the sorted order, not the kth distinct element.
- * Example 1:
- * Input: [3,2,1,5,6,4] and k = 2
- * Output: 5
- * Example 2:
- * Input: [3,2,3,1,2,4,5,5,6] and k = 4
- * Output: 4
- * Note:
- * You may assume k is always valid, 1 ≤ k ≤ array's length.
+ * 215. 数组中的第K个最大元素
+ * 在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+ *
+ * 示例 1:
+ * 输入: [3,2,1,5,6,4] 和 k = 2
+ * 输出: 5
+ *
+ * 示例 2:
+ * 输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
+ * 输出: 4
+ *
+ * 说明:
+ * 你可以假设 k 总是有效的，且 1 ≤ k ≤ 数组的长度。
  */
 public class KthLargestElementInAnArray {
 
-    public int solution1(int[] array, int k) {
-        Arrays.sort(array);
-        return array[array.length-k];
+    public int findKthLargest(int[] nums, int k) {
+        if(nums==null||nums.length==0||k>nums.length||k<1) {
+            return -1;
+        }
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        for(int num : nums) {
+            queue.offer(num);
+            if(queue.size()>k) {
+                queue.poll();
+            }
+        }
+        return queue.poll();
     }
 
-    /**使用快速排序*/
-    public static int solution2(List<Integer> list, int k) {
-        int left = 0, right = list.size()-1;
-        int key = list.get(left);
+    public int findKthLargest1(int[] nums, int k) {
+        if(nums==null||nums.length==0||k>nums.length||k<1) {
+            return -1;
+        }
+        return helper(nums, 0, nums.length-1, k);
+    }
+
+    public int helper(int[] nums, int start, int end, int k) {
+        if(start>end) {
+            return -1;
+        }
+        int left = start;
+        int right = end;
+        int key = nums[start];
+        int tmp;
         while(left<right) {
-            while(left<right&&list.get(right)<=key) {
+            while(left<right&&nums[right]>=key) {
                 right--;
             }
-            if(left<right) {
-                list.set(left, list.get(right));
-            }
-            while(left<right&&list.get(left)>=key) {
+            while(left<right&&nums[left]<=key) {
                 left++;
             }
             if(left<right) {
-                list.set(right, list.get(left));
+                tmp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = tmp;
             }
-            list.set(left, key);
         }
-        if(left == k-1) {
-            return list.get(left);
-        }else if(left>k-1) {
-            return solution2(list.subList(0, left), k);
+        nums[start] = nums[right];
+        nums[right] = key;
+        if(right==nums.length-k) {
+            return nums[right];
+        }else if(right>nums.length-k) {
+            return helper(nums, start, right-1, k);
         }else {
-            return solution2(list.subList(left+1, list.size()), k-1-left);
+            return helper(nums, right+1, end, k);
         }
     }
 
     public static void main(String[] args) {
-        List<Integer> list = new ArrayList<Integer>();
-        list.add(3);
-        list.add(2);
-        list.add(3);
-        list.add(1);
-        list.add(2);
-        list.add(4);
-        list.add(5);
-        list.add(5);
-        list.add(6);
-        System.out.println(solution2(list, 4));
+        System.out.println(new KthLargestElementInAnArray().findKthLargest(new int[]{3,2,1,5,6,4}, 2));
+        System.out.println(new KthLargestElementInAnArray().findKthLargest(new int[]{3,2,3,1,2,4,5,5,6}, 4));
     }
 
 }

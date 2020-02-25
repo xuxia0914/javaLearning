@@ -35,7 +35,7 @@ public class DecodeString {
                 }
                 res = new StringBuilder(stack_res.pop() + tmp);
             } else if(c >= '0' && c <= '9') {
-                multi = multi * 10 + Integer.parseInt(c + "");
+                multi = multi * 10 + c - '0';
             }else {
                 res.append(c);
             }

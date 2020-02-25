@@ -7,6 +7,34 @@ import java.util.*;
 
 public class Test {
 
+    public int numIslands(char[][] grid) {
+
+        if(grid==null||grid.length==0||grid[0].length==0) {
+            return 0;
+        }
+        int result = 0;
+        for(int i=0;i<grid.length;i++) {
+            for(int j=0;j<grid[0].length;j++) {
+                if(grid[i][j]=='1') {
+                    result ++;
+                    helper(grid, i, j);
+                }
+            }
+        }
+        return result;
+    }
+
+    public void helper(char[][] grid, int i, int j) {
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]=='0') {
+            return;
+        }
+        grid[i][j] = 0;
+        helper(grid, i-1, j);
+        helper(grid, i+1, j);
+        helper(grid, i, j-1);
+        helper(grid, i, j+1);
+    }
+
     /**
      * 739. 每日温度
      * 根据每日 气温 列表，请重新生成一个列表，对应位置的输入是你需要再等待多久温度才会升高超过该日的天数。如果之后都不会升高，请在该位置用 0 来代替。
@@ -704,27 +732,43 @@ public class Test {
     }
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if(numCourses<2) {
+            return true;
+        }
         int[] inDegrees = new int[numCourses];
+        Map<Integer, List<Integer>> map = new HashMap<>();
         for(int[] prerequisite : prerequisites) {
             inDegrees[prerequisite[0]]++;
+            if(!map.containsKey(prerequisite[1])) {
+                map.put(prerequisite[1], new ArrayList<>());
+            }
+            map.get(prerequisite[1]).add(prerequisite[0]);
         }
         Queue<Integer> queue = new LinkedList<>();
+        int finishedCnt=0;
         for(int i=0;i<numCourses;i++) {
             if(inDegrees[i]==0) {
                 queue.offer(i);
-            }
-        }
-        int course;
-        while(!queue.isEmpty()) {
-            course = queue.poll();
-            numCourses--;
-            for(int[] prerequisite : prerequisites) {
-                if(prerequisite[1]==course&&--inDegrees[prerequisite[0]]==0) {
-                    queue.offer(prerequisite[0]);
+                if(++finishedCnt==numCourses) {
+                    return true;
                 }
             }
         }
-        return numCourses==0;
+        int curr;
+        while(!queue.isEmpty()) {
+            curr = queue.poll();
+            if(map.containsKey(curr)) {
+                for(int course : map.get(curr)) {
+                    if(--inDegrees[course]==0) {
+                        queue.offer(course);
+                        if(++finishedCnt==numCourses) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public ListNode reverseList(ListNode head) {
@@ -1039,9 +1083,25 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        Test test = new Test();
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(1, 9);
+        map.put(2, 10);
+        map.put(4, 5);
+        map.put(6, 20);
+        map.put(7, 1);
+        map.put(8, 7);
+
+        PriorityQueue<Integer> queue = new PriorityQueue<>((k1, k2)->map.get(k2)-map.get(k1));
+        for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            queue.add(entry.getKey());
+        }
+        while(!queue.isEmpty()) {
+            System.out.print(queue.poll()+"\t");
+        }
+
+        /*Test test = new Test();
         int[][] people = new int[][]{{7,0}, {4,4}, {7,1}, {5,0}, {6,1}, {5,2}};
-        test.reconstructQueue(people);
+        test.reconstructQueue(people);*/
         //System.out.println(test.canFinish(2, new int[0][0]));
         /*Chopsticks chopsticks = new Chopsticks();
         Bowl bowl = new Bowl();

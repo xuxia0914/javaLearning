@@ -3,29 +3,40 @@ package cn.leetcode.xux.easy;
 import cn.leetcode.xux.common.ListNode;
 
 /**
- * Given a singly linked list, determine if it is a palindrome.
- * Follow up: Could you do it in O(n) time and O(1) space?
+ * 234. 回文链表
+ * 请判断一个链表是否为回文链表。
+ *
+ * 示例 1:
+ * 输入: 1->2
+ * 输出: false
+ *
+ * 示例 2:
+ * 输入: 1->2->2->1
+ * 输出: true
+ *
+ * 进阶：
+ * 你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
  */
 public class PalindromeLinkedList {
 
-    public static boolean solution(ListNode node) {
-        if(node==null) {
+    public boolean isPalindrome(ListNode head) {
+        if(head==null) {
             return true;
         }
         int length = 0;
-        ListNode node1 = node;
+        ListNode node1 = head;
         while(node1!=null) {
             length++;
             node1=node1.next;
         }
         int mid = (length-1)/2+1;
-        ListNode node2 = node;
+        ListNode node2 = head;
         while(mid>0) {
             node2 = node2.next;
             mid--;
         }
         ListNode node3 = ListNode.reverse2(node2);
-        ListNode node4 = node;
+        ListNode node4 = head;
         while(node3!=null) {
             if(node3.val!=node4.val) {
                 return false;
@@ -34,23 +45,6 @@ public class PalindromeLinkedList {
             node4 = node4.next;
         }
         return true;
-    }
-
-    public static void main(String[] args) {
-        ListNode node1 = new ListNode(1);
-        ListNode node2 = new ListNode(2);
-        ListNode node3 = new ListNode(3);
-        ListNode node4 = new ListNode(4);
-        ListNode node5 = new ListNode(3);
-        ListNode node6 = new ListNode(2);
-        ListNode node7 = new ListNode(1);
-        node6.next = node7;
-        node5.next = node6;
-        node4.next = node5;
-        node3.next = node4;
-        node2.next = node3;
-        node1.next = node2;
-        System.out.println(solution(node1));
     }
 
 }

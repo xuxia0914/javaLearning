@@ -18,40 +18,48 @@ import java.util.*;
  * 输出: false
  * 解释: 总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0；并且学习课程 0 之前，你还应先完成课程 1。这是不可能的。
  *
- * 有判断向图是否有环
+ * 判断有向图是否有环
  */
 public class CourseScheduleI {
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        int[] inDegrees = new int[numCourses];
-        for(int[] prerequisity : prerequisites) {
-            inDegrees[prerequisity[0]]++;
-            if(!map.containsKey(prerequisity[1])) {
-                map.put(prerequisity[1], new ArrayList<Integer>());
-            }
-            map.get(prerequisity[1]).add(prerequisity[0]);
+        if(numCourses<2) {
+            return true;
         }
-        int cnt = 0;
+        int[] inDegrees = new int[numCourses];
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for(int[] prerequisite : prerequisites) {
+            inDegrees[prerequisite[0]]++;
+            if(!map.containsKey(prerequisite[1])) {
+                map.put(prerequisite[1], new ArrayList<>());
+            }
+            map.get(prerequisite[1]).add(prerequisite[0]);
+        }
         Queue<Integer> queue = new LinkedList<>();
+        int finishedCnt=0;
         for(int i=0;i<numCourses;i++) {
             if(inDegrees[i]==0) {
-                cnt++;
                 queue.offer(i);
+                if(++finishedCnt==numCourses) {
+                    return true;
+                }
             }
         }
+        int curr;
         while(!queue.isEmpty()) {
-            int curr = queue.poll();
+            curr = queue.poll();
             if(map.containsKey(curr)) {
                 for(int course : map.get(curr)) {
                     if(--inDegrees[course]==0) {
-                        cnt++;
                         queue.offer(course);
+                        if(++finishedCnt==numCourses) {
+                            return true;
+                        }
                     }
                 }
             }
         }
-        return cnt==numCourses;
+        return false;
     }
 
     public static void main(String[] args) {
