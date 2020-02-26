@@ -19,7 +19,8 @@ public class LongestPalindromicSubString {
             return s;
         }
         //预处理字符串
-        StringBuilder sb = new StringBuilder('#');
+        StringBuilder sb = new StringBuilder();
+        sb.append('#');
         for(char c : s.toCharArray()) {
             sb.append(c).append('#');
         }
@@ -98,8 +99,8 @@ public class LongestPalindromicSubString {
 
     public static void main(String[] args) {
         LongestPalindromicSubString lps = new LongestPalindromicSubString();
-        System.out.println(lps.longestPalindrome("ababad"));
-        System.out.println(lps.longestPalindrome("dcbbcd"));
+        //System.out.println(lps.longestPalindrome("ababad"));
+        //System.out.println(lps.longestPalindrome("dcbbcd"));
         System.out.println(lps.longestPalindrome("cbdfghbd"));
     }
 
