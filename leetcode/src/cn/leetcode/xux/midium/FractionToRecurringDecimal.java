@@ -1,74 +1,60 @@
 package cn.leetcode.xux.midium;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
- * If the fractional part is repeating, enclose the repeating part in parentheses.
- * Example 1:
- * Input: numerator = 1, denominator = 2
- * Output: "0.5"
- * Example 2:
- * Input: numerator = 2, denominator = 1
- * Output: "2"
- * Example 3:
- * Input: numerator = 2, denominator = 3
- * Output: "0.(6)"
+ * 166. 分数到小数
+ * 给定两个整数，分别表示分数的分子 numerator 和分母 denominator，以字符串形式返回小数。
+ * 如果小数部分为循环小数，则将循环的部分括在括号内。
+ *
+ * 示例 1:
+ * 输入: numerator = 1, denominator = 2
+ * 输出: "0.5"
+ *
+ * 示例 2:
+ * 输入: numerator = 2, denominator = 1
+ * 输出: "2"
+ *
+ * 示例 3:
+ * 输入: numerator = 2, denominator = 3
+ * 输出: "0.(6)"
  */
 public class FractionToRecurringDecimal {
 
     public String fractionToDecimal(int numerator, int denominator) {
-        if(denominator==0) {
-            return "";
-        }
-        if(numerator==0) {
+        if (numerator == 0) {
             return "0";
         }
-        boolean sign = true;
-        long l1 = (long)numerator;
-        long l2 = (long)denominator;
-        if(l1<0) {
-            sign = !sign;
-            l1 = -l1;
+        StringBuilder fraction = new StringBuilder();
+        // If either one is negative (not both)
+        if (numerator < 0 ^ denominator < 0) {
+            fraction.append("-");
         }
-        if(l2<0) {
-            sign = !sign;
-            l2 = -l2;
+        // Convert to Long or else abs(-2147483648) overflows
+        long dividend = Math.abs(Long.valueOf(numerator));
+        long divisor = Math.abs(Long.valueOf(denominator));
+        fraction.append(String.valueOf(dividend / divisor));
+        long remainder = dividend % divisor;
+        if (remainder == 0) {
+            return fraction.toString();
         }
-        String res = fractionToDecimal(l1, l2);
-        return sign?res:"-"+res;
-    }
-
-    public String fractionToDecimal(long numerator, long denominator) {
-        StringBuilder sb = new StringBuilder();
-        long a = numerator/denominator;
-        sb.append(a);
-        long b = numerator%denominator;
-        if(b==0) {
-            return sb.toString();
-        }
-        sb.append('.');
-        List<Long> list = new ArrayList<>();
-        while(!list.contains(b)&&b!=0) {
-            list.add(b);
-            b = b*10%denominator;
-        }
-        if(b==0) {
-            for(int i=0;i<list.size();i++) {
-                sb.append(list.get(i)*10/denominator);
+        fraction.append(".");
+        Map<Long, Integer> map = new HashMap<>();
+        while (remainder != 0) {
+            if (map.containsKey(remainder)) {
+                fraction.insert(map.get(remainder), "(");
+                fraction.append(")");
+                break;
             }
-        }else {
-            for(int i=0;i<list.indexOf(b);i++) {
-                sb.append(list.get(i)*10/denominator);
-            }
-            sb.append('(');
-            for(int i=list.indexOf(b);i<list.size();i++) {
-                sb.append(list.get(i)*10/denominator);
-            }
-            sb.append(')');
+            map.put(remainder, fraction.length());
+            remainder *= 10;
+            fraction.append(String.valueOf(remainder / divisor));
+            remainder %= divisor;
         }
-        return sb.toString();
+        return fraction.toString();
     }
 
 }

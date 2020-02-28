@@ -11,8 +11,8 @@ import java.util.Queue;
  *
  * 每次转换只能改变一个字母。
  * 转换过程中的中间单词必须是字典中的单词。
- * 说明:
  *
+ * 说明:
  * 如果不存在这样的转换序列，返回 0。
  * 所有单词具有相同的长度。
  * 所有单词只由小写字母组成。
@@ -24,20 +24,16 @@ import java.util.Queue;
  * beginWord = "hit",
  * endWord = "cog",
  * wordList = ["hot","dot","dog","lot","log","cog"]
- *
  * 输出: 5
- *
  * 解释: 一个最短转换序列是 "hit" -> "hot" -> "dot" -> "dog" -> "cog",
  *      返回它的长度 5。
- * 示例 2:
  *
+ * 示例 2:
  * 输入:
  * beginWord = "hit"
  * endWord = "cog"
  * wordList = ["hot","dot","dog","lot","log"]
- *
  * 输出: 0
- *
  * 解释: endWord "cog" 不在字典中，所以无法进行转换。
  */
 public class WordLadder {

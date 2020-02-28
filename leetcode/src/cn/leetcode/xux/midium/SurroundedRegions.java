@@ -26,59 +26,48 @@ import java.util.Queue;
 public class SurroundedRegions {
 
     public void solve(char[][] board) {
-        if(board==null||board.length<3||board[0].length<2) {
+        if(board==null||board.length<3||board[0].length<3) {
             return ;
         }
         int m = board.length;
         int n = board[0].length;
-        boolean[][] flags = new boolean[m][n];
-        Queue<int[]> queue = new LinkedList<>();
-        for(int i=0;i<n;i++) {
-            if(!flags[0][i]&&board[0][i]=='O') {
-                flags[0][i] = true;
-                queue.offer(new int[]{0, i});
+        for(int j=0;j<n;j++) {
+            if(board[0][j]=='O') {
+                dfs(board, 0, j);
             }
-            if(!flags[m-1][i]&&board[m-1][i]=='O') {
-                flags[m-1][i] = true;
-                queue.offer(new int[]{m-1, i});
+            if(board[m-1][j]=='O') {
+                dfs(board, m-1, j);
             }
         }
         for(int i=1;i<m-1;i++) {
-            if(!flags[i][0]&&board[i][0]=='O') {
-                flags[i][0] = true;
-                queue.offer(new int[]{i, 0});
+            if(board[i][0]=='O') {
+                dfs(board, i, 0);
             }
-            if(!flags[i][n-1]&&board[i][n-1]=='O') {
-                flags[i][n-1] = true;
-                queue.offer(new int[]{i, n-1});
-            }
-        }
-        while(!queue.isEmpty()) {
-            int[] curr = queue.poll();
-            if(curr[0]>0&&!flags[curr[0]-1][curr[1]]&&board[curr[0]-1][curr[1]]=='O') {
-                flags[curr[0]-1][curr[1]] = true;
-                queue.offer(new int[]{curr[0]-1, curr[1]});
-            }
-            if(curr[0]<m-1&&!flags[curr[0]+1][curr[1]]&&board[curr[0]+1][curr[1]]=='O') {
-                flags[curr[0]+1][curr[1]] = true;
-                queue.offer(new int[]{curr[0]+1, curr[1]});
-            }
-            if(curr[1]>0&&!flags[curr[0]][curr[1]-1]&&board[curr[0]][curr[1]-1]=='O') {
-                flags[curr[0]][curr[1]-1] = true;
-                queue.offer(new int[]{curr[0], curr[1]-1});
-            }
-            if(curr[1]<n-1&&!flags[curr[0]][curr[1]+1]&&board[curr[0]][curr[1]+1]=='O') {
-                flags[curr[0]][curr[1]+1] = true;
-                queue.offer(new int[]{curr[0], curr[1]+1});
+            if(board[i][n-1]=='O') {
+                dfs(board, i, n-1);
             }
         }
         for(int i=0;i<m;i++) {
             for(int j=0;j<n;j++) {
-                if(!flags[i][j]&&board[i][j]=='O') {
+                if(board[i][j]=='O') {
                     board[i][j] = 'X';
+                }
+                if(board[i][j]=='#') {
+                    board[i][j] = 'O';
                 }
             }
         }
+    }
+
+    public void dfs(char[][] board, int i, int j) {
+        if(i<0||i>=board.length||j<0||j>=board[0].length||board[i][j]!='O') {
+            return ;
+        }
+        board[i][j] = '#';
+        dfs(board, i-1, j);
+        dfs(board, i+1, j);
+        dfs(board, i, j-1);
+        dfs(board, i, j+1);
     }
 
 }

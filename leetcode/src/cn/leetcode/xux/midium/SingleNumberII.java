@@ -22,9 +22,12 @@ public class SingleNumberII {
         int two = 0;
         int three = 0;
         for(int num : nums) {
-            two |= (one&num);   //ones & num 提取两个数都为1的位，与twos作或操作保留出现2次的位
-            one ^= num;  //当 ones 和 num 同时为 1 or 0 时，ones = 0，因为同时为1已经加到twos里了，这里不做count
-            three = one&two;    //当ones和twos对应位都为1时，说明此位出现了3次
+            //ones & num 提取两个数都为1的位，与twos作或操作保留出现2次的位
+            two |= (one&num);
+            //当 ones 和 num 同时为 1 or 0 时，ones = 0，因为同时为1已经加到twos里了，这里不做count
+            one ^= num;
+            //当ones和twos对应位都为1时，说明此位出现了3次
+            three = one&two;
             //three为1的位，将one和two对应位归零
             one &= ~three;
             two &= ~three;

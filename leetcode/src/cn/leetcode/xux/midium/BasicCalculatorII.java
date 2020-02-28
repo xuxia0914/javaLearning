@@ -1,64 +1,83 @@
 package cn.leetcode.xux.midium;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
- * Implement a basic calculator to evaluate a simple expression string.
- * The expression string contains only non-negative integers, +, -, *, / operators and empty spaces .
- * The integer division should truncate toward zero.
- * You may assume that the given expression is always valid.
- * Some examples:
- * "3+2*2" = 7
- * " 3/2 " = 1
- * " 3+5 / 2 " = 5
- * Note: Do not use the eval built-in library function.
+ * 227. 基本计算器 II
+ * 实现一个基本的计算器来计算一个简单的字符串表达式的值。
+ * 字符串表达式仅包含非负整数，+， - ，*，/ 四种运算符和空格  。 整数除法仅保留整数部分。
+ *
+ * 示例 1:
+ * 输入: "3+2*2"
+ * 输出: 7
+ *
+ * 示例 2:
+ * 输入: " 3/2 "
+ * 输出: 1
+ *
+ * 示例 3:
+ * 输入: " 3+5 / 2 "
+ * 输出: 5
+ * 说明：
+ *
+ * 你可以假设所给定的表达式都是有效的。
+ * 请不要使用内置的库函数 eval。
  */
 public class BasicCalculatorII {
 
-    public static int solution(String s) {
-        if(s==null||"".equals(s)||"".equals(s.trim())) {}
-        int result = 0;
-        s = s.replaceAll(" ", "");
-        Stack<String> stack = new Stack<String>();
-        for(int i=0;i<s.length();i++) {
-            if(s.charAt(i)>='0'&&s.charAt(i)<='9'||s.charAt(i)=='-') {
-                int j;
-                for(j=i+1;j<s.length();j++) {
-                    if(s.charAt(j)<'0'||s.charAt(j)>'9') {
-                        break;
-                    }
+    public int calculate(String s) {
+        if(s==null||"".equals(s)||"".equals(s.trim())) {
+            return 0;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int len = s.length();
+        int num = 0;
+        char pre = '+';
+        char c;
+        for(int i=0;i<len;i++) {
+            c = s.charAt(i);
+            if(c==' ') {
+                continue;
+            }else if(c=='+'||c=='-'||c=='*'||c=='/') {
+                if(pre=='*') {
+                    stack.push(stack.pop()*num);
+                }else if(pre=='/') {
+                    stack.push(stack.pop()/num);
+                }else if(pre=='-') {
+                    stack.push(-num);
+                }else if(pre=='+') {
+                    stack.push(num);
                 }
-                stack.push(s.substring(i, j));
-                i=j-1;
-            }else if(s.charAt(i)=='*'||s.charAt(i)=='/') {
-                String x1="", x2="";
-                int j;
-                for(j=i+1;j<s.length();j++) {
-                    if(s.charAt(j)<'0'||s.charAt(j)>'9') {
-                        break;
-                    }
-                }
-                x1 = s.substring(i+1, j);
-                x2 = stack.pop();
-                if(s.charAt(i)=='*') {
-                    stack.push((String.valueOf(Integer.valueOf(x1)*Integer.valueOf(x2))));
-                }else {
-                    stack.push((String.valueOf(Integer.valueOf(x2)/Integer.valueOf(x1))));
-                }
-                i=j-1;
+                pre = c;
+                num = 0;
+            }else {
+                num = num*10+c-'0';
             }
         }
+        if(pre=='*') {
+            stack.push(stack.pop()*num);
+        }else if(pre=='/') {
+            stack.push(stack.pop()/num);
+        }else if(pre=='-') {
+            stack.push(-num);
+        }else {
+            stack.push(num);
+        }
+        int result = 0;
         while(!stack.isEmpty()) {
-            result += Integer.valueOf(stack.pop());
+            result += stack.pop();
         }
         return result;
     }
 
     public static void main(String[] args) {
-        System.out.println(solution("3+2*2"));
-        System.out.println(solution(" 3/2 "));
-        System.out.println(solution(" 3+5 / 2 "));
-        System.out.println(solution(" 3-5 / 2 "));
+        BasicCalculatorII calc = new BasicCalculatorII();
+//        System.out.println(calc.calculate("3+2*2"));
+//        System.out.println(calc.calculate(" 3/2 "));
+//        System.out.println(calc.calculate(" 3+5 / 2 "));
+        System.out.println(calc.calculate(" 3-5 / 2 "));
     }
 
 }

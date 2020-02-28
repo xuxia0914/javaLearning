@@ -36,6 +36,7 @@ import java.util.Stack;
  */
 public class KthSmallestElementInABst {
 
+    //中序遍历
     public int kthSmallest(BinaryTreeNode root, int k) {
         Stack<BinaryTreeNode> stack = new Stack<>();
         BinaryTreeNode node = root;

@@ -6,18 +6,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *Given a linked list, determine if it has a cycle in it.
- * Follow up: Can you solve it without using extra space?
- * 如何判断一个单链表中是否有环？
+ * 141. 环形链表
+ * 给定一个链表，判断链表中是否有环。
+ * 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。
  */
 public class LinkedListCycle {
 
-    public static boolean solution1(ListNode header) {
-        if(header==null) {
+    public boolean hasCycle(ListNode head) {
+        if(head==null) {
             return false;
         }
-        ListNode slow = header;
-        ListNode fast = header;
+        ListNode slow = head;
+        ListNode fast = head;
         while(fast!=null&&fast.next!=null) {
             slow = slow.next;
             fast = fast.next.next;
@@ -28,13 +28,13 @@ public class LinkedListCycle {
         return false;
     }
 
-    public static boolean solution2(ListNode header) {
+    public boolean hasCycle1(ListNode head) {
         Set<ListNode> set = new HashSet<ListNode>();
-        while(header!=null) {
-            if(!set.add(header)) {
+        while(head!=null) {
+            if(!set.add(head)) {
                 return true;
             }
-            header = header.next;
+            head = head.next;
         }
         return false;
     }
