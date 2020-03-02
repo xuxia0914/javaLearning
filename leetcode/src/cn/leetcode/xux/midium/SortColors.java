@@ -26,29 +26,14 @@ public class SortColors {
         int n = nums.length;
         int left = 0;
         int right = n-1;
-        while(left<n&&nums[left]==0) {
-            left++;
-        }
-        while(right>=0&&nums[right]==2) {
-            right--;
-        }
-        int i=left;
-        while(i<=right) {
-            if(nums[i]==1) {
-                i++;
+        int curr = 0;
+        while(curr<right) {
+            if(nums[curr]==0) {
+                swap(nums, curr++, left++);
+            }else if(nums[curr]==2) {
+                swap(nums, curr, right--);
             }else {
-                if(nums[i]==0) {
-                    swap(nums, left++, i);
-                }else {
-                    swap(nums, i, right--);
-                }
-                while(left<n&&nums[left]==0) {
-                    left++;
-                }
-                while(right>=0&&nums[right]==2) {
-                    right--;
-                }
-                i=left;
+                curr++;
             }
         }
     }

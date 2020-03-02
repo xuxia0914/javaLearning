@@ -31,36 +31,29 @@ import java.util.Stack;
 public class WiggleSubsequence {
 
     public int wiggleMaxLength(int[] nums) {
-        if(nums==null) {
+        if(nums==null||nums.length==0) {
             return 0;
         }
-        int n = nums.length;
-        if(n<2) {
-            return n;
-        }
-        Stack<Integer> stack = new Stack();
-        stack.push(nums[0]);
-        int idx = 1;
-        while(idx<n&&nums[idx]==stack.peek()) {
-            idx++;
-        }
-        if(idx==n) {
-           return 1;
-        }
-        boolean asc = nums[idx]>stack.peek();
-        stack.push(nums[idx]);
-        for(int i=idx;i<n;i++) {
-            if(nums[i]==stack.peek()) {
-                continue;
+        boolean up = true;
+        int result = 1;
+        int i=1;
+        int len = nums.length;
+        for(;i<len;i++) {
+            if(nums[i]!=nums[i-1]) {
+                if(nums[i]<nums[i-1]) {
+                    up = false;
+                }
+                result++;
+                break;
             }
-            if(asc == (nums[i]>stack.peek())) {
-                stack.pop();
-            }else {
-                asc = !asc;
-            }
-            stack.push(nums[i]);
         }
-        return stack.size();
+        for(;i<len;i++) {
+            if((up&&nums[i]<nums[i-1])||(!up&&nums[i]>nums[i-1])) {
+                result++;
+                up = !up;
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {
