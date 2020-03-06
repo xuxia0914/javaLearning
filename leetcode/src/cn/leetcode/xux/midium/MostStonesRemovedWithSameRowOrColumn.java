@@ -67,10 +67,6 @@ public class MostStonesRemovedWithSameRowOrColumn {
 
     /**
      * DSU 并查集
-     * 作者：LeetCode
-     * 链接：https://leetcode-cn.com/problems/two-sum/solution/yi-chu-zui-duo-de-tong-xing-huo-tong-lie-shi-tou-b/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      * 石子的坐标不要简单看成坐标，如坐标(a, b)要看成域(x)的点(a)和域(y)的点(b)存在联通
      * 因为a,b的数据规模不超过10000，所以可以用b+10000来隔离两个域，这样思考就可以使用一维并查集来做题了。
      *

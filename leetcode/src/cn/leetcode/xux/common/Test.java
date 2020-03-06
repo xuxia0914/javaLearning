@@ -7,6 +7,29 @@ import java.util.*;
 
 public class Test {
 
+    public int[][] findContinuousSequence(int target) {
+        List<int[]> list = new ArrayList<>();
+        int left = 1;
+        int right = 2;
+        while(left<right&&left<=target/2) {
+            int sum = (right+left)*(right-left+1)/2;
+            if(sum>target) {
+                left++;
+            }else if(sum<target) {
+                right++;
+            }else {
+                int[] seq = new int[right-left+1];
+                for(int i=left;i<=right;i++) {
+                    seq[i-left] = i;
+                }
+                list.add(seq);
+                left++;
+                right++;
+            }
+        }
+        return list.toArray(new int[list.size()][]);
+    }
+
     public int numIslands(char[][] grid) {
 
         if(grid==null||grid.length==0||grid[0].length==0) {
@@ -1083,7 +1106,7 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        Map<Integer, Integer> map = new HashMap<>();
+        /*Map<Integer, Integer> map = new HashMap<>();
         map.put(1, 9);
         map.put(2, 10);
         map.put(4, 5);
@@ -1097,10 +1120,11 @@ public class Test {
         }
         while(!queue.isEmpty()) {
             System.out.print(queue.poll()+"\t");
-        }
+        }*/
 
-        /*Test test = new Test();
-        int[][] people = new int[][]{{7,0}, {4,4}, {7,1}, {5,0}, {6,1}, {5,2}};
+        Test test = new Test();
+        System.out.println(test.findContinuousSequence(9));
+        /*int[][] people = new int[][]{{7,0}, {4,4}, {7,1}, {5,0}, {6,1}, {5,2}};
         test.reconstructQueue(people);*/
         //System.out.println(test.canFinish(2, new int[0][0]));
         /*Chopsticks chopsticks = new Chopsticks();
