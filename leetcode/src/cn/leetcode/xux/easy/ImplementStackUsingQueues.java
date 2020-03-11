@@ -34,11 +34,11 @@ public class ImplementStackUsingQueues {
 
 class MyStack {
 
-    Queue<Integer> queue = new LinkedList<>();
+    Queue<Integer> queue;
 
     /** Initialize your data structure here. */
     public MyStack() {
-
+        queue = new LinkedList<>();
     }
 
     /** Push element x onto stack. */

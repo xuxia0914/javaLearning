@@ -19,18 +19,9 @@ import cn.leetcode.xux.common.BinaryTreeNode;
 public class LowestCommonAncestorOfABinarySearchTree {
 
     public BinaryTreeNode lowestCommonAncestor(BinaryTreeNode root, BinaryTreeNode p, BinaryTreeNode q) {
-        if(p.val>q.val) {
-            BinaryTreeNode tmp = p;
-            p = q;
-            q = tmp;
-        }
-        return helper(root, p, q);
-    }
-
-    public BinaryTreeNode helper(BinaryTreeNode root, BinaryTreeNode p, BinaryTreeNode q) {
-        if(root.val<p.val) {
+        if(root.val<Math.min(p.val, q.val)) {
             return lowestCommonAncestor(root.right, p, q);
-        }else if(root.val>q.val) {
+        }else if(root.val>Math.max(p.val, q.val)) {
             return lowestCommonAncestor(root.left, p, q);
         }else {
             return root;

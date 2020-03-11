@@ -46,4 +46,49 @@ public class PalindromicSubstrings {
         return result;
     }
 
+    //Manacher算法
+    public int countSubstrings1(String s) {
+        if(s==null||s=="") {
+            return 0;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append('#');
+        for(char c : s.toCharArray()) {
+            sb.append(c).append('#');
+        }
+        String newStr = sb.toString();
+        int len = newStr.length();
+        int[] dp = new int[len];
+        dp[0] = 0;
+        int maxMid = 0;
+        int maxRight = 0;
+        int result = s.length();
+        for(int i=1;i<len;i++) {
+            if(i<maxRight) {
+                dp[i] = Math.min(dp[2*maxMid-i], maxRight-i);
+            }
+            int j=dp[i]+1;
+            while(i+j<len&&i-j>=0) {
+                if(newStr.charAt(i+j)==newStr.charAt(i-j)) {
+                    dp[i]++;
+                    j++;
+                }else {
+                    break;
+                }
+            }
+            if(i+dp[i]>maxRight) {
+                maxMid = i;
+                maxRight = i+dp[i];
+            }
+            result += dp[i]/2;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        PalindromicSubstrings ps = new PalindromicSubstrings();
+        System.out.println(ps.countSubstrings1("aaa"));
+        System.out.println(ps.countSubstrings1("abc"));
+    }
+
 }
