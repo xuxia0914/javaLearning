@@ -3,19 +3,22 @@ package cn.leetcode.xux.easy;
 import cn.leetcode.xux.common.BinaryTreeNode;
 
 /**
- * Given a binary tree, determine if it is height-balanced.
- * For this problem, a height-balanced binary tree is defined as:
- * a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
- * Example 1:
- * Given the following tree [3,9,20,null,null,15,7]:
+ * 110. 平衡二叉树
+ * 给定一个二叉树，判断它是否是高度平衡的二叉树。
+ * 本题中，一棵高度平衡二叉树定义为：
+ * 一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过1。
+ *
+ * 示例 1:
+ * 给定二叉树 [3,9,20,null,null,15,7]
  *     3
  *    / \
  *   9  20
  *     /  \
  *    15   7
- * Return true.
- * Example 2:
- * Given the following tree [1,2,2,3,3,null,null,4,4]:
+ * 返回 true 。
+ *
+ * 示例 2:
+ * 给定二叉树 [1,2,2,3,3,null,null,4,4]
  *        1
  *       / \
  *      2   2
@@ -23,12 +26,12 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  *    3   3
  *   / \
  *  4   4
- * Return false.
+ * 返回 false 。
  */
 public class BalancedBinaryTree {
 
     public boolean isBalanced(BinaryTreeNode root) {
-        return helper(root)>=0;
+        return helper(root)!=-1;
     }
 
     public int helper(BinaryTreeNode root) {
@@ -37,14 +40,7 @@ public class BalancedBinaryTree {
         }
         int left = helper(root.left);
         int right = helper(root.right);
-        if(left<0||right<0) {
-            return -1;
-        }
-        if(Math.abs(left-right)>1) {
-            return -1;
-        }else {
-            return 1+Math.max(left, right);
-        }
+        return left==-1||right==-1||Math.abs(left-right)>1?-1:1+Math.max(left, right);
     }
 
 }
