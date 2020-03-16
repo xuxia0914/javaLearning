@@ -20,10 +20,10 @@ import java.util.*;
  *   [3]
  * ]
  */
-public class BinaryTreeLevelOrderTraversalTwo {
+public class BinaryTreeLevelOrderTraversalII {
 
     public static List<List<Integer>> solution(BinaryTreeNode tree) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<List<Integer>> result = new LinkedList<List<Integer>>();
         if(tree==null) {
             return result;
         }

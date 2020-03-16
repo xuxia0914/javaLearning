@@ -5,10 +5,461 @@ import java.util.*;
 public class Test {
 
     int result_int;
+    Map<String, List<String>> mem = new HashMap<>();
 
     public static void main(String[] args) {
         Test test = new Test();
-        System.out.println(test.permutation("abc"));
+//        System.out.println(test.spiralOrder(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
+//        System.out.println(test.spiralOrder(new int[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}}));
+        System.out.println(test.spiralOrder(new int[][]{{6,9,7}}));
+    }
+
+    /**
+     * 面试题29. 顺时针打印矩阵
+     * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+     *
+     * 示例 1：
+     * 输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+     * 输出：[1,2,3,6,9,8,7,4,5]
+     *
+     * 示例 2：
+     * 输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+     * 输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+     *
+     * 限制：
+     * 0 <= matrix.length <= 100
+     * 0 <= matrix[i].length <= 100
+     */
+    public int[] spiralOrder(int[][] matrix) {
+        if(matrix==null||matrix.length==0||matrix[0].length==0) {
+            return new int[0];
+        }
+        int[] result = new int[matrix.length*matrix[0].length];
+        int up = 0;
+        int bottom = matrix.length-1;
+        int left = 0;
+        int right = matrix[0].length-1;
+        int index = 0;
+        while(up<=bottom&&left<=right) {
+            for(int i=left;i<=right;i++) {
+                result[index++] = matrix[up][i];
+            }
+            for(int i=up+1;i<=bottom;i++) {
+                result[index++] = matrix[i][right];
+            }
+            if(index<result.length) {
+                for(int i=right-1;i>=left;i--) {
+                    result[index++] = matrix[bottom][i];
+                }
+                for(int i=bottom-1;i>=up+1;i--) {
+                    result[index++] = matrix[i][left];
+                }
+            }
+            up++;
+            bottom--;
+            left++;
+            right--;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题31. 栈的压入、弹出序列
+     * 输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。
+     * 假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，
+     * 但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
+     *
+     * 示例 1：
+     * 输入：pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+     * 输出：true
+     * 解释：我们可以按以下顺序执行：
+     * push(1), push(2), push(3), push(4), pop() -> 4,
+     * push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
+     *
+     * 示例 2：
+     * 输入：pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+     * 输出：false
+     * 解释：1 不能在 2 之前弹出。
+     *
+     * 提示：
+     * 0 <= pushed.length == popped.length <= 1000
+     * 0 <= pushed[i], popped[i] < 1000
+     * pushed 是 popped 的排列。
+     */
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        if(pushed==null) {
+            return false;
+        }
+        int len = pushed.length;
+        if(len<3) {
+            return true;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int poppedIndex = 0;
+        for(int i=0;i<len;i++) {
+            stack.push(pushed[i]);
+            while(!stack.isEmpty()&&stack.peek()==popped[poppedIndex]) {
+                stack.pop();
+                poppedIndex++;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    /**
+     * 面试题32 - I. 从上到下打印二叉树
+     * 从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+     *
+     * 例如:给定二叉树: [3,9,20,null,null,15,7],
+     *     3
+     *    / \
+     *   9  20
+     *     /  \
+     *    15   7
+     * 返回：[3,9,20,15,7]
+     *
+     * 提示：节点总数 <= 1000
+     */
+    public int[] levelOrderI(BinaryTreeNode root) {
+        if(root==null) {
+            return new int[0];
+        }
+        List<Integer> list = new ArrayList<>();
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            BinaryTreeNode curr = queue.poll();
+            list.add(curr.val);
+            if(curr.left!=null) {
+                queue.offer(curr.left);
+            }
+            if(curr.right!=null) {
+                queue.offer(curr.right);
+            }
+        }
+        int[] result = new int[list.size()];
+        for(int i=0;i<result.length;i++) {
+            result[i] = list.get(i);
+        }
+        return result;
+    }
+
+    /**
+     * 面试题32 - II. 从上到下打印二叉树 II
+     * 从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。
+     *
+     * 例如:给定二叉树: [3,9,20,null,null,15,7],
+     *     3
+     *    / \
+     *   9  20
+     *     /  \
+     *    15   7
+     * 返回其层次遍历结果：
+     * [
+     *   [3],
+     *   [9,20],
+     *   [15,7]
+     * ]
+     *
+     * 提示：
+     * 节点总数 <= 1000
+     */
+    public List<List<Integer>> levelOrderII(BinaryTreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(root==null) {
+            return result;
+        }
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList<>();
+            while(size-->0) {
+                BinaryTreeNode curr = queue.poll();
+                list.add(curr.val);
+                if(curr.left!=null) {
+                    queue.offer(curr.left);
+                }
+                if(curr.right!=null) {
+                    queue.offer(curr.right);
+                }
+            }
+            result.add(list);
+        }
+        return result;
+    }
+
+    /**
+     * 面试题32 - III. 从上到下打印二叉树 III
+     * 请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。
+     *
+     * 例如:
+     * 给定二叉树: [3,9,20,null,null,15,7],
+     *     3
+     *    / \
+     *   9  20
+     *     /  \
+     *    15   7
+     * 返回其层次遍历结果：
+     * [
+     *   [3],
+     *   [20,9],
+     *   [15,7]
+     * ]
+     *
+     * 提示：
+     * 节点总数 <= 1000
+     */
+    public List<List<Integer>> levelOrderIII(BinaryTreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(root==null) {
+            return result;
+        }
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        boolean asc = true;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new LinkedList<>();
+            while(size-->0) {
+                BinaryTreeNode curr = queue.poll();
+                if(asc) {
+                    list.add(curr.val);
+                }else {
+                    list.add(0, curr.val);
+                }
+                if(curr.left!=null) {
+                    queue.offer(curr.left);
+                }
+                if(curr.right!=null) {
+                    queue.offer(curr.right);
+                }
+            }
+            result.add(list);
+            asc = !asc;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题33. 二叉搜索树的后序遍历序列
+     * 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回 true，否则返回 false。
+     * 假设输入的数组的任意两个数字都互不相同。
+     *
+     * 参考以下这颗二叉搜索树：
+     *      5
+     *     / \
+     *    2   6
+     *   / \
+     *  1   3
+     *
+     * 示例 1：
+     * 输入: [1,6,3,2,5]
+     * 输出: false
+     *
+     * 示例 2：
+     * 输入: [1,3,2,6,5]
+     * 输出: true
+     *
+     * 提示：
+     * 数组长度 <= 1000
+     */
+    //O(n2)
+    public boolean verifyPostorder(int[] postorder) {
+        if(postorder==null) {
+            return false;
+        }
+        return verifyPostorder(postorder, 0, postorder.length-1);
+    }
+
+    public boolean verifyPostorder(int[] postorder, int start, int end) {
+        if(end-start<=1) {
+            return true;
+        }
+        boolean isLeft = true;
+        int leftStart = start;
+        int leftEnd = end-1;
+        int rightEnd = end-1;
+        for(int i=start;i<end;i++) {
+            if(isLeft&&postorder[i]>postorder[end]) {
+                isLeft = false;
+                leftEnd = i-1;
+                continue;
+            }
+            if(!isLeft&&postorder[i]<postorder[end]) {
+                return false;
+            }
+        }
+        return verifyPostorder(postorder, leftStart, leftEnd)&&verifyPostorder(postorder, leftEnd+1, rightEnd);
+    }
+
+    //O(n)
+    public boolean verifyPostorder1(int[] postorder) {
+        if(postorder==null) {
+            return false;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int root = Integer.MAX_VALUE;
+        for(int i=postorder.length-1;i>=0;i--) {
+            if(postorder[i]>root) {
+                return false;
+            }
+            while(!stack.isEmpty()&&stack.peek()>postorder[i]) {
+                root = stack.pop();
+            }
+            stack.push(postorder[i]);
+        }
+        return true;
+    }
+
+    /**
+     * 面试题34. 二叉树中和为某一值的路径
+     * 输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
+     *
+     * 示例:
+     * 给定如下二叉树，以及目标和 sum = 22，
+     *               5
+     *              / \
+     *             4   8
+     *            /   / \
+     *           11  13  4
+     *          /  \    / \
+     *         7    2  5   1
+     * 返回:
+     * [
+     *    [5,4,11,2],
+     *    [5,8,4,5]
+     * ]
+     *
+     * 提示：
+     * 节点总数 <= 10000
+     */
+    List<List<Integer>> result_list = new ArrayList<>();
+    public List<List<Integer>> pathSum(BinaryTreeNode root, int sum) {
+        result_list.clear();
+        if(root==null) {
+            return result_list;
+        }
+        pathSum(new ArrayList<Integer>(), root, 0, sum);
+        return result_list;
+    }
+
+    public void pathSum(List<Integer> curr, BinaryTreeNode node, int pre, int sum) {
+        pre += node.val;
+        List<Integer> newCurr = new ArrayList<>(curr);
+        newCurr.add(node.val);
+        if(node.left==null&&node.right==null) {
+            if(pre==sum) {
+                result_list.add(newCurr);
+            }
+            return;
+        }
+        if(node.left!=null) {
+            pathSum(newCurr, node.left, pre, sum);
+        }
+        if(node.right!=null) {
+            pathSum(newCurr, node.right, pre, sum);
+        }
+    }
+
+    /**
+     * 面试题35. 复杂链表的复制
+     * 请实现 copyRandomList 函数，复制一个复杂链表。
+     * 在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null。
+     *
+     * 示例 1：
+     * 输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+     * 输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+     *
+     * 示例 2：
+     * 输入：head = [[1,1],[2,1]]
+     * 输出：[[1,1],[2,1]]
+     *
+     * 示例 3：
+     * 输入：head = [[3,null],[3,0],[3,null]]
+     * 输出：[[3,null],[3,0],[3,null]]
+     *
+     * 示例 4：
+     * 输入：head = []
+     * 输出：[]
+     * 解释：给定的链表为空（空指针），因此返回 null。
+     *
+     * 提示：
+     * -10000 <= Node.val <= 10000
+     * Node.random 为空（null）或指向链表中的节点。
+     * 节点数目不超过 1000 。
+     */
+    public ListNodeWithPointer copyRandomList(ListNodeWithPointer head) {
+        if(head==null) {
+            return null;
+        }
+        ListNodeWithPointer newHead = new ListNodeWithPointer(head.val);
+        Map<ListNodeWithPointer, ListNodeWithPointer> map = new HashMap<>();
+        map.put(head, newHead);
+        Queue<ListNodeWithPointer> queue = new LinkedList<>();
+        queue.offer(head);
+        while(!queue.isEmpty()) {
+            ListNodeWithPointer curr = queue.poll();
+            if(curr.next!=null) {
+                if(map.containsKey(curr.next)) {
+                    map.get(curr).next = map.get(curr.next);
+                }else {
+                    ListNodeWithPointer node = new ListNodeWithPointer(curr.next.val);
+                    map.get(curr).next = node;
+                    map.put(curr.next, node);
+                    queue.offer(curr.next);
+                }
+            }
+            if(curr.point!=null) {
+                if(map.containsKey(curr.point)) {
+                    map.get(curr).point = map.get(curr.point);
+                }else {
+                    ListNodeWithPointer node = new ListNodeWithPointer(curr.point.val);
+                    map.get(curr).point = node;
+                    map.put(curr.point, node);
+                    queue.offer(curr.point);
+                }
+            }
+        }
+        return newHead;
+    }
+
+    /**
+     * 面试题36. 二叉搜索树与双向链表
+     * 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的循环双向链表。要求不能创建任何新的节点，只能调整树中节点指针的指向。
+     * 为了让您更好地理解问题，以下面的二叉搜索树为例：
+     * 我们希望将这个二叉搜索树转化为双向循环链表。链表中的每个节点都有一个前驱和后继指针。对于双向循环链表，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
+     * 下图展示了上面的二叉搜索树转化成的链表。“head” 表示指向链表中有最小元素的节点。
+     * 特别地，我们希望可以就地完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中的第一个节点的指针。
+     */
+    public BinaryTreeNode treeToDoublyList(BinaryTreeNode root) {
+        if(root==null) {
+            return null;
+        }
+        BinaryTreeNode curr = root;
+        Stack<BinaryTreeNode> stack = new Stack<>();
+        while(curr!=null) {
+            stack.push(curr);
+            curr = curr.left;
+        }
+        BinaryTreeNode head = stack.peek();
+        BinaryTreeNode pre = null;
+        while(!stack.isEmpty()) {
+            curr = stack.pop();
+            curr.left = pre;
+            if(pre!=null) {
+                pre.right = curr;
+            }
+            pre = curr;
+            curr = curr.right;
+            while(curr!=null) {
+                stack.push(curr);
+                curr = curr.left;
+            }
+        }
+        head.left = pre;
+        pre.right = head;
+        return head;
     }
 
     /**
@@ -23,9 +474,36 @@ public class Test {
      * 限制：
      * 1 <= s 的长度 <= 8
      */
-    public List<String> permutation(String s) {
-        //TODO
-        return null;
+    public String[] permutation(String s) {
+        List<String> list = permutationHelper(s);
+        return list.toArray(new String[list.size()]);
+    }
+
+    public List<String> permutationHelper(String s) {
+        List<String> result = new ArrayList<>();
+        if(s==null||s.length()==0) {
+            return result;
+        }
+        if(s.length()==1) {
+            result.add(s);
+            return result;
+        }
+        if(mem.containsKey(s)) {
+            return mem.get(s);
+        }
+        Set<Character> set = new HashSet<>();
+        for(int i=0;i<s.length();i++) {
+            char curr = s.charAt(i);
+            if(!set.add(curr)) {
+                continue;
+            }
+            List<String> remain = permutationHelper(s.substring(0, i)+s.substring(i+1));
+            for(String str : remain) {
+                result.add(curr+str);
+            }
+        }
+        mem.put(s, result);
+        return result;
     }
 
     /**
@@ -810,10 +1288,41 @@ class MaxQueue {
         return value;
     }
 }
-/**
- * Your MaxQueue object will be instantiated and called as such:
- * MaxQueue obj = new MaxQueue();
- * int param_1 = obj.max_value();
- * obj.push_back(value);
- * int param_3 = obj.pop_front();
- */
+
+class MinStack {
+
+    Stack<Integer> stack1;
+    Stack<Integer> stack2;
+
+    /** initialize your data structure here. */
+    public MinStack() {
+        stack1 = new Stack<>();
+        stack2 = new Stack<>();
+    }
+
+    public void push(int x) {
+        stack1.push(x);
+        if(stack2.isEmpty()||x<=stack2.peek()) {
+            stack2.push(x);
+        }
+    }
+
+    public void pop() {
+        if(stack1.isEmpty()) {
+            return;
+        }
+        int x = stack1.pop();
+        if(!stack2.isEmpty()&&stack2.peek()==x) {
+            stack2.pop();
+        }
+    }
+
+    public int top() {
+        return stack1.isEmpty()?-1:stack1.peek();
+    }
+
+    public int getMin() {
+        return stack2.isEmpty()?-1:stack2.peek();
+    }
+
+}

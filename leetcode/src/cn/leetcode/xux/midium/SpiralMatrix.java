@@ -1,84 +1,62 @@
 package cn.leetcode.xux.midium;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 螺旋遍历矩阵
- *Given a matrix of m x n elements (m rows, ncolumns), return all elements of the matrix in spiral order.
- * Example 1:
- * Input:
+ * 54. 螺旋矩阵
+ * 给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+ *
+ * 示例 1:
+ * 输入:
  * [
  *  [ 1, 2, 3 ],
  *  [ 4, 5, 6 ],
  *  [ 7, 8, 9 ]
  * ]
- * Output: [1,2,3,6,9,8,7,4,5]
- * Example 2:
- * Input:
+ * 输出: [1,2,3,6,9,8,7,4,5]
+ *
+ * 示例 2:
+ * 输入:
  * [
  *   [1, 2, 3, 4],
  *   [5, 6, 7, 8],
  *   [9,10,11,12]
  * ]
- * Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+ * 输出: [1,2,3,4,8,12,11,10,9,5,6,7]
  */
 public class SpiralMatrix {
-    public static List<Integer> solution(int[][] matrix) {
-        int minColumn=0, maxColumn=matrix[0].length-1, minRow=0, maxRow=matrix.length-1;
-        boolean ifColumn=true, columnAsc=true, rowAsc=true;
-        List<Integer> result = new ArrayList<Integer>();
-        while(minRow<=maxRow&&minColumn<=maxColumn) {
-            if(ifColumn) {
-                if(columnAsc) {
-                    for(int i=minColumn;i<=maxColumn;i++) {
-                        result.add(matrix[minRow][i]);
-                    }
-                    minRow++;
-                }else {
-                    for(int i=maxColumn;i>=minColumn;i--) {
-                        result.add(matrix[maxRow][i]);
-                    }
-                    maxRow--;
-                }
-                columnAsc = !columnAsc;
-            }else {
-                if(rowAsc) {
-                    for(int i=minRow;i<=maxRow;i++) {
-                        result.add(matrix[i][maxColumn]);
-                    }
-                    maxColumn--;
-                }else {
-                    for(int i=maxRow;i>=minRow;i--) {
-                        result.add(matrix[i][minColumn]);
-                    }
-                    minColumn++;
-                }
-                rowAsc = !rowAsc;
+
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new LinkedList<>();
+        if(matrix==null||matrix.length==0||matrix[0].length==0) {
+            return result;
+        }
+        int up = 0;
+        int bottom = matrix.length-1;
+        int left = 0;
+        int right = matrix[0].length-1;
+        while(up<=bottom&&left<=right) {
+            for(int i=left;i<=right;i++) {
+                result.add(matrix[up][i]);
             }
-            ifColumn = !ifColumn;
+            for(int i=up+1;i<=bottom;i++) {
+                result.add(matrix[i][right]);
+            }
+            if(up<bottom&&left<right) {
+                for(int i=right-1;i>=left;i--) {
+                    result.add(matrix[bottom][i]);
+                }
+                for(int i=bottom-1;i>=up+1;i--) {
+                    result.add(matrix[i][left]);
+                }
+            }
+            up++;
+            bottom--;
+            left++;
+            right--;
         }
         return result;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(solution(
-                new int[][]{{1, 2, 3},
-                            {4, 5, 6},
-                            {7, 8, 9}}
-        ));
-        System.out.println(solution(
-                new int[][]{{1, 2, 3, 4},
-                            {5, 6, 7, 8},
-                            {9, 10,11,12}}
-        ));
-        System.out.println(solution(
-                new int[][]{{1, 2, 3, 4},
-                            {5, 6, 7, 8},
-                            {9, 10,11,12},
-                            {13,14,15,16},
-                            {17,18,19,20}}
-        ));
     }
 
 }
