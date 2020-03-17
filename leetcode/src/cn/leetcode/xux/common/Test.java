@@ -15,6 +15,361 @@ public class Test {
     }
 
     /**
+     * 面试题18. 删除链表的节点
+     * 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
+     * 返回删除后的链表的头节点。
+     *
+     * 注意：此题对比原题有改动
+     * 示例 1:
+     * 输入: head = [4,5,1,9], val = 5
+     * 输出: [4,1,9]
+     * 解释: 给定你链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9.
+     *
+     * 示例 2:
+     * 输入: head = [4,5,1,9], val = 1
+     * 输出: [4,5,9]
+     * 解释: 给定你链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -> 5 -> 9.
+     *
+     * 说明：
+     * 题目保证链表中节点的值互不相同
+     * 若使用 C 或 C++ 语言，你不需要 free 或 delete 被删除的节点
+     */
+    public ListNode deleteNode(ListNode head, int val) {
+        if(head==null) {
+            return null;
+        }
+        ListNode newHead = new ListNode(0);
+        newHead.next = head;
+        ListNode curr = newHead;
+        while(curr!=null&&curr.next!=null) {
+            if(curr.next.val==val) {
+                curr.next = curr.next.next;
+                break;
+            }
+            curr = curr.next;
+        }
+        return newHead.next;
+    }
+
+    /**
+     * 面试题20. 表示数值的字符串
+     * 请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。
+     * 例如，字符串"+100"、"5e2"、"-123"、"3.1416"、"0123"及"-1E-16"都表示数值，
+     * 但"12e"、"1a3.14"、"1.2.3"、"+-5"及"12e+5.4"都不是。
+     */
+    public boolean isNumber(String s) {
+        if(s==null||s.trim().length()==0) {
+            return false;
+        }
+        s = s.trim();
+        String[] ss = s.split("e", -1);
+        if(ss.length==0||ss.length>2) {
+            return false;
+        }
+        boolean pre = isNum(ss[0]);
+        if(ss.length==1) {
+            return pre;
+        }else {
+            boolean post = ss[1].startsWith("+")||ss[1].startsWith("-")?isInteger(ss[1].substring(1)):isInteger(ss[1]);
+            return pre&&post;
+        }
+    }
+    public boolean isNum(String s) {
+        if(s.length()==0) {
+            return false;
+        }
+        if(s.startsWith("+")||s.startsWith("-")) {
+            s = s.substring(1);
+        }
+        String[] ss = s.split("\\.", -1);
+        if(ss.length==0||ss.length>2) {
+            return false;
+        }
+        boolean pre = isInteger(ss[0]);
+        if(ss.length==1) {
+            return isInteger(ss[0]);
+        }else {
+            boolean post = isInteger(ss[1]);
+            return (ss[0].length()==0&&post)||(ss[1].length()==0&&pre)||(pre&&post);
+        }
+    }
+    public boolean isInteger(String s) {
+        if(s.length()==0) {
+            return false;
+        }
+        for(int i=0;i<s.length();i++) {
+            char c = s.charAt(i);
+            if(c>'9'||c<'0') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 面试题21. 调整数组顺序使奇数位于偶数前面
+     * 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分。
+     *
+     * 示例：
+     * 输入：nums = [1,2,3,4]
+     * 输出：[1,3,2,4]
+     * 注：[3,1,2,4] 也是正确的答案之一。
+     *
+     * 提示：
+     * 1 <= nums.length <= 50000
+     * 1 <= nums[i] <= 10000
+     */
+    public int[] exchange(int[] nums) {
+        if(nums==null||nums.length<2) {
+            return nums;
+        }
+        int len = nums.length;
+        int left = 0;
+        int right = len-1;
+        while(left<right) {
+            while(left<right&&nums[left]%2==1) {
+                left++;
+            }
+            while(left<right&&nums[right]%2==0) {
+                right--;
+            }
+            if(left<right) {
+                int tmp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = tmp;
+                left++;
+                right--;
+            }
+        }
+        return nums;
+    }
+
+    /**
+     * 面试题22. 链表中倒数第k个节点
+     * 输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。
+     * 例如，一个链表有6个节点，从头节点开始，它们的值依次是1、2、3、4、5、6。这个链表的倒数第3个节点是值为4的节点。
+     *
+     * 示例：
+     * 给定一个链表: 1->2->3->4->5, 和 k = 2.
+     * 返回链表 4->5.
+     */
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        if(head==null||k<=0) {
+            return null;
+        }
+        ListNode right = head;
+        while(k-->0&&right!=null) {
+            right = right.next;
+        }
+        if(k>0) {
+            return null;
+        }
+        ListNode left = head;
+        while(right!=null) {
+            left = left.next;
+            right = right.next;
+        }
+        return left;
+    }
+
+    /**
+     * 面试题24. 反转链表
+     * 定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
+     *
+     * 示例:
+     * 输入: 1->2->3->4->5->NULL
+     * 输出: 5->4->3->2->1->NULL
+     *
+     * 限制：
+     * 0 <= 节点个数 <= 5000
+     */
+    public ListNode reverseList(ListNode head) {
+        if(head==null) {
+            return null;
+        }
+        ListNode result = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return result;
+        /*ListNode pre = null;
+        ListNode curr = head;
+        while(curr!=null) {
+            ListNode tmp = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = tmp;
+        }
+        return pre;*/
+    }
+
+    /**
+     * 面试题25. 合并两个排序的链表
+     * 输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
+     *
+     * 示例1：
+     * 输入：1->2->4, 1->3->4
+     * 输出：1->1->2->3->4->4
+     *
+     * 限制：
+     * 0 <= 链表长度 <= 1000
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode(0);
+        ListNode curr = head;
+        while(l1!=null&&l2!=null) {
+            if(l1.val<=l2.val) {
+                curr.next = l1;
+                l1 = l1.next;
+                curr = curr.next;
+            }else {
+                curr.next = l2;
+                l2 = l2.next;
+                curr = curr.next;
+            }
+        }
+        curr.next = l1==null?l2 : l1;
+        return head.next;
+    }
+
+    /**
+     * 面试题26. 树的子结构
+     * 输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
+     * B是A的子结构， 即 A中有出现和B相同的结构和节点值。
+     * 例如:给定的树 A:
+     *      3
+     *     / \
+     *    4   5
+     *   / \
+     *  1   2
+     * 给定的树 B：
+     *    4
+     *   /
+     *  1
+     * 返回 true，因为 B 与 A 的一个子树拥有相同的结构和节点值。
+     *
+     * 示例 1：
+     * 输入：A = [1,2,3], B = [3,1]
+     * 输出：false
+     *
+     * 示例 2：
+     * 输入：A = [3,4,5,1,2], B = [4,1]
+     * 输出：true
+     *
+     * 限制：
+     * 0 <= 节点个数 <= 10000
+     */
+    public boolean isSubStructure(BinaryTreeNode A, BinaryTreeNode B) {
+        if(A==null||B==null) {
+            return false;
+        }
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(A);
+        while(!queue.isEmpty()) {
+            BinaryTreeNode curr = queue.poll();
+            if(isSame(curr, B)) {
+                return true;
+            }else {
+                if(curr.left!=null) {
+                    queue.offer(curr.left);
+                }
+                if(curr.right!=null) {
+                    queue.offer(curr.right);
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isSame(BinaryTreeNode A, BinaryTreeNode B) {
+        if(B==null) {
+            return true;
+        }
+        if(A==null||A.val!=B.val) {
+            return false;
+        }
+        return isSame(A.left, B.left)&&isSame(A.right, B.right);
+    }
+
+    /**
+     * 面试题27. 二叉树的镜像
+     * 请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+     *
+     * 例如输入：
+     *      4
+     *    /   \
+     *   2     7
+     *  / \   / \
+     * 1   3 6   9
+     * 镜像输出：
+     *      4
+     *    /   \
+     *   7     2
+     *  / \   / \
+     * 9   6 3   1
+     *
+     * 示例 1：
+     * 输入：root = [4,2,7,1,3,6,9]
+     * 输出：[4,7,2,9,6,3,1]
+     *
+     * 限制：
+     * 0 <= 节点个数 <= 1000
+     */
+    public BinaryTreeNode mirrorTree(BinaryTreeNode root) {
+        if(root==null) {
+            return null;
+        }
+        BinaryTreeNode result = new BinaryTreeNode(root.val);
+        result.left = mirrorTree(root.right);
+        result.right = mirrorTree(root.left);
+        return result;
+    }
+
+    /**
+     * 面试题28. 对称的二叉树
+     * 请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+     * 例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+     *     1
+     *    / \
+     *   2   2
+     *  / \ / \
+     * 3  4 4  3
+     * 但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+     *     1
+     *    / \
+     *   2   2
+     *    \   \
+     *    3    3
+     *
+     * 示例 1：
+     * 输入：root = [1,2,2,3,4,4,3]
+     * 输出：true
+     *
+     * 示例 2：
+     * 输入：root = [1,2,2,null,3,null,3]
+     * 输出：false
+     *
+     * 限制：
+     * 0 <= 节点个数 <= 1000
+     */
+    //递归
+    public boolean isSymmetric(BinaryTreeNode root) {
+        if(root==null) {
+            return true;
+        }
+        return isSymmetric(root.left, root.right);
+    }
+
+    public boolean isSymmetric(BinaryTreeNode left, BinaryTreeNode right) {
+        if(left==null&&right==null) {
+            return true;
+        }
+        if(left==null||right==null||left.val!=right.val) {
+            return false;
+        }
+        return isSymmetric(left.left, right.right)&&isSymmetric(left.right, right.left);
+    }
+
+    /**
      * 面试题29. 顺时针打印矩阵
      * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
      *

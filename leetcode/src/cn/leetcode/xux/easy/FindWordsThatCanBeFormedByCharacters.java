@@ -1,7 +1,7 @@
 package cn.leetcode.xux.easy;
 
 /**
- * 5048. 拼写单词
+ * 1160. 拼写单词
  * 给你一份『词汇表』（字符串数组） words 和一张『字母表』（字符串） chars。
  * 假如你可以用 chars 中的『字母』（字符）拼写出 words 中的某个『单词』（字符串），那么我们就认为你掌握了这个单词。
  * 注意：每次拼写时，chars 中的每个字母都只能用一次。
@@ -27,29 +27,30 @@ package cn.leetcode.xux.easy;
 public class FindWordsThatCanBeFormedByCharacters {
 
     public int countCharacters(String[] words, String chars) {
+        int result = 0;
         if(words==null||words.length==0||chars==null||chars.length()==0) {
-            return 0;
+            return result;
         }
         int[] cnts = new int[26];
-        for(int i=0;i<chars.length();i++) {
-            cnts[chars.charAt(i)-'a']++;
+        for(char c : chars.toCharArray()) {
+            cnts[c-'a']++;
         }
-        int res = 0;
         for(String word : words) {
-            int[] tmp = new int[26];
-            for(int i=0;i<word.length();i++) {
-                tmp[word.charAt(i)-'a']++;
-            }
-            for(int i=0;i<26;i++) {
-                if(tmp[i]>cnts[i]) {
+            int[] curr = cnts.clone();
+            boolean flag = true;
+            for(char c : word.toCharArray()) {
+                if(curr[c-'a']==0) {
+                    flag = false;
                     break;
+                }else {
+                    curr[c-'a']--;
                 }
-                if(i==25) {
-                    res += word.length();
-                }
+            }
+            if(flag) {
+                result += word.length();
             }
         }
-        return res;
+        return result;
     }
 
 }

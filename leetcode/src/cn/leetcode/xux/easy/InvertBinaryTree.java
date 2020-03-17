@@ -3,15 +3,17 @@ package cn.leetcode.xux.easy;
 import cn.leetcode.xux.common.BinaryTreeNode;
 
 /**
- * Invert a binary tree.
- * Example:
- * Input:
+ * 226. 翻转二叉树
+ * 翻转一棵二叉树。
+ *
+ * 示例：
+ * 输入：
  *      4
  *    /   \
  *   2     7
  *  / \   / \
  * 1   3 6   9
- * Output:
+ * 输出：
  *      4
  *    /   \
  *   7     2
