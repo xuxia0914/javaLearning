@@ -34,12 +34,8 @@ public class PowXN {
                 return myPow(1/x, -n);
             }
         }
-        double half = myPow(x, n/2);
-        if(n%2==0) {
-            return half*half;
-        }else {
-            return half*half*x;
-        }
+        double pre = myPow(x, n/2);
+        return n%2==1?pre*pre*x:pre*pre;
     }
 
 }

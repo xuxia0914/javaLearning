@@ -24,14 +24,13 @@ public class FindMinimumInRotatedSortedArray {
         while(left<right) {
             if(nums[left]<nums[right]) {
                 return nums[left];
+            }
+            mid = (left+right)/2;
+            if(nums[left]<nums[mid]) {
+                left = mid+1;
             }else {
-                mid = (left+right)/2;
-                if(nums[left]<nums[mid]) {
-                    left = mid+1;
-                }else {
-                    left++;
-                    right = mid;
-                }
+                left++;
+                right = mid;
             }
 
         }

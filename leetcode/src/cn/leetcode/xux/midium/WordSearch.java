@@ -12,9 +12,15 @@ package cn.leetcode.xux.midium;
  *   ['S','F','C','S'],
  *   ['A','D','E','E']
  * ]
- * 给定 word = "ABCCED", 返回 true.
- * 给定 word = "SEE", 返回 true.
- * 给定 word = "ABCB", 返回 false.
+ * 给定 word = "ABCCED", 返回 true
+ * 给定 word = "SEE", 返回 true
+ * 给定 word = "ABCB", 返回 false
+ *
+ * 提示：
+ * board 和 word 中只包含大写和小写英文字母。
+ * 1 <= board.length <= 200
+ * 1 <= board[i].length <= 200
+ * 1 <= word.length <= 10^3
  */
 public class WordSearch {
 
@@ -23,7 +29,7 @@ public class WordSearch {
         int n = board[0].length;
         for(int i=0;i<m;i++) {
             for(int j=0;j<n;j++) {
-                if(helper(board, new boolean[m][n], word, 0, i, j)) {
+                if(exist(board, word, 0, i, j)) {
                     return true;
                 }
             }
@@ -31,31 +37,23 @@ public class WordSearch {
         return false;
     }
 
-    boolean helper(char[][] board, boolean[][] visited, String word, int idx, int i, int j) {
+    boolean exist(char[][] board, String word, int idx, int i, int j) {
         if(idx==word.length()) {
             return true;
         }
         int m = board.length;
         int n = board[0].length;
-        if(i<0||i>=m||j<0||j>=n||board[i][j]!=word.charAt(idx)||visited[i][j]) {
+        if(i<0||i>=m||j<0||j>=n||board[i][j]!=word.charAt(idx)) {
             return false;
         }
-        visited[i][j] = true;
-        boolean res = helper(board, visited, word, idx+1, i-1, j)
-                ||helper(board, visited, word, idx+1, i+1, j)
-                ||helper(board, visited, word, idx+1, i, j-1)
-                ||helper(board, visited, word, idx+1, i, j+1);
-        visited[i][j] = false;
+        char tmp = board[i][j];
+        board[i][j] = '#';
+        boolean res = exist(board, word, idx+1, i-1, j)
+                ||exist(board, word, idx+1, i+1, j)
+                ||exist(board, word, idx+1, i, j-1)
+                ||exist(board, word, idx+1, i, j+1);
+        board[i][j] = tmp;
         return res;
-    }
-
-    public static void main(String[] args) {
-        /*System.out.println(new WordSearch().exist(new char[][]{
-                {'o','a','a','n'},
-                {'e','t','a','e'},
-                {'i','h','k','r'},
-                {'i','f','l','v'}},"oath"));*/
-        System.out.println(new WordSearch().exist(new char[][]{{'a','a'}},"aaa"));
     }
 
 }

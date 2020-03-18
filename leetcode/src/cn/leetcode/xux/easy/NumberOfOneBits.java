@@ -29,40 +29,14 @@ package cn.leetcode.xux.easy;
  */
 public class NumberOfOneBits {
 
-    public static int solution1(int n) {
-        int sum = 0;
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int result = 0;
         while(n!=0) {
-            sum++;
             n &= n-1;
+            result++;
         }
-        return sum;
-    }
-
-    public static int solution2(int n) {
-        int sum = 0;
-        int mask = 1;
-        for(int i=0;i<=31;i++) {
-            if((n&mask)!=0) {
-                sum++;
-            }
-            mask<<=1;
-        }
-        return sum;
-    }
-
-    public static int solution3(int n) {
-        int sum = 0;
-        while(n!=0) {
-            if(n%2==1) {
-                sum++;
-            }
-            n>>=1;
-        }
-        return sum;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(solution3(11));
+        return result;
     }
 
 }

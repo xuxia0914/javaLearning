@@ -11,7 +11,303 @@ public class Test {
         Test test = new Test();
 //        System.out.println(test.spiralOrder(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
 //        System.out.println(test.spiralOrder(new int[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}}));
-        System.out.println(test.spiralOrder(new int[][]{{6,9,7}}));
+//        System.out.println(test.spiralOrder(new int[][]{{6,9,7}}));
+        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
+    }
+
+    /**
+     * 面试题11. 旋转数组的最小数字
+     * 把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的一个旋转，输出旋转数组的最小元素。
+     * 例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一个旋转，该数组的最小值为1。
+     *
+     * 示例 1：
+     * 输入：[3,4,5,1,2]
+     * 输出：1
+     *
+     * 示例 2：
+     * 输入：[2,2,2,0,1]
+     * 输出：0
+     */
+    public int minArray(int[] numbers) {
+        int left = 0, right = numbers.length - 1;
+        int mid;
+        while (left<right) {
+            mid = (left+right)/2;
+            if (numbers[mid]>numbers[right]) {
+                left = mid+1;
+            }else if(numbers[mid]<numbers[right]) {
+                right = mid;
+            }else {
+                right--;
+            }
+        }
+        return numbers[left];
+    }
+
+    /**
+     * 面试题12. 矩阵中的路径
+     * 请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。
+     * 如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。例如，在下面的3×4的矩阵中包含一条字符串“bfce”的路径（路径中的字母用加粗标出）。
+     * [["a","b","c","e"],
+     * ["s","f","c","s"],
+     * ["a","d","e","e"]]
+     * 但矩阵中不包含字符串“abfb”的路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入这个格子。
+     *
+     * 示例 1：
+     * 输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+     * 输出：true
+     *
+     * 示例 2：
+     * 输入：board = [["a","b"],["c","d"]], word = "abcd"
+     * 输出：false
+     *
+     * 提示：
+     * 1 <= board.length <= 200
+     * 1 <= board[i].length <= 200
+     */
+    public boolean exist(char[][] board, String word) {
+        int m = board.length;
+        int n = board[0].length;
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(exist(board, word, i, j, 0)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean exist(char[][] board, String word, int i, int j, int curr) {
+        if(curr==word.length()) {
+            return true;
+        }
+        if(i<0||i>=board.length||j<0||j>=board[0].length||board[i][j]!=word.charAt(curr)) {
+            return false;
+        }
+        char tmp = board[i][j];
+        board[i][j]  = '#';
+        boolean res = exist(board, word, i-1, j, curr+1)
+                ||exist(board, word, i+1, j, curr+1)
+                ||exist(board, word, i, j-1, curr+1)
+                ||exist(board, word, i, j+1, curr+1);
+        board[i][j] = tmp;
+        return res;
+    }
+
+    /**
+     * 面试题13. 机器人的运动范围
+     * 地上有一个m行n列的方格，从坐标 [0,0] 到坐标 [m-1,n-1] 。
+     * 一个机器人从坐标 [0, 0] 的格子开始移动，它每次可以向左、右、上、下移动一格（不能移动到方格外），也不能进入行坐标和列坐标的数位之和大于k的格子。
+     * 例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。但它不能进入方格 [35, 38]，因为3+5+3+8=19。请问该机器人能够到达多少个格子？
+     *
+     * 示例 1：
+     * 输入：m = 2, n = 3, k = 1
+     * 输出：3
+     *
+     * 示例 2：
+     * 输入：m = 3, n = 1, k = 0
+     * 输出：1
+     *
+     * 提示：
+     * 1 <= n,m <= 100
+     * 0 <= k <= 20
+     */
+    public int movingCount(int m, int n, int k) {
+        if(m<=0||n<=0||k<0) {
+            return 0;
+        }
+        result_int = 0;
+        movingCount(0, 0, k, new boolean[m][n]);
+        return result_int;
+    }
+
+    public void movingCount(int i, int j, int k, boolean[][] visited) {
+        if(i<0||i>=visited.length||j<0||j>=visited[0].length||visited[i][j]) {
+            return;
+        }
+        visited[i][j] = true;
+        int target = 0;
+        int tmpI = i;
+        while(tmpI>0) {
+            target += tmpI%10;
+            tmpI /= 10;
+        }
+        int tmpJ = j;
+        while(tmpJ>0) {
+            target += tmpJ%10;
+            tmpJ /= 10;
+        }
+        if(target>k) {
+            return ;
+        }
+        result_int++;
+        movingCount(i-1, j, k, visited);
+        movingCount(i+1, j, k, visited);
+        movingCount(i, j-1, k, visited);
+        movingCount(i, j+1, k, visited);
+    }
+
+    /**
+     * 面试题14- I. 剪绳子
+     * 给你一根长度为 n 的绳子，请把绳子剪成整数长度的 m 段（m、n都是整数，n>1并且m>1），
+     * 每段绳子的长度记为 k[0],k[1]...k[m] 。请问 k[0]*k[1]*...*k[m] 可能的最大乘积是多少？
+     * 例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+     *
+     * 示例 1：
+     * 输入: 2
+     * 输出: 1
+     * 解释: 2 = 1 + 1, 1 × 1 = 1
+     *
+     * 示例 2:
+     * 输入: 10
+     * 输出: 36
+     * 解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36
+     *
+     * 提示：
+     * 2 <= n <= 58
+     */
+    public int cuttingRopeI(int n) {
+        if(n==2||n==3) {
+            return n-1;
+        }
+        int m = n/3-1;
+        int result = (int)Math.pow(3, m);
+        if(n%3==0) {
+            return result*3;
+        }else if(n%3==1) {
+            return result*4;
+        }else {
+            return result*6;
+        }
+    }
+
+    /**
+     * 面试题14- II. 剪绳子 II
+     * 给你一根长度为 n 的绳子，请把绳子剪成整数长度的 m 段（m、n都是整数，n>1并且m>1），
+     * 每段绳子的长度记为 k[0],k[1]...k[m] 。请问 k[0]*k[1]*...*k[m] 可能的最大乘积是多少？
+     * 例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+     * 答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+     *
+     * 示例 1：
+     * 输入: 2
+     * 输出: 1
+     * 解释: 2 = 1 + 1, 1 × 1 = 1
+     *
+     * 示例 2:
+     * 输入: 10
+     * 输出: 36
+     * 解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36
+     *
+     * 提示：
+     * 2 <= n <= 1000
+     */
+    public int cuttingRopeII(int n) {
+        if(n==2||n==3) {
+            return n-1;
+        }
+        int mod = 1000000007;
+        int m = n/3-1;
+        long result = 1;
+        while(m-->0) {
+            result = result*3%mod;
+        }
+        if(n%3==0) {
+            return (int)result*3%mod;
+        }else if(n%3==1) {
+            return (int)result*4%mod;
+        }else {
+            return (int)result*6%mod;
+        }
+    }
+
+    /**
+     * 面试题15. 二进制中1的个数
+     * 请实现一个函数，输入一个整数，输出该数二进制表示中 1 的个数。例如，把 9 表示成二进制是 1001，有 2 位是 1。因此，如果输入 9，则该函数输出 2。
+     *
+     * 示例 1：
+     * 输入：00000000000000000000000000001011
+     * 输出：3
+     * 解释：输入的二进制串 00000000000000000000000000001011 中，共有三位为 '1'。
+     *
+     * 示例 2：
+     * 输入：00000000000000000000000010000000
+     * 输出：1
+     * 解释：输入的二进制串 00000000000000000000000010000000 中，共有一位为 '1'。
+     *
+     * 示例 3：
+     * 输入：11111111111111111111111111111101
+     * 输出：31
+     * 解释：输入的二进制串 11111111111111111111111111111101 中，共有 31 位为 '1'。
+     */
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int result = 0;
+        while(n!=0) {
+            n &= n-1;
+            result++;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题16. 数值的整数次方
+     * 实现函数double Power(double base, int exponent)，求base的exponent次方。不得使用库函数，同时不需要考虑大数问题。
+     *
+     * 示例 1:
+     * 输入: 2.00000, 10
+     * 输出: 1024.00000
+     *
+     * 示例 2:
+     * 输入: 2.10000, 3
+     * 输出: 9.26100
+     *
+     * 示例 3:
+     * 输入: 2.00000, -2
+     * 输出: 0.25000
+     * 解释: 2-2 = 1/22 = 1/4 = 0.25
+     *
+     * 说明:
+     * -100.0 < x < 100.0
+     * n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
+     */
+    public double myPow(double x, int n) {
+        if(n==0) {
+            return 1;
+        }
+        if(n<0) {
+            if(n==Integer.MIN_VALUE) {
+                return myPow(1/x, -(n+1))/x;
+            }else {
+                return myPow(1/x, -n);
+            }
+        }
+        double pre = myPow(x, n/2);
+        return n%2==1?pre*pre*x:pre*pre;
+    }
+
+    /**
+     * 面试题17. 打印从1到最大的n位数
+     * 输入数字 n，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。
+     *
+     * 示例 1:
+     * 输入: n = 1
+     * 输出: [1,2,3,4,5,6,7,8,9]
+     *
+     * 说明：
+     * 用返回一个整数列表来代替打印
+     * n 为正整数
+     */
+    public int[] printNumbers(int n) {
+        if(n<1) {
+            return new int[0];
+        }
+        int target = (int)Math.pow(10,n);
+        int[] result = new int[target-1];
+        for(int i=0;i<result.length;i++) {
+            result[i] = i+1;
+        }
+        return result;
     }
 
     /**
