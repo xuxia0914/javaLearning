@@ -1,18 +1,482 @@
 package cn.leetcode.xux.common;
 
+import javafx.util.Pair;
+
 import java.util.*;
 
 public class Test {
 
     int result_int;
     Map<String, List<String>> mem = new HashMap<>();
+    int mod = 1000000007;
 
     public static void main(String[] args) {
         Test test = new Test();
 //        System.out.println(test.spiralOrder(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
 //        System.out.println(test.spiralOrder(new int[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}}));
 //        System.out.println(test.spiralOrder(new int[][]{{6,9,7}}));
-        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
+//        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
+//        System.out.println(Integer.MAX_VALUE);
+        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
+    }
+
+    /**
+     * 面试题 17.18. 最短超串
+     * 假设你有两个数组，一个长一个短，短的元素均不相同。找到长数组中包含短数组所有的元素的最短子数组，其出现顺序无关紧要。
+     * 返回最短子数组的左端点和右端点，如有多个满足条件的子数组，返回左端点最小的一个。若不存在，返回空数组。
+     *
+     * 示例 1:
+     * 输入:
+     * big = [7,5,9,0,2,1,3,5,7,9,1,1,5,8,8,9,7]
+     * small = [1,5,9]
+     * 输出: [7,10]
+     *
+     * 示例 2:
+     * 输入:
+     * big = [1,2,3]
+     * small = [4]
+     * 输出: []
+     *
+     * 提示：
+     * big.length <= 100000
+     * 1 <= small.length <= 100000
+     */
+    public int[] shortestSeq(int[] big, int[] small) {
+        if(small==null||small.length==0||big==null||big.length<small.length) {
+            return new int[0];
+        }
+        int len = big.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int num : small) {
+            map.put(num, len);
+        }
+        int[] result = new int[]{len, len};
+        for(int i=0;i<len;i++) {
+            if(map.containsKey(big[i])) {
+                map.put(big[i], i);
+                Map.Entry<Integer, Integer> min = null;
+                boolean flag = true;
+                for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                    if(entry.getValue()==len) {
+                        flag = false;
+                        break;
+                    }
+                    if(min==null||min.getValue()>entry.getValue()) {
+                        min = entry;
+                    }
+                }
+                if(flag&&(result[0]==len||result[1]-result[0]>i-min.getValue())) {
+                    result[0] = min.getValue();
+                    result[1] = i;
+                    map.put(min.getKey(), len);
+                }
+            }
+        }
+        return result[0]==len?new int[0]:result;
+    }
+
+    /**
+     * 面试题 17.19. 消失的两个数字
+     * 给定一个数组，包含从 1 到 N 所有的整数，但其中缺了两个数字。你能在 O(N) 时间内只用 O(1) 的空间找到它们吗？
+     * 以任意顺序返回这两个数字均可。
+     *
+     * 示例 1:
+     * 输入: [1]
+     * 输出: [2,3]
+     *
+     * 示例 2:
+     * 输入: [2,3]
+     * 输出: [1,4]
+     *
+     * 提示：
+     * nums.length <= 30000
+     */
+    public int[] missingTwo(int[] nums) {
+        if(nums==null) {
+            return null;
+        }
+        int n = nums.length;
+        int i = 0;
+        while(i<n) {
+            if(nums[i]==i+1||nums[i]==n+1||nums[i]==n+2) {
+                i++;
+            }else {
+                int tmp = nums[nums[i]-1];
+                nums[nums[i]-1] = nums[i];
+                nums[i] = tmp;
+            }
+        }
+        int result1 = n+1;
+        int result2 = n+2;
+        for(int j=n-1;j>=0;j--) {
+            if(nums[j]!=j+1) {
+                if(nums[j]==n+1) {
+                    result1 = j+1;
+                }else {
+                    result2 = j+1;
+                }
+            }
+        }
+        return new int[]{result1, result2};
+    }
+
+    /**
+     * 面试题 17.22. 单词转换
+     * 给定字典中的两个词，长度相等。写一个方法，把一个词转换成另一个词， 但是一次只能改变一个字符。每一步得到的新词都必须能在字典中找到。
+     * 编写一个程序，返回一个可能的转换序列。如有多个可能的转换序列，你可以返回任何一个。
+     *
+     * 示例 1:
+     * 输入:
+     * beginWord = "hit",
+     * endWord = "cog",
+     * wordList = ["hot","dot","dog","lot","log","cog"]
+     * 输出:
+     * ["hit","hot","dot","lot","log","cog"]
+     *
+     * 示例 2:
+     * 输入:
+     * beginWord = "hit"
+     * endWord = "cog"
+     * wordList = ["hot","dot","dog","lot","log"]
+     * 输出: []
+     * 解释: endWord "cog" 不在字典中，所以不存在符合要求的转换序列。
+     */
+    public List<String> findLadders(String beginWord, String endWord, List<String> wordList) {
+        if(beginWord==null||endWord==null||wordList==null||wordList.size()==0) {
+            return new ArrayList<>();
+        }
+        Queue<List<String>> queue = new LinkedList<>();
+        List<String> firstList = new ArrayList<>();
+        firstList.add(beginWord);
+        queue.offer(firstList);
+        int size = wordList.size();
+        for(int i=0;i<size;i++) {
+            if(beginWord.equals(wordList.get(i))) {
+                wordList.set(i, null);
+            }
+        }
+        while(!queue.isEmpty()) {
+            List<String> currList = queue.poll();
+            String currStr = currList.get(currList.size()-1);
+            if(currStr.equals(endWord)) {
+                return currList;
+            }
+            for(int i=0;i<wordList.size();i++) {
+                if(wordList.get(i)!=null&&canChange(currStr, wordList.get(i))) {
+                    List<String> newList = new ArrayList<>(currList);
+                    newList.add(wordList.get(i));
+                    wordList.set(i, null);
+                    queue.offer(newList);
+                }
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean canChange(String word, String target) {
+        if(word==null||target==null||word.length()==0||target.length()==0||word.length()!=target.length()) {
+            return false;
+        }
+        boolean flag = false;
+        for(int i=0;i<word.length();i++) {
+            if(word.charAt(i)!=target.charAt(i)) {
+                if(flag) {
+                    return false;
+                }else {
+                    flag = true;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 面试题 17.23. 最大黑方阵
+     * 给定一个方阵，其中每个单元(像素)非黑即白。设计一个算法，找出 4 条边皆为黑色像素的最大子方阵。
+     * 返回一个数组 [r, c, size] ，其中 r, c 分别代表子方阵左上角的行号和列号，size 是子方阵的边长。
+     * 若有多个满足条件的子方阵，返回 r 最小的，若 r 相同，返回 c 最小的子方阵。若无满足条件的子方阵，返回空数组。
+     *
+     * 示例 1:
+     * 输入:
+     * [
+     *    [1,0,1],
+     *    [0,0,1],
+     *    [0,0,1]
+     * ]
+     * 输出: [1,0,2]
+     * 解释: 输入中 0 代表黑色，1 代表白色，标粗的元素即为满足条件的最大子方阵
+     *
+     * 示例 2:
+     * 输入:
+     * [
+     *    [0,1,1],
+     *    [1,0,1],
+     *    [1,1,0]
+     * ]
+     * 输出: [0,0,1]
+     *
+     * 提示：
+     * matrix.length == matrix[0].length <= 200
+     */
+    public int[] findSquare(int[][] matrix) {
+        if(matrix==null||matrix.length==0||matrix[0].length==0) {
+            return new int[0];
+        }
+        int[] result = new int[3];
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][][] dp = new int[m][n][2];
+        for(int i=m-1;i>=0;i--) {
+            for(int j=n-1;j>=0;j--) {
+                if(matrix[i][j]==0) {
+                    dp[i][j][0] = i<m-1?dp[i+1][j][0]+1:1;
+                    dp[i][j][1] = j<n-1?dp[i][j+1][1]+1:1;
+                }
+            }
+        }
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                for(int k=Math.min(dp[i][j][0], dp[i][j][1]);k>result[2];k--) {
+                    if(dp[i+k-1][j][1]>=k&&dp[i][j+k-1][0]>=k) {
+                        result[0] = i;
+                        result[1] = j;
+                        result[2] = k;
+                        break;
+                    }
+                }
+            }
+        }
+        return result[2]==0?new int[0]:result;
+    }
+
+    /**
+     * 面试题03. 数组中重复的数字
+     * 找出数组中重复的数字。
+     * 在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。
+     * 数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
+     *
+     * 示例 1：
+     * 输入：[2, 3, 1, 0, 2, 5, 3]
+     * 输出：2 或 3
+     *
+     * 限制：
+     * 2 <= n <= 100000
+     */
+    public int findRepeatNumber(int[] nums) {
+        int index = 0;
+        while(true) {
+            if(index==nums[index]) {
+                index++;
+            }else if(nums[index]==nums[nums[index]]) {
+                return nums[index];
+            }else {
+                int tmp = nums[nums[index]];
+                nums[nums[index]]  = nums[index];
+                index = tmp;
+            }
+        }
+    }
+
+    /**
+     * 面试题04. 二维数组中的查找
+     * 在一个 n * m 的二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。
+     * 请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+     *
+     * 示例:
+     * 现有矩阵 matrix 如下：
+     * [
+     *   [1,   4,  7, 11, 15],
+     *   [2,   5,  8, 12, 19],
+     *   [3,   6,  9, 16, 22],
+     *   [10, 13, 14, 17, 24],
+     *   [18, 21, 23, 26, 30]
+     * ]
+     * 给定 target = 5，返回 true。
+     * 给定 target = 20，返回 false。
+     *
+     * 限制：
+     * 0 <= n <= 1000
+     * 0 <= m <= 1000
+     */
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        if(matrix==null||matrix.length==0||matrix[0].length==0) {
+            return false;
+        }
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int i = m-1;
+        int j = 0;
+        while(i>=0&&j<n) {
+            if(matrix[i][j]==target) {
+                return true;
+            }else if(matrix[i][j]<target) {
+                j++;
+            }else {
+                i--;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 面试题05. 替换空格
+     * 请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
+     *
+     * 示例 1：
+     * 输入：s = "We are happy."
+     * 输出："We%20are%20happy."
+     *
+     * 限制：
+     * 0 <= s 的长度 <= 10000
+     */
+    public String replaceSpace(String s) {
+        if(s==null||s.length()==0) {
+            return s;
+        }
+        StringBuilder sb = new StringBuilder();
+        for(char c : s.toCharArray()) {
+            if(c!=' ') {
+                sb.append(c);
+            }else {
+                sb.append("%20");
+            }
+        }
+        return sb.toString();
+        //return s.replaceAll(" ", "%20");
+    }
+
+    /**
+     * 面试题06. 从尾到头打印链表
+     * 输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。
+     *
+     * 示例 1：
+     * 输入：head = [1,3,2]
+     * 输出：[2,3,1]
+     *
+     * 限制：
+     * 0 <= 链表长度 <= 10000
+     */
+    public int[] reversePrint(ListNode head) {
+        if(head==null) {
+            return new int[0];
+        }
+        ListNode curr = head;
+        int len = 0;
+        while(curr!=null) {
+            len++;
+            curr  = curr.next;
+        }
+        int[] result = new int[len];
+        curr = head;
+        for(int i=len-1;i>=0;i--) {
+            result[i] = curr.val;
+            curr = curr.next;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题07. 重建二叉树
+     * 输入某二叉树的前序遍历和中序遍历的结果，请重建该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+     *
+     * 例如，给出
+     * 前序遍历 preorder = [3,9,20,15,7]
+     * 中序遍历 inorder = [9,3,15,20,7]
+     * 返回如下的二叉树：
+     *     3
+     *    / \
+     *   9  20
+     *     /  \
+     *    15   7
+     *
+     * 限制：
+     * 0 <= 节点个数 <= 5000
+     */
+    public BinaryTreeNode buildTree(int[] preorder, int[] inorder) {
+        if(preorder==null||preorder.length==0) {
+            return null;
+        }
+        return buildTree(preorder, 0, inorder, 0, preorder.length);
+    }
+
+    public BinaryTreeNode buildTree(int[] preorder, int preStart, int[] inorder, int inStart, int len) {
+        if(len<=0) {
+            return null;
+        }
+        int value = preorder[preStart];
+        int leftLen = 0;
+        for(;leftLen<len;leftLen++) {
+            if(inorder[inStart+leftLen]==value) {
+                break;
+            }
+        }
+        BinaryTreeNode node = new BinaryTreeNode(value);
+        node.left = buildTree(preorder, preStart+1, inorder, inStart, leftLen);
+        node.right = buildTree(preorder, preStart+1+leftLen, inorder, inStart+leftLen+1, len-leftLen-1);
+        return node;
+    }
+
+    /**
+     * 面试题10- I. 斐波那契数列
+     * 写一个函数，输入 n ，求斐波那契（Fibonacci）数列的第 n 项。斐波那契数列的定义如下：
+     * F(0) = 0,   F(1) = 1
+     * F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
+     * 斐波那契数列由 0 和 1 开始，之后的斐波那契数就是由之前的两数相加而得出。
+     * 答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+     *
+     * 示例 1：
+     * 输入：n = 2
+     * 输出：1
+     *
+     * 示例 2：
+     * 输入：n = 5
+     * 输出：5
+     *
+     * 提示：
+     * 0 <= n <= 100
+     */
+    public int fib(int n) {
+        if(n<2) {
+            return n;
+        }
+        int dp1 = 0;
+        int dp2 = 1;
+        for(int i=2;i<=n;i++) {
+            int tmp = dp2;
+            dp2 = (dp1+dp2)%mod;
+            dp1 = tmp;
+        }
+        return dp2;
+    }
+
+    /**
+     * 面试题10- II. 青蛙跳台阶问题
+     * 一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。
+     * 答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+     *
+     * 示例 1：
+     * 输入：n = 2
+     * 输出：2
+     *
+     * 示例 2：
+     * 输入：n = 7
+     * 输出：21
+     *
+     * 提示：
+     * 0 <= n <= 100
+     */
+    public int numWays(int n) {
+        if(n==0||n==1) {
+            return 1;
+        }
+        int dp1 = 1;
+        int dp2 = 1;
+        for(int i=2;i<=n;i++) {
+            int tmp = dp2;
+            dp2 = (dp2+dp1)%mod;
+            dp1 = tmp;
+        }
+        return dp2;
     }
 
     /**
@@ -206,7 +670,6 @@ public class Test {
         if(n==2||n==3) {
             return n-1;
         }
-        int mod = 1000000007;
         int m = n/3-1;
         long result = 1;
         while(m-->0) {
@@ -1977,3 +2440,53 @@ class MinStack {
     }
 
 }
+
+/**
+ * 面试题09. 用两个栈实现队列
+ * 用两个栈实现一个队列。队列的声明如下，请实现它的两个函数 appendTail 和 deleteHead ，
+ * 分别完成在队列尾部插入整数和在队列头部删除整数的功能。(若队列中没有元素，deleteHead 操作返回 -1 )
+ *
+ * 示例 1：
+ * 输入：["CQueue","appendTail","deleteHead","deleteHead"]
+ * [[],[3],[],[]]
+ * 输出：[null,null,3,-1]
+ *
+ * 示例 2：
+ * 输入：["CQueue","deleteHead","appendTail","appendTail","deleteHead","deleteHead"]
+ * [[],[],[5],[2],[],[]]
+ * 输出：[null,-1,null,null,5,2]
+ *
+ * 提示：
+ * 1 <= values <= 10000
+ * 最多会对 appendTail、deleteHead 进行 10000 次调用
+ */
+class CQueue {
+
+    Stack<Integer> stack1;
+    Stack<Integer> stack2;
+
+    public CQueue() {
+        stack1 = new Stack<>();
+        stack2 = new Stack<>();
+    }
+
+    public void appendTail(int value) {
+        while(!stack1.isEmpty()) {
+            stack2.push(stack1.pop());
+        }
+        stack1.push(value);
+        while(!stack2.isEmpty()) {
+            stack1.push(stack2.pop());
+        }
+    }
+
+    public int deleteHead() {
+        return stack1.isEmpty()?-1:stack1.pop();
+    }
+}
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * CQueue obj = new CQueue();
+ * obj.appendTail(value);
+ * int param_2 = obj.deleteHead();
+ */
