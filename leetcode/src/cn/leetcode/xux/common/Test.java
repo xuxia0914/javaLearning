@@ -1,7 +1,5 @@
 package cn.leetcode.xux.common;
 
-import javafx.util.Pair;
-
 import java.util.*;
 
 public class Test {
@@ -17,7 +15,421 @@ public class Test {
 //        System.out.println(test.spiralOrder(new int[][]{{6,9,7}}));
 //        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
 //        System.out.println(Integer.MAX_VALUE);
-        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
+//        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
+        System.out.println(test.calculate("3+2*2"));
+    }
+
+    /**
+     * 面试题 16.26. 计算器
+     * 给定一个包含正整数、加(+)、减(-)、乘(*)、除(/)的算数表达式(括号除外)，计算其结果。
+     * 表达式仅包含非负整数，+， - ，*，/ 四种运算符和空格  。 整数除法仅保留整数部分。
+     *
+     * 示例 1:
+     * 输入: "3+2*2"
+     * 输出: 7
+     *
+     * 示例 2:
+     * 输入: " 3/2 "
+     * 输出: 1
+     *
+     * 示例 3:
+     * 输入: " 3+5 / 2 "
+     * 输出: 5
+     *
+     * 说明：
+     * 你可以假设所给定的表达式都是有效的。
+     * 请不要使用内置的库函数 eval。
+     */
+    public int calculate(String s) {
+        int num = 0;
+        char pre = '+';
+        Stack<Integer> stack = new Stack<>();
+        for(char c : s.toCharArray()) {
+            if(c==' ') {
+                continue;
+            }else if(c>='0'&&c<='9') {
+                num = num*10+c-'0';
+            }else {
+                if(pre=='*') {
+                    stack.push(stack.pop()*num);
+                }else if(pre=='/') {
+                    stack.push(stack.pop()/num);
+                }else if(pre=='+') {
+                    stack.push(num);
+                }else {
+                    stack.push(-num);
+                }
+                num = 0;
+                pre = c;
+            }
+        }
+        if(pre=='*') {
+            stack.push(stack.pop()*num);
+        }else if(pre=='/') {
+            stack.push(stack.pop()/num);
+        }else if(pre=='+') {
+            stack.push(num);
+        }else {
+            stack.push(-num);
+        }
+        int result = 0;
+        while(!stack.isEmpty()) {
+            result += stack.pop();
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 17.01. 不用加号的加法
+     * 设计一个函数把两个数字相加。不得使用 + 或者其他算术运算符。
+     *
+     * 示例:
+     * 输入: a = 1, b = 1
+     * 输出: 2
+     *
+     * 提示：
+     * a, b 均可能是负数或 0
+     * 结果不会溢出 32 位整数
+     */
+    public int add1(int a, int b) {
+        int res = a;
+        int carry = b;
+        while(carry!=0) {
+            int tmp = res;
+            res ^= carry;
+            carry = (carry&tmp)<<1;
+        }
+        return res;
+    }
+
+    /**
+     * 面试题 17.04. 消失的数字
+     * 数组nums包含从0到n的所有整数，但其中缺了一个。请编写代码找出那个缺失的整数。你有办法在O(n)时间内完成吗？
+     * 注意：本题相对书上原题稍作改动
+     *
+     * 示例 1：
+     * 输入：[3,0,1]
+     * 输出：2
+     *
+     * 示例 2：
+     * 输入：[9,6,4,2,3,5,7,0,1]
+     * 输出：8
+     */
+    public int missingNumber1(int[] nums) {
+        if(nums==null) {
+            return -1;
+        }
+        int n = nums.length;
+        int res = 0;
+        for(int i=0;i<n;i++) {
+            res ^= i;
+            res ^= nums[i];
+        }
+        return res^n;
+        /*int idx = 0;
+        while(idx<nums.length) {
+            if(nums[idx]!=n||nums[idx]!=idx) {
+                int tmp = nums[nums[idx]];
+                nums[nums[idx]] = nums[idx];
+                nums[idx] = tmp;
+            }else {
+                idx++;
+            }
+        }
+        for(int i=0;i<n;i++) {
+            if(nums[idx]!=idx) {
+                return idx;
+            }
+        }
+        return n;*/
+    }
+
+    /**
+     * 面试题 17.05.  字母与数字
+     * 给定一个放有字符和数字的数组，找到最长的子数组，且包含的字符和数字的个数相同。
+     * 返回该子数组，若存在多个最长子数组，返回左端点最小的。若不存在这样的数组，返回一个空数组。
+     *
+     * 示例 1:
+     * 输入: ["A","1","B","C","D","2","3","4","E","5","F","G","6","7","H","I","J","K","L","M"]
+     * 输出: ["A","1","B","C","D","2","3","4","E","5","F","G","6","7"]
+     *
+     * 示例 2:
+     * 输入: ["A","A"]
+     * 输出: []
+     *
+     * 提示：
+     * array.length <= 100000
+     */
+    public String[] findLongestSubarray(String[] array) {
+        if(array==null||array.length==0) {
+            return new String[0];
+        }
+        int len = array.length;
+        int[] mem = new int[len+1];
+        for(int i=1;i<=len;i++) {
+            mem[i] = mem[i-1]+(array[i-1].charAt(0)>='0'&&array[i-1].charAt(0)<='9'?1:-1);
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        int left = 0;
+        int right = 0;
+        for(int i=0;i<=len;i++) {
+            if(map.containsKey(mem[i])) {
+                int pre = map.get(mem[i]);
+                if(i-pre>right-left) {
+                    right = i;
+                    left = pre;
+                }
+            }else {
+                map.put(mem[i], i);
+            }
+        }
+        return Arrays.copyOfRange(array, left,right-1);
+    }
+
+    /**
+     * 面试题 17.06. 2出现的次数
+     * 编写一个方法，计算从 0 到 n (含 n) 中数字 2 出现的次数。
+     *
+     * 示例:
+     * 输入: 25
+     * 输出: 9
+     * 解释: (2, 12, 20, 21, 22, 23, 24, 25)(注意 22 应该算作两次)
+     *
+     * 提示：
+     * n <= 10^9
+     */
+    public int numberOf2sInRange(int n) {
+        if(n<2) {
+            return 0;
+        }
+        int tmp = n;
+        int bitIdx = 0;
+        int result = 0;
+        while(tmp>0) {
+            int curr = tmp%10;
+            tmp /= 10;
+            int left = tmp;
+            int right = n%(int)Math.pow(10, bitIdx)+1;
+            result += left*(int)Math.pow(10, bitIdx);
+            if(curr==2) {
+                result += right;
+            }
+            if(curr>2) {
+                result += (int)Math.pow(10, bitIdx);
+            }
+            bitIdx++;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 17.09. 第 k 个数
+     * 有些数的素因子只有 3，5，7，请设计一个算法找出第 k 个数。注意，不是必须有这些素因子，而是必须不包含其他的素因子。
+     * 例如，前几个数按顺序应该是 1，3，5，7，9，15，21。
+     *
+     * 示例 1:
+     * 输入: k = 5
+     * 输出: 9
+     */
+    public int getKthMagicNumber(int k) {
+        if(k<0) {
+            return -1;
+        }
+        int[] dp = new int[k];
+        dp[0] = 1;
+        int idx3 = 0;
+        int idx5 = 0;
+        int idx7 = 0;
+        for(int i=1;i<k;i++) {
+            dp[i] = Math.min(dp[idx3]*3, Math.min(dp[idx5]*5, dp[idx7]*7));
+            idx3 += dp[i]==dp[idx3]*3?1:0;
+            idx5 += dp[i]==dp[idx3]*3?1:0;
+            idx7 += dp[i]==dp[idx3]*3?1:0;
+        }
+        return dp[k-1];
+    }
+
+    /**
+     * 面试题 17.11. 单词距离
+     * 有个内含单词的超大文本文件，给定任意两个单词，找出在这个文件中这两个单词的最短距离(相隔单词数)。
+     * 如果寻找过程在这个文件中会重复多次，而每次寻找的单词不同，你能对此优化吗?
+     *
+     * 示例：
+     * 输入：words = ["I","am","a","student","from","a","university","in","a","city"], word1 = "a", word2 = "student"
+     * 输出：1
+     *
+     * 提示：
+     * words.length <= 100000
+     */
+    public int findClosest(String[] words, String word1, String word2) {
+        if(words==null||words.length==0||word1==null||word2==null) {
+            return -1;
+        }
+        if(word1.equals(word2)) {
+            return 0;
+        }
+        int result = words.length;
+        int idx1 = -1;
+        int idx2 = -1;
+        for(int i=0;i<words.length;i++) {
+            if(words[i].equals(word1)) {
+                idx1 = i;
+                if(idx2!=-1) {
+                    result = Math.min(result, idx1-idx2);
+                }
+            }else if(words[i].equals(word2)) {
+                idx2 = i;
+                if(idx1!=-1) {
+                    result = Math.min(result, idx2-idx1);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 17.12. BiNode
+     * 二叉树数据结构TreeNode可用来表示单向链表（其中left置空，right为下一个链表节点）。实现一个方法，把二叉搜索树转换为单向链表，要求值的顺序保持不变，转换操作应是原址的，也就是在原始的二叉搜索树上直接修改。
+     * 返回转换后的单向链表的头节点。
+     * 注意：本题相对原题稍作改动
+     *
+     * 示例：
+     * 输入： [4,2,5,1,3,null,6,0]
+     * 输出： [0,null,1,null,2,null,3,null,4,null,5,null,6]
+     *
+     * 提示：
+     * 节点数量不会超过 100000。
+     */
+    public BinaryTreeNode convertBiNode(BinaryTreeNode root) {
+        if(root==null) {
+            return null;
+        }
+        BinaryTreeNode left = convertBiNode(root.left);
+        BinaryTreeNode right = convertBiNode(root.right);
+        root.left = null;
+        root.right = right;
+        if(left==null) {
+            return root;
+        }
+        BinaryTreeNode result = left;
+        while(left.right!=null) {
+            left = left.right;
+        }
+        left.right = root;
+        return result;
+    }
+
+    /**
+     * 面试题 17.14. 最小K个数
+     * 设计一个算法，找出数组中最小的k个数。以任意顺序返回这k个数均可。
+     *
+     * 示例：
+     *
+     * 输入： arr = [1,3,5,7,2,4,6,8], k = 4
+     * 输出： [1,2,3,4]
+     * 提示：
+     *
+     * 0 <= len(arr) <= 100000
+     * 0 <= k <= min(100000, len(arr))
+     */
+    public int[] smallestK(int[] arr, int k) {
+        if(arr==null||arr.length==0||k<=0) {
+            return new int[0];
+        }
+        PriorityQueue<Integer> queue = new PriorityQueue<>((o1, o2)->o2-o1);
+        for(int i : arr) {
+            queue.offer(i);
+            if(queue.size()>k) {
+                queue.poll();
+            }
+        }
+        int[] result = new int[k];
+        while(k-->0) {
+            result[k] = queue.poll();
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 17.16. 按摩师
+     * 一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。
+     * 给定一个预约请求序列，替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。
+     * 注意：本题相对原题稍作改动
+     *
+     * 示例 1：
+     * 输入： [1,2,3,1]
+     * 输出： 4
+     * 解释： 选择 1 号预约和 3 号预约，总时长 = 1 + 3 = 4。
+     *
+     * 示例 2：
+     * 输入： [2,7,9,3,1]
+     * 输出： 12
+     * 解释： 选择 1 号预约、 3 号预约和 5 号预约，总时长 = 2 + 9 + 1 = 12。
+     *
+     * 示例 3：
+     * 输入： [2,1,4,5,3,1,1,3]
+     * 输出： 12
+     * 解释： 选择 1 号预约、 3 号预约、 5 号预约和 8 号预约，总时长 = 2 + 4 + 3 + 3 = 12。
+     */
+    public int massage(int[] nums) {
+        if(nums==null||nums.length==0) {
+            return 0;
+        }
+        if(nums.length==1) {
+            return nums[0];
+        }
+        if(nums.length==2) {
+            return Math.max(nums[0], nums[1]);
+        }
+        int pre2 = nums[0];
+        int pre1 = Math.max(nums[0], nums[1]);
+        for(int i=2;i<nums.length;i++) {
+            int tmp = pre1;
+            pre1 = Math.max(pre1, pre2+nums[i]);
+            pre2 = tmp;
+        }
+        return pre1;
+    }
+
+    /**
+     * 面试题 17.17. 多次搜索
+     * 给定一个较长字符串big和一个包含较短字符串的数组smalls，设计一个方法，根据smalls中的每一个较短字符串，对big进行搜索。
+     * 输出smalls中的字符串在big里出现的所有位置positions，其中positions[i]为smalls[i]出现的所有位置。
+     *
+     * 示例：
+     * 输入：
+     * big = "mississippi"
+     * smalls = ["is","ppi","hi","sis","i","ssippi"]
+     * 输出： [[1,4],[8],[],[3],[1,4,7,10],[5]]
+     *
+     * 提示：
+     * 0 <= len(big) <= 1000
+     * 0 <= len(smalls[i]) <= 1000
+     * smalls的总字符数不会超过 100000。
+     * 你可以认为smalls中没有重复字符串。
+     * 所有出现的字符均为英文小写字母。
+     */
+    public int[][] multiSearch(String big, String[] smalls) {
+        int bigLen = big.length();
+        int smallsLen = smalls.length;
+        int[][] result = new int[smallsLen][];
+        for(int i=0;i<smallsLen;i++) {
+            List<Integer> list = new ArrayList<>();
+            String curr = smalls[i];
+            if(curr!=null&&curr.length()!=0) {
+                for(int j=0;j<=bigLen-curr.length();j++) {
+                    if(curr.equals(big.substring(j, j+curr.length()))) {
+                        list.add(j);
+                    }
+                }
+            }
+            int[] array = new int[list.size()];
+            for(int j=0;j<list.size();j++) {
+                array[j] = list.get(j);
+            }
+            result[i] = array;
+        }
+        return result;
     }
 
     /**
@@ -96,7 +508,32 @@ public class Test {
             return null;
         }
         int n = nums.length;
-        int i = 0;
+        int x = 0;
+        for(int i=0;i<n;i++) {
+            x ^= i+1;
+            x ^= nums[i];
+        }
+        x ^= n+1;
+        x ^= n+2;
+        int diff = x&(-x);
+        int result1 = 0;
+        int result2 = 0;
+        for(int i=0;i<n;i++) {
+            if((nums[i]&diff)==0) {
+                result1 ^= nums[i];
+            }else {
+                result2 ^= nums[i];
+            }
+        }
+        for(int i=1;i<=n+2;i++) {
+            if((i&diff)==0) {
+                result1 ^= i;
+            }else {
+                result2 ^= i;
+            }
+        }
+        return new int[]{result1, result2};
+        /*int i = 0;
         while(i<n) {
             if(nums[i]==i+1||nums[i]==n+1||nums[i]==n+2) {
                 i++;
@@ -117,7 +554,7 @@ public class Test {
                 }
             }
         }
-        return new int[]{result1, result2};
+        return new int[]{result1, result2};*/
     }
 
     /**
@@ -2266,10 +2703,7 @@ public class Test {
         for(int num : nums) {
             ret ^= num;
         }
-        int h = 1;
-        while((ret&h)==0) {
-            h <<= 1;
-        }
+        int h = ret^(-ret);
         for(int num : nums) {
             if((num&h)==0) {
                 a ^= num;
