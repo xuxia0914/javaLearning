@@ -16,7 +16,504 @@ public class Test {
 //        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
 //        System.out.println(Integer.MAX_VALUE);
 //        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
-        System.out.println(test.calculate("3+2*2"));
+        System.out.println(test.subSort(new int[]{1,2,4,7,10,11,7,12,6,7,16,18,19}));
+    }
+
+    /**
+     * 面试题 16.05. 阶乘尾数
+     * 设计一个算法，算出 n 阶乘有多少个尾随零。
+     *
+     * 示例 1:
+     * 输入: 3
+     * 输出: 0
+     * 解释: 3! = 6, 尾数中没有零。
+     *
+     * 示例 2:
+     * 输入: 5
+     * 输出: 1
+     * 解释: 5! = 120, 尾数中有 1 个零.
+     * 说明: 你算法的时间复杂度应为 O(log n) 。
+     */
+    public int trailingZeroes(int n) {
+        int result = 0;
+        while(n>=5) {
+            n /= 5;
+            result += n;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 16.06. 最小差
+     * 给定两个整数数组a和b，计算具有最小差绝对值的一对数值（每个数组中取一个值），并返回该对数值的差
+     *
+     * 示例：
+     * 输入：{1, 3, 15, 11, 2}, {23, 127, 235, 19, 8}
+     * 输出： 3，即数值对(11, 8)
+     *
+     * 提示：
+     * 1 <= a.length, b.length <= 100000
+     * -2147483648 <= a[i], b[i] <= 2147483647
+     * 正确结果在区间[-2147483648, 2147483647]内
+     */
+    public int smallestDifference(int[] a, int[] b) {
+        Arrays.sort(a);
+        Arrays.sort(b);
+        int idxA = 0;
+        int idxB = 0;
+        long min = Long.MAX_VALUE;
+        while(idxA<a.length&&idxB<b.length) {
+            if(a[idxA]==b[idxB]) {
+                return 0;
+            }else if(a[idxA]>b[idxB]) {
+                long curr = (long)a[idxA]-(long)b[idxB];
+                if(curr<min) {
+                    min = curr;
+                }
+                idxB++;
+            }else {
+                long curr = (long)b[idxB]-(long)a[idxA];
+                if(curr<min) {
+                    min = curr;
+                }
+                idxA++;
+            }
+        }
+        return (int)min;
+    }
+
+    /**
+     * 面试题 16.07. 最大数值
+     * 编写一个方法，找出两个数字a和b中最大的那一个。不得使用if-else或其他比较运算符。
+     *
+     * 示例：
+     * 输入： a = 1, b = 2
+     * 输出： 2
+     */
+    public int maximum(int a, int b) {
+        int i = (int)(((long)a-(long)b)>>>63);
+        return (i^1)*a + i*b;
+    }
+
+    /**
+     * 面试题 16.10. 生存人数
+     * 给定N个人的出生年份和死亡年份，第i个人的出生年份为birth[i]，死亡年份为death[i]，实现一个方法以计算生存人数最多的年份。
+     * 你可以假设所有人都出生于1900年至2000年（含1900和2000）之间。如果一个人在某一年的任意时期都处于生存状态，那么他们应该被纳入那一年的统计中。
+     * 例如，生于1908年、死于1909年的人应当被列入1908年和1909年的计数。
+     * 如果有多个年份生存人数相同且均为最大值，输出其中最小的年份。
+     *
+     * 示例：
+     * 输入：
+     * birth = {1900, 1901, 1950}
+     * death = {1948, 1951, 2000}
+     * 输出： 1901
+     *
+     * 提示：
+     * 0 < birth.length == death.length <= 10000
+     * birth[i] <= death[i]
+     */
+    public int maxAliveYear(int[] birth, int[] death) {
+        int[] cnts = new int[102];
+        int len = birth.length;
+        for(int i=0;i<len;i++) {
+            cnts[birth[i]-1900]++;
+            cnts[death[i]-1900+1]--;
+        }
+        int result = 0;
+        int sum = cnts[0];
+        int max = cnts[0];
+        for(int i=1;i<101;i++) {
+            sum += cnts[i];
+            if(sum>max) {
+                result = i;
+                max = sum;
+            }
+        }
+        return 1900+result;
+    }
+
+    /**
+     * 面试题 16.11. 跳水板
+     * 你正在使用一堆木板建造跳水板。有两种类型的木板，其中长度较短的木板长度为shorter，长度较长的木板长度为longer。
+     * 你必须正好使用k块木板。编写一个方法，生成跳水板所有可能的长度。
+     *
+     * 返回的长度需要从小到大排列。
+     *
+     * 示例：
+     * 输入：
+     * shorter = 1
+     * longer = 2
+     * k = 3
+     * 输出： {3,4,5,6}
+     *
+     * 提示：
+     * 0 < shorter <= longer
+     * 0 <= k <= 100000
+     */
+    public int[] divingBoard(int shorter, int longer, int k) {
+        if(k<1) {
+            return new int[0];
+        }
+        if(shorter==longer) {
+            return new int[]{shorter*k};
+        }
+        int[] res = new int[k+1];
+        res[0] = shorter*k;
+        int dis = longer-shorter;
+        for(int i=1;i<=k;i++) {
+            res[i] = res[i-1]+dis;
+        }
+        return res;
+    }
+
+    /**
+     * 面试题 16.15. 珠玑妙算
+     * 珠玑妙算游戏（the game of master mind）的玩法如下。
+     * 计算机有4个槽，每个槽放一个球，颜色可能是红色（R）、黄色（Y）、绿色（G）或蓝色（B）。
+     * 例如，计算机可能有RGGB 4种（槽1为红色，槽2、3为绿色，槽4为蓝色）。
+     * 作为用户，你试图猜出颜色组合。打个比方，你可能会猜YRGB。
+     * 要是猜对某个槽的颜色，则算一次“猜中”；要是只猜对颜色但槽位猜错了，则算一次“伪猜中”。注意，“猜中”不能算入“伪猜中”。
+     *
+     * 给定一种颜色组合solution和一个猜测guess，编写一个方法，返回猜中和伪猜中的次数answer，其中answer[0]为猜中的次数，answer[1]为伪猜中的次数。
+     *
+     * 示例：
+     * 输入： solution="RGBY",guess="GGRR"
+     * 输出： [1,1]
+     * 解释： 猜中1次，伪猜中1次。
+     *
+     * 提示：
+     * len(solution) = len(guess) = 4
+     * solution和guess仅包含"R","G","B","Y"这4种字符
+     */
+    public int[] masterMind(String solution, String guess) {
+        int res0 = 0;
+        int[] cntSol = new int[4];
+        int[] cntGue = new int[4];
+        for(int i=0;i<4;i++) {
+            char c1 = solution.charAt(i);
+            char c2 = guess.charAt(i);
+            if(c1==c2) {
+                res0++;
+            }else {
+                switch(c1) {
+                    case 'R':cntSol[0]++; break;
+                    case 'Y':cntSol[1]++; break;
+                    case 'G':cntSol[2]++; break;
+                    case 'B':cntSol[3]++; break;
+                }
+                switch(c2) {
+                    case 'R':cntGue[0]++; break;
+                    case 'Y':cntGue[1]++; break;
+                    case 'G':cntGue[2]++; break;
+                    case 'B':cntGue[3]++; break;
+                }
+            }
+        }
+        int res1 = 0;
+        for(int i=0;i<4;i++) {
+            res1 += Math.min(cntSol[i], cntGue[i]);
+        }
+        return new int[]{res0, res1};
+    }
+
+    /**
+     * 面试题 16.16. 部分排序
+     * 给定一个整数数组，编写一个函数，找出索引m和n，只要将索引区间[m,n]的元素排好序，整个数组就是有序的。
+     * 注意：n-m尽量最小，也就是说，找出符合条件的最短序列。函数返回值为[m,n]，若不存在这样的m和n（例如整个数组是有序的），请返回[-1,-1]。
+     *
+     * 示例：
+     * 输入： [1,2,4,7,10,11,7,12,6,7,16,18,19]
+     * 输出： [3,9]
+     *
+     * 提示：
+     * 0 <= len(array) <= 1000000
+     */
+    public int[] subSort(int[] array) {
+        if(array==null||array.length<2) {
+            return new int[]{-1,-1};
+        }
+        int right = -1;
+        int max = array[0];
+        for(int i=0;i<array.length;i++) {
+            if(array[i]<max) {
+                right = i;
+            }else {
+                max = array[i];
+            }
+        }
+        if(right==-1) {
+            return new int[]{-1,-1};
+        }
+        int left = array.length;
+        int min = array[array.length-1];
+        for(int i=array.length-1;i>=0;i--) {
+            if(array[i]>min) {
+                left = i;
+            }else {
+                min = array[i];
+            }
+        }
+        return new int[]{left, right};
+    }
+
+    /**
+     * 面试题 16.19. 水域大小
+     * 你有一个用于表示一片土地的整数矩阵land，该矩阵中每个点的值代表对应地点的海拔高度。
+     * 若值为0则表示水域。由垂直、水平或对角连接的水域为池塘。池塘的大小是指相连接的水域的个数。
+     * 编写一个方法来计算矩阵中所有池塘的大小，返回值需要从小到大排序。
+     *
+     * 示例：
+     * 输入：
+     * [
+     *   [0,2,1,0],
+     *   [0,1,0,1],
+     *   [1,1,0,1],
+     *   [0,1,0,1]
+     * ]
+     * 输出： [1,2,4]
+     *
+     * 提示：
+     * 0 < len(land) <= 1000
+     * 0 < len(land[i]) <= 1000
+     */
+    public int[] pondSizes(int[][] land) {
+        if(land==null||land.length==0||land[0].length==0) {
+            return new int[0];
+        }
+        List<Integer> list = new ArrayList<>();
+        for(int i=0;i<land.length;i++) {
+            for(int j=0;j<land[0].length;j++) {
+                if(land[i][j]==0) {
+                    list.add(pondSizes(land, i, j));
+                }
+            }
+        }
+        int[] result = new int[list.size()];
+        for(int i=0;i<result.length;i++) {
+            result[i] = list.get(i);
+        }
+        return result;
+    }
+
+    public int pondSizes(int[][] land, int i, int j) {
+        int result = 0;
+        if(i<0||i>=land.length||j<0||j>=land[0].length||land[i][j]!=0) {
+            return result;
+        }else {
+            land[i][j] = 1;
+            result++;
+            for(int k=-1;k<=1;k++) {
+                for(int l=-1;l<=1;l++) {
+                    result += pondSizes(land, i+k, j+l);
+                }
+            }
+            return result;
+        }
+    }
+
+    /**
+     * 面试题 16.20. T9键盘
+     * 在老式手机上，用户通过数字键盘输入，手机将提供与这些数字相匹配的单词列表。每个数字映射到0至4个字母。给定一个数字序列，实现一个算法来返回匹配单词的列表。你会得到一张含有有效单词的列表。映射如下图所示：
+     *
+     * 示例 1:
+     * 输入: num = "8733", words = ["tree", "used"]
+     * 输出: ["tree", "used"]
+     *
+     * 示例 2:
+     * 输入: num = "2", words = ["a", "b", "c", "d"]
+     * 输出: ["a", "b", "c"]
+     *
+     * 提示：
+     * num.length <= 1000
+     * words.length <= 500
+     * words[i].length == num.length
+     * num中不会出现 0, 1 这两个数字
+     */
+    private String[] dict = new String[]{"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+
+    public List<String> getValidT9Words(String num, String[] words) {
+        List<String> result = new ArrayList<>();
+        if(num==null||num.length()==0||words==null||words.length==0) {
+            return result;
+        }
+        for(String word : words) {
+            if(word.length()==num.length()&&getValidT9Words(num, 0, word)) {
+                result.add(word);
+            }
+        }
+        return result;
+    }
+
+    public boolean getValidT9Words(String num, int idx, String word) {
+        if(idx==num.length()) {
+            return true;
+        }
+        for(char c : dict[num.charAt(idx)-'2'].toCharArray()) {
+            if(c==word.charAt(idx)) {
+                return getValidT9Words(num, idx+1, word);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 面试题 16.21. 交换和
+     * 给定两个整数数组，请交换一对数值（每个数组中取一个数值），使得两个数组所有元素的和相等。
+     * 返回一个数组，第一个元素是第一个数组中要交换的元素，第二个元素是第二个数组中要交换的元素。
+     * 若有多个答案，返回任意一个均可。若无满足条件的数值，返回空数组。
+     *
+     * 示例:
+     * 输入: array1 = [4, 1, 2, 1, 1, 2], array2 = [3, 6, 3, 3]
+     * 输出: [1, 3]
+     *
+     * 示例:
+     * 输入: array1 = [1, 2, 3], array2 = [4, 5, 6]
+     * 输出: []
+     *
+     * 提示：
+     * 1 <= array1.length, array2.length <= 100000
+     */
+    public int[] findSwapValues(int[] array1, int[] array2) {
+        if(array1==null||array1.length==0||array2==null||array2.length==0) {
+            return new int[0];
+        }
+        int sum1 = 0;
+        for(int num : array1) {
+            sum1 += num;
+        }
+        int sum2 = 0;
+        Set<Integer> set = new HashSet<>();
+        for(int num : array2) {
+            set.add(num);
+            sum2 += num;
+        }
+        if((sum1-sum2)%2!=0) {
+            return new int[0];
+        }
+        for(int i=0;i<array1.length;i++) {
+            int target = array1[i] - (sum1-sum2)/2;
+            if(set.contains(target)) {
+                return new int[]{array1[i], target};
+            }
+        }
+        return new int[0];
+    }
+
+    /**
+     * 面试题 16.22. 兰顿蚂蚁
+     * 一只蚂蚁坐在由白色和黑色方格构成的无限网格上。开始时，网格全白，蚂蚁面向右侧。每行走一步，蚂蚁执行以下操作。
+     * (1) 如果在白色方格上，则翻转方格的颜色，向右(顺时针)转 90 度，并向前移动一个单位。
+     * (2) 如果在黑色方格上，则翻转方格的颜色，向左(逆时针方向)转 90 度，并向前移动一个单位。
+     * 编写程序来模拟蚂蚁执行的前 K 个动作，并返回最终的网格。
+     * 网格由数组表示，每个元素是一个字符串，代表网格中的一行，黑色方格由 'X' 表示，白色方格由 '_' 表示，
+     * 蚂蚁所在的位置由 'L', 'U', 'R', 'D' 表示，分别表示蚂蚁 左、上、右、下 的朝向。
+     * 只需要返回能够包含蚂蚁走过的所有方格的最小矩形。
+     *
+     * 示例 1:
+     * 输入: 0
+     * 输出: ["R"]
+     *
+     * 示例 2:
+     * 输入: 2
+     * 输出:
+     * [
+     *   "_X",
+     *   "LX"
+     * ]
+     *
+     * 示例 3:
+     * 输入: 5
+     * 输出:
+     * [
+     *   "_U",
+     *   "X_",
+     *   "XX"
+     * ]
+     *
+     * 说明：
+     * K <= 100000
+     */
+    public List<String> printKMoves(int K) {
+        List<String> result = new ArrayList<>();
+        if(K<0) {
+            return result;
+        }
+        char[] poss = new char[]{'R', 'D', 'L', 'U'};
+        Set<String> set = new HashSet<>();
+        int[] edges = new int[4];
+        int currDirect = 0;
+        int[] currPos = new int[2];
+        while(K-->0) {
+            String currPosStr = currPos[0]+","+currPos[1];
+            if(set.contains(currPosStr)) {
+                set.remove(currPosStr);
+                currDirect = (currDirect+3)%4;
+            }else {
+                set.add(currPosStr);
+                currDirect = (currDirect+1)%4;
+            }
+            switch(currDirect) {
+                case 0 : currPos[0] += 1; break;
+                case 1 : currPos[1] += 1; break;
+                case 2 : currPos[0] -= 1; break;
+                case 3 : currPos[1] -= 1; break;
+            }
+            updateEdges(edges, currPos);
+        }
+        for(int i=edges[3];i<=edges[1];i++) {
+            StringBuilder curr = new StringBuilder();
+            for(int j=edges[2];j<=edges[0];j++) {
+                if(i==currPos[1]&&j==currPos[0]) {
+                    curr.append(poss[currDirect]);
+                }else {
+                    curr.append(set.contains(j+","+i)?'X':'_');
+                }
+            }
+            result.add(curr.toString());
+        }
+        return result;
+    }
+
+    public void updateEdges(int[] edges, int[] currPos) {
+        edges[0] = Math.max(edges[0], currPos[0]);
+        edges[1] = Math.max(edges[1], currPos[1]);
+        edges[2] = Math.min(edges[2], currPos[0]);
+        edges[3] = Math.min(edges[3], currPos[1]);
+    }
+
+    /**
+     * 面试题 16.24. 数对和
+     * 设计一个算法，找出数组中两数之和为指定值的所有整数对。一个数只能属于一个数对。
+     *
+     * 示例 1:
+     * 输入: nums = [5,6,5], target = 11
+     * 输出: [[5,6]]
+     *
+     * 示例 2:
+     * 输入: nums = [5,6,5,6], target = 11
+     * 输出: [[5,6],[5,6]]
+     *
+     * 提示：
+     * nums.length <= 100000
+     */
+    public List<List<Integer>> pairSums(int[] nums, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(nums==null||nums.length<2) {
+            return result;
+        }
+        Map<Integer, Integer> mem = new HashMap<>();
+        for(int num : nums) {
+            if(mem.getOrDefault(target-num, 0)>0) {
+                mem.put(target-num, mem.get(target-num)-1);
+                List<Integer> list = new ArrayList<>();
+                list.add(num);
+                list.add(target-num);
+                result.add(list);
+            }else {
+                mem.put(num, mem.getOrDefault(num, 0)+1);
+            }
+        }
+        return result;
     }
 
     /**
@@ -2924,3 +3421,27 @@ class CQueue {
  * obj.appendTail(value);
  * int param_2 = obj.deleteHead();
  */
+
+class LRUCache extends LinkedHashMap<Integer, Integer> {
+
+    private int capacity;
+
+    public LRUCache(int capacity) {
+        super(capacity, 0.75f, true);
+        this.capacity = capacity;
+    }
+
+    public int get(int key) {
+        return this.getOrDefault(key, -1);
+    }
+
+    public void put(int key, int value) {
+        this.put(key, value);
+    }
+
+    @Override
+    public boolean removeEldestEntry(Map.Entry<Integer, Integer> eldestEntry) {
+        return this.size()>capacity;
+    }
+
+}
