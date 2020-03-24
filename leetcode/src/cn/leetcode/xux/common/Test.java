@@ -16,7 +16,682 @@ public class Test {
 //        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
 //        System.out.println(Integer.MAX_VALUE);
 //        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
-        System.out.println(test.subSort(new int[]{1,2,4,7,10,11,7,12,6,7,16,18,19}));
+        System.out.println(test.permutation1("Frx"));
+    }
+
+    /**
+     * 面试题 08.05. 递归乘法
+     * 递归乘法。 写一个递归函数，不使用 * 运算符， 实现两个正整数的相乘。可以使用加号、减号、位移，但要吝啬一些。
+     *
+     * 示例1:
+     *  输入：A = 1, B = 10
+     *  输出：10
+     *
+     * 示例2:
+     *  输入：A = 3, B = 4
+     *  输出：12
+     *
+     * 提示:
+     * 保证乘法范围不会溢出
+     */
+    public int multiply(int A, int B) {
+        if(A==0||B==0) {
+            return 0;
+        }
+        if(A<B) {
+            return multiply(B, A);
+        }
+        if(B==1) {
+            return A;
+        }
+        int pre = B>>1;
+        int remain = B-pre-pre;
+        int bRes = multiply(A, pre);
+        return bRes+bRes+multiply(A, remain);
+    }
+
+    /**
+     * 面试题 08.06. 汉诺塔问题
+     * 在经典汉诺塔问题中，有 3 根柱子及 N 个不同大小的穿孔圆盘，盘子可以滑入任意一根柱子。一开始，所有盘子自上而下按升序依次套在第一根柱子上(即每一个盘子只能放在更大的盘子上面)。移动圆盘时受到以下限制:
+     * (1) 每次只能移动一个盘子;
+     * (2) 盘子只能从柱子顶端滑出移到下一根柱子;
+     * (3) 盘子只能叠在比它大的盘子上。
+     * 请编写程序，用栈将所有盘子从第一根柱子移到最后一根柱子。
+     * 你需要原地修改栈。
+     *
+     * 示例1:
+     *  输入：A = [2, 1, 0], B = [], C = []
+     *  输出：C = [2, 1, 0]
+     *
+     * 示例2:
+     *  输入：A = [1, 0], B = [], C = []
+     *  输出：C = [1, 0]
+     *
+     * 提示:
+     * A中盘子的数目不大于14个。
+     */
+    public void hanota(List<Integer> A, List<Integer> B, List<Integer> C) {
+        if(A==null||A.size()==0) {
+            return;
+        }
+        hanota(A.size(), A, B, C);
+    }
+
+    public void hanota(int n, List<Integer> A, List<Integer> B, List<Integer> C) {
+        if(n==1) {
+            C.add(A.remove(A.size()-1));
+            return;
+        }
+        hanota(n-1, A, C, B);
+        hanota(1, A, B, C);
+        hanota(n-1, B, A, C);
+    }
+
+    /**
+     * 面试题 08.07. 无重复字符串的排列组合
+     * 无重复字符串的排列组合。编写一种方法，计算某字符串的所有排列组合，字符串每个字符均不相同。
+     *
+     * 示例1:
+     *  输入：S = "qwe"
+     *  输出：["qwe", "qew", "wqe", "weq", "ewq", "eqw"]
+     *
+     * 示例2:
+     *  输入：S = "ab"
+     *  输出：["ab", "ba"]
+     *
+     * 提示:
+     * 字符都是英文字母。
+     * 字符串长度在[1, 9]之间。
+     */
+    public String[] permutation2(String S) {
+        if(S==null||S.length()==0) {
+            return new String[0];
+        }
+        List<String> result = new ArrayList<>();
+        result.add(S);
+        int len = S.length();
+        for(int i=0;i<len;i++) {
+            int size = result.size();
+            for(int j=i+1;j<len;j++) {
+                for(int k=0;k<size;k++) {
+                    char[] chars = result.get(k).toCharArray();
+                    char tmp = chars[i];
+                    chars[i] = chars[j];
+                    chars[j] = tmp;
+                    result.add(String.valueOf(chars));
+                }
+            }
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    /**
+     * 面试题 08.08. 有重复字符串的排列组合
+     * 有重复字符串的排列组合。编写一种方法，计算某字符串的所有排列组合。
+     *
+     * 示例1:
+     *  输入：S = "qqe"
+     *  输出：["eqq","qeq","qqe"]
+     *
+     * 示例2:
+     *  输入：S = "ab"
+     *  输出：["ab", "ba"]
+     *
+     * 提示:
+     * 字符都是英文字母。
+     * 字符串长度在[1, 9]之间。
+     */
+    public String[] permutation1(String S) {
+        if(S==null||S.length()==0) {
+            return new String[0];
+        }
+        int[] cnts = new int[52];
+        for(char c : S.toCharArray()) {
+            if(c>='a') {
+                cnts[c-'a']++;
+            }else {
+                cnts[c-'A'+26]++;
+            }
+        }
+        List<String> result = new ArrayList<>();
+        permutation(result, cnts, "");
+        return result.toArray(new String[result.size()]);
+    }
+
+    public void permutation(List<String> result, int[] cnts, String curr) {
+        boolean done = true;
+        for(int cnt : cnts) {
+            if(cnt!=0) {
+                done = false;
+                break;
+            }
+        }
+        if(done) {
+            result.add(curr);
+            return ;
+        }
+        for(int i=0;i<52;i++) {
+            if(cnts[i]>0) {
+                cnts[i]--;
+                if(i<26) {
+                    permutation(result, cnts, curr+(char)(i+'a'));
+                }else {
+                    permutation(result, cnts, curr+(char)(i-26+'A'));
+                }
+                cnts[i]++;
+            }
+        }
+    }
+
+    /**
+     * 面试题 08.09. 括号
+     * 括号。设计一种算法，打印n对括号的所有合法的（例如，开闭一一对应）组合。
+     * 说明：解集不能包含重复的子集。
+     * 例如，给出 n = 3，生成结果为：
+     * [
+     *   "((()))",
+     *   "(()())",
+     *   "(())()",
+     *   "()(())",
+     *   "()()()"
+     * ]
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        generateParenthesis(result, "", n, n);
+        return result;
+    }
+
+    public void generateParenthesis(List<String> result, String curr, int left, int right) {
+        if(left==0&&right==0) {
+            result.add(curr);
+            return;
+        }
+        if(left>0) {
+            generateParenthesis(result, curr+'(', left-1, right);
+        }
+        if(right>left) {
+            generateParenthesis(result, curr+')', left, right-1);
+        }
+    }
+
+    /**
+     * 面试题 08.10. 颜色填充
+     * 颜色填充。编写函数，实现许多图片编辑软件都支持的“颜色填充”功能。
+     * 给定一个屏幕（以二维数组表示，元素为颜色值）、一个点和一个新的颜色值，将新颜色值填入这个点的周围区域，直到原来的颜色值全都改变。
+     *
+     * 示例1:
+     *  输入：
+     * image = [[1,1,1],[1,1,0],[1,0,1]]
+     * sr = 1, sc = 1, newColor = 2
+     *  输出：[[2,2,2],[2,2,0],[2,0,1]]
+     *  解释:
+     * 在图像的正中间，(坐标(sr,sc)=(1,1)),
+     * 在路径上所有符合条件的像素点的颜色都被更改成2。
+     * 注意，右下角的像素没有更改为2，
+     * 因为它不是在上下左右四个方向上与初始点相连的像素点。
+     *
+     * 说明：
+     * image 和 image[0] 的长度在范围 [1, 50] 内。
+     * 给出的初始点将满足 0 <= sr < image.length 和 0 <= sc < image[0].length。
+     * image[i][j] 和 newColor 表示的颜色值在范围 [0, 65535]内。
+     */
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        if(image==null||image.length==0||image[0].length==0) {
+            return image;
+        }
+        int m = image.length;
+        int n = image[0].length;
+        if(sr<0||sr>=m||sc<0||sc>=n) {
+            return image;
+        }
+        int src = image[sr][sc];
+        if(src!=newColor) {
+            floodFill(image, sr, sc, src, newColor);
+        }
+        return image;
+    }
+
+    public void floodFill(int[][] image, int i, int j, int color, int newColor) {
+        if(i<0||i>=image.length||j<0||j>=image[0].length||image[i][j]!=color) {
+            return;
+        }
+        image[i][j] = newColor;
+        floodFill(image, i-1, j, color, newColor);
+        floodFill(image, i+1, j, color, newColor);
+        floodFill(image, i, j-1, color, newColor);
+        floodFill(image, i, j+1, color, newColor);
+    }
+
+    /**
+     * 面试题 08.11. 硬币
+     * 硬币。给定数量不限的硬币，币值为25分、10分、5分和1分，编写代码计算n分有几种表示法。(结果可能会很大，你需要将结果模上1000000007)
+     *
+     * 示例1:
+     *  输入: n = 5
+     *  输出：2
+     *  解释: 有两种方式可以凑成总金额:
+     * 5=5
+     * 5=1+1+1+1+1
+     *
+     * 示例2:
+     *  输入: n = 10
+     *  输出：4
+     *  解释: 有四种方式可以凑成总金额:
+     * 10=10
+     * 10=5+5
+     * 10=5+1+1+1+1+1
+     * 10=1+1+1+1+1+1+1+1+1+1
+     *
+     * 说明：
+     * 注意:
+     * 你可以假设：
+     * 0 <= n (总金额) <= 1000000
+     */
+    public int waysToChange(int n) {
+        int[] dp = new int[n+1];
+        int[] coins = new int[]{1,5,10,25};
+        dp[0] = 1;
+        for(int coin : coins) {
+            for(int i=1;i<=n;i++) {
+                if(i>=coin) {
+                    dp[i] = (dp[i]+dp[i-coin])%1000000007;
+                }
+            }
+        }
+        return dp[n];
+    }
+
+    /**
+     * 面试题 08.14. 布尔运算
+     * 给定一个布尔表达式和一个期望的布尔结果 result，布尔表达式由 0 (false)、1 (true)、& (AND)、 | (OR) 和 ^ (XOR) 符号组成。
+     * 实现一个函数，算出有几种可使该表达式得出 result 值的括号方法。
+     *
+     * 示例 1:
+     * 输入: s = "1^0|0|1", result = 0
+     * 输出: 2
+     *
+     * 解释: 两种可能的括号方法是
+     * 1^(0|(0|1))
+     * 1^((0|0)|1)
+     *
+     * 示例 2:
+     * 输入: s = "0&0&0&1^1|0", result = 1
+     * 输出: 10
+     *
+     * 提示：
+     * 运算符的数量不超过 19 个
+     */
+    public int countEval(String s, int result) {
+        if(s==null||s.length()==0||(result!=0&&result!=1)) {
+            return 0;
+        }
+        int len = s.length();
+        int[][][] dp = new int[len][len][2];
+        for(int i=0;i<len;i+=2) {
+            char c = s.charAt(i);
+            if(c=='0') {
+                dp[i][i][0] = 1;
+            }else {
+                dp[i][i][1] = 1;
+            }
+        }
+        for(int i=2;i<len;i+=2) {
+            for(int j=0;j+i<len;j+=2) {
+                for(int k=j+1;k<i+j;k+=2) {
+                    int pre0 =  dp[j][k-1][0];
+                    int pre1 =  dp[j][k-1][1];
+                    int post0 = dp[k+1][i+j][0];
+                    int post1 = dp[k+1][i+j][1];
+                    switch(s.charAt(k)) {
+                        case '&' :
+                            dp[j][i+j][0] += pre0*(post0+post1)+pre1*post0;
+                            dp[j][i+j][1] += pre1*post1;
+                            break;
+                        case '|' :
+                            dp[j][i+j][0] += pre0*post0;
+                            dp[j][i+j][1] += pre1*(post0+post1)+pre0*post1;
+                            break;
+                        case '^' :
+                            dp[j][i+j][0] += pre0*post0+pre1*post1;
+                            dp[j][i+j][1] += pre1*post0+pre0*post1;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        return dp[0][len-1][result];
+    }
+
+    /**
+     * 面试题 10.02. 变位词组
+     * 编写一种方法，对字符串数组进行排序，将所有变位词组合在一起。变位词是指字母相同，但排列不同的字符串。
+     * 注意：本题相对原题稍作修改
+     *
+     * 示例:
+     * 输入: ["eat", "tea", "tan", "ate", "nat", "bat"],
+     * 输出:
+     * [
+     *   ["ate","eat","tea"],
+     *   ["nat","tan"],
+     *   ["bat"]
+     * ]
+     *
+     * 说明：
+     * 所有输入均为小写字母。
+     * 不考虑答案输出的顺序。
+     */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> result = new ArrayList<>();
+        if(strs==null||strs.length==0) {
+            return result;
+        }
+        Map<String, List<String>> map = new HashMap<>();
+        for(String s : strs) {
+            int[] cnts = new int[26];
+            for(char c : s.toCharArray()) {
+                cnts[c-'a']++;
+            }
+            StringBuilder sb = new StringBuilder();
+            for(int cnt : cnts) {
+                sb.append(cnt).append('#');
+            }
+            String tmp = sb.toString();
+            if(!map.containsKey(tmp)) {
+                map.put(tmp, new ArrayList<String>());
+            }
+            map.get(tmp).add(s);
+        }
+        for(Map.Entry<String, List<String>> entry : map.entrySet()) {
+            result.add(entry.getValue());
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 10.03. 搜索旋转数组
+     * 搜索旋转数组。给定一个排序后的数组，包含n个整数，但这个数组已被旋转过很多次了，次数不详。
+     * 请编写代码找出数组中的某个元素，假设数组元素原先是按升序排列的。若有多个相同元素，返回索引值最小的一个。
+     *
+     * 示例1:
+     *  输入: arr = [15, 16, 19, 20, 25, 1, 3, 4, 5, 7, 10, 14], target = 5
+     *  输出: 8（元素5在该数组中的索引）
+     *
+     * 示例2:
+     *  输入：arr = [15, 16, 19, 20, 25, 1, 3, 4, 5, 7, 10, 14], target = 11
+     *  输出：-1 （没有找到）
+     *
+     * 提示:
+     * arr 长度范围在[1, 1000000]之间
+     */
+    public int search1(int[] arr, int target) {
+        if(arr==null||arr.length==0) {
+            return -1;
+        }
+        int left = 0;
+        int right = arr.length-1;
+        while(left<right) {
+            int mid = (left+right)/2;
+            if(arr[left]<arr[mid]) {
+                if(arr[left]<=target&&target<=arr[mid]) {
+                    right = mid;
+                }else {
+                    left = mid+1;
+                }
+            }else if(arr[left]>arr[mid]) {
+                if(target>=arr[left]||target<=arr[mid]) {
+                    right = mid;
+                }else {
+                    left = mid+1;
+                }
+            }else {
+                if(arr[left]!=target) {
+                    left++;
+                }else {
+                    return left;
+                }
+            }
+        }
+        return arr[left]==target?left:-1;
+    }
+
+    /**
+     * 面试题 10.05. 稀疏数组搜索
+     * 稀疏数组搜索。有个排好序的字符串数组，其中散布着一些空字符串，编写一种方法，找出给定字符串的位置。
+     *
+     * 示例1:
+     *  输入: words = ["at", "", "", "", "ball", "", "", "car", "", "","dad", "", ""], s = "ta"
+     *  输出：-1
+     *  说明: 不存在返回-1。
+     *
+     * 示例2:
+     *  输入：words = ["at", "", "", "", "ball", "", "", "car", "", "","dad", "", ""], s = "ball"
+     *  输出：4
+     *
+     * 提示:
+     * words的长度在[1, 1000000]之间
+     */
+    public int findString(String[] words, String s) {
+        if(words==null||words.length==0) {
+            return -1;
+        }
+        int left = 0;
+        int right = words.length-1;
+        while(left<right) {
+            while(left<right&&words[left].equals("")) {
+                left++;
+            }
+            while(left<right&&words[right].equals("")) {
+                right--;
+            }
+            int mid = (left+right)/2;
+            while(mid<right&&words[mid].equals("")) {
+                mid++;
+            }
+            if(words[mid].compareTo(s)<0) {
+                left = mid+1;
+            }else if(words[mid].compareTo(s)>0) {
+                right=mid-1;
+            }else {
+                return mid;
+            }
+        }
+        return left==right&&words[left].equals(s)?left:-1;
+    }
+
+    /**
+     * 面试题 10.09. 排序矩阵查找
+     * 给定M×N矩阵，每一行、每一列都按升序排列，请编写代码找出某元素。
+     *
+     * 示例:
+     * 现有矩阵 matrix 如下：
+     * [
+     *   [1,   4,  7, 11, 15],
+     *   [2,   5,  8, 12, 19],
+     *   [3,   6,  9, 16, 22],
+     *   [10, 13, 14, 17, 24],
+     *   [18, 21, 23, 26, 30]
+     * ]
+     * 给定 target = 5，返回 true。
+     * 给定 target = 20，返回 false。
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if(matrix==null||matrix.length==0||matrix[0].length==0) {
+            return false;
+        }
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int i = 0;
+        int j = n-1;
+        while(i<m&&j>=0) {
+            if(matrix[i][j]>target) {
+                j--;
+            }else if(matrix[i][j]<target) {
+                i++;
+            }else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 面试题 10.11. 峰与谷
+     * 在一个整数数组中，“峰”是大于或等于相邻整数的元素，相应地，“谷”是小于或等于相邻整数的元素。
+     * 例如，在数组{5, 8, 6, 2, 3, 4, 6}中，{8, 6}是峰， {5, 2}是谷。
+     * 现在给定一个整数数组，将该数组按峰与谷的交替顺序排序。
+     *
+     * 示例:
+     * 输入: [5, 3, 1, 2, 3]
+     * 输出: [5, 1, 3, 2, 3]
+     *
+     * 提示：
+     * nums.length <= 10000
+     */
+    public void wiggleSort(int[] nums) {
+        if(nums==null||nums.length<3) {
+            return;
+        }
+        for(int i=1;i<nums.length;i++) {
+            if((i%2==1&&nums[i]>nums[i-1])||(i%2==0&&nums[i]<nums[i-1])) {
+                int tmp = nums[i];
+                nums[i] = nums[i+1];
+                nums[i+1] = tmp;
+            }
+        }
+    }
+
+    /**
+     * 面试题 16.01. 交换数字
+     * 编写一个函数，不用临时变量，直接交换numbers = [a, b]中a与b的值。
+     *
+     * 示例：
+     * 输入: numbers = [1,2]
+     * 输出: [2,1]
+     *
+     * 提示：
+     * numbers.length == 2
+     */
+    public int[] swapNumbers(int[] numbers) {
+        numbers[0] = numbers[0]+numbers[1]-numbers[0];
+        numbers[1] = numbers[0]^numbers[1];
+        numbers[0] = numbers[0]^numbers[1];
+        return new int[]{numbers[0]+numbers[1]-numbers[0], numbers[0]+numbers[1]-numbers[1]};
+    }
+
+    /**
+     * 面试题 16.04. 井字游戏
+     * 设计一个算法，判断玩家是否赢了井字游戏。输入是一个 N x N 的数组棋盘，由字符" "，"X"和"O"组成，其中字符" "代表一个空位。
+     * 以下是井字游戏的规则：
+     * 玩家轮流将字符放入空位（" "）中。
+     * 第一个玩家总是放字符"O"，且第二个玩家总是放字符"X"。
+     * "X"和"O"只允许放置在空位中，不允许对已放有字符的位置进行填充。
+     * 当有N个相同（且非空）的字符填充任何行、列或对角线时，游戏结束，对应该字符的玩家获胜。
+     * 当所有位置非空时，也算为游戏结束。
+     * 如果游戏结束，玩家不允许再放置字符。
+     * 如果游戏存在获胜者，就返回该游戏的获胜者使用的字符（"X"或"O"）；
+     * 如果游戏以平局结束，则返回 "Draw"；如果仍会有行动（游戏未结束），则返回 "Pending"。
+     *
+     * 示例 1：
+     * 输入： board = ["O X"," XO","X O"]
+     * 输出： "X"
+     *
+     * 示例 2：
+     * 输入： board = ["OOX","XXO","OXO"]
+     * 输出： "Draw"
+     * 解释： 没有玩家获胜且不存在空位
+     *
+     * 示例 3：
+     * 输入： board = ["OOX","XXO","OX "]
+     * 输出： "Pending"
+     * 解释： 没有玩家获胜且仍存在空位
+     *
+     * 提示：
+     * 1 <= board.length == board[i].length <= 100
+     * 输入一定遵循井字棋规则
+     */
+    public String tictactoe(String[] board) {
+        if(board==null||board.length==0) {
+            return null;
+        }
+        boolean pending = false;
+        int len = board.length;
+        int cnt = 0;
+        for(int i=0;i<len;i++) {
+            cnt = 0;
+            for(int j=0;j<len;j++) {
+                char c = board[i].charAt(j);
+                if(c=='X') {
+                    cnt++;
+                }else if(c=='O') {
+                    cnt--;
+                }else {
+                    pending = true;
+                    break;
+                }
+            }
+            if(cnt==len) {
+                return "X";
+            }else if(cnt==-len) {
+                return "O";
+            }
+        }
+        for(int i=0;i<len;i++) {
+            cnt = 0;
+            for(int j=0;j<len;j++) {
+                char c = board[j].charAt(i);
+                if(c=='X') {
+                    cnt++;
+                }else if(c=='O') {
+                    cnt--;
+                }else {
+                    pending = true;
+                    break;
+                }
+            }
+            if(cnt==len) {
+                return "X";
+            }else if(cnt==-len) {
+                return "O";
+            }
+        }
+        cnt = 0;
+        for(int i=0;i<len;i++) {
+            char c = board[i].charAt(i);
+            if(c=='X') {
+                cnt++;
+            }else if(c=='O') {
+                cnt--;
+            }else {
+                pending = true;
+                break;
+            }
+        }
+        if(cnt==len) {
+            return "X";
+        }else if(cnt==-len) {
+            return "O";
+        }
+        cnt = 0;
+        for(int i=0;i<len;i++) {
+            char c = board[i].charAt(len-1-i);
+            if(c=='X') {
+                cnt++;
+            }else if(c=='O') {
+                cnt--;
+            }else {
+                pending = true;
+                break;
+            }
+        }
+        if(cnt==len) {
+            return "X";
+        }else if(cnt==-len) {
+            return "O";
+        }
+        return pending?"Pending":"Draw";
     }
 
     /**
@@ -3442,6 +4117,87 @@ class LRUCache extends LinkedHashMap<Integer, Integer> {
     @Override
     public boolean removeEldestEntry(Map.Entry<Integer, Integer> eldestEntry) {
         return this.size()>capacity;
+    }
+
+}
+
+/**
+ * 面试题 16.02. 单词频率
+ * 设计一个方法，找出任意指定单词在一本书中的出现频率。
+ * 你的实现应该支持如下操作：
+ * WordsFrequency(book)构造函数，参数为字符串数组构成的一本书
+ * get(word)查询指定单词在数中出现的频率
+ *
+ * 示例：
+ * WordsFrequency wordsFrequency = new WordsFrequency({"i", "have", "an", "apple", "he", "have", "a", "pen"});
+ * wordsFrequency.get("you"); //返回0，"you"没有出现过
+ * wordsFrequency.get("have"); //返回2，"have"出现2次
+ * wordsFrequency.get("an"); //返回1
+ * wordsFrequency.get("apple"); //返回1
+ * wordsFrequency.get("pen"); //返回1
+ *
+ * 提示：
+ * book[i]中只包含小写字母
+ * 1 <= book.length <= 100000
+ * 1 <= book[i].length <= 10
+ * get函数的调用次数不会超过100000
+ */
+class WordsFrequency {
+
+    Map<String, Integer> mem;
+
+    public WordsFrequency(String[] book) {
+        mem = new HashMap<>();
+        for(String word : book) {
+            mem.put(word, mem.getOrDefault(word, 0)+1);
+        }
+    }
+
+    public int get(String word) {
+        return mem.getOrDefault(word, 0);
+    }
+
+}
+
+/**
+ * 面试题 10.10. 数字流的秩
+ * 假设你正在读取一串整数。每隔一段时间，你希望能找出数字 x 的秩(小于或等于 x 的值的个数)。
+ * 请实现数据结构和算法来支持这些操作，也就是说：
+ * 实现 track(int x) 方法，每读入一个数字都会调用该方法；
+ * 实现 getRankOfNumber(int x) 方法，返回小于或等于 x 的值的个数。
+ * 注意：本题相对原题稍作改动
+ *
+ * 示例:
+ * 输入:
+ * ["StreamRank", "getRankOfNumber", "track", "getRankOfNumber"]
+ * [[], [1], [0], [0]]
+ * 输出:
+ * [null,0,null,1]
+ *
+ * 提示：
+ * x <= 50000
+ * track 和 getRankOfNumber 方法的调用次数均不超过 2000 次
+ */
+class StreamRank {
+
+    Map<Integer, Integer> mem;
+
+    public StreamRank() {
+        mem = new HashMap<>();
+    }
+
+    public void track(int x) {
+        mem.put(x, mem.getOrDefault(x, 0)+1);
+    }
+
+    public int getRankOfNumber(int x) {
+        int result = 0;
+        for(Map.Entry<Integer, Integer> entry : mem.entrySet()) {
+            if(entry.getKey()<=x) {
+                result += entry.getValue();
+            }
+        }
+        return result;
     }
 
 }
