@@ -16,7 +16,923 @@ public class Test {
 //        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
 //        System.out.println(Integer.MAX_VALUE);
 //        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
-        System.out.println(test.permutation1("Frx"));
+        //System.out.println(test.BSTSequences(null));
+
+        AnimalShelf as = new AnimalShelf();
+        //["AnimalShelf", "enqueue", "enqueue", "dequeueCat", "dequeueDog", "dequeueAny"]
+        //[[], [[0, 0]], [[1, 0]], [], [], []]
+        as.enqueue(new int[]{0,0});
+        as.enqueue(new int[]{1,0});
+        as.dequeueCat();
+        as.dequeueDog();
+        as.dequeueAny();
+    }
+
+    /**
+     * 面试题 04.01. 节点间通路
+     * 节点间通路。给定有向图，设计一个算法，找出两个节点之间是否存在一条路径。
+     *
+     * 示例1:
+     *  输入：n = 3, graph = [[0, 1], [0, 2], [1, 2], [1, 2]], start = 0, target = 2
+     *  输出：true
+     *
+     * 示例2:
+     *  输入：n = 5, graph = [[0, 1], [0, 2], [0, 4], [0, 4], [0, 1], [1, 3], [1, 4], [1, 3], [2, 3], [3, 4]], start = 0, target = 4
+     *  输出 true
+     *
+     * 提示：
+     * 节点数量n在[0, 1e5]范围内。
+     * 节点编号大于等于 0 小于 n。
+     * 图中可能存在自环和平行边。
+     */
+    public boolean findWhetherExistsPath(int n, int[][] graph, int start, int target) {
+        if(graph==null||graph.length==0) {
+            return false;
+        }
+        List<Integer>[] neighborTable = new List[n];
+        for(int[] border : graph) {
+            if(neighborTable[border[0]]==null) {
+                neighborTable[border[0]] = new ArrayList<>();
+            }
+            neighborTable[border[0]].add(border[1]);
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        Set<Integer> mem = new HashSet<>();
+        queue.offer(start);
+        mem.add(start);
+        while(!queue.isEmpty()) {
+            int curr = queue.poll();
+            if(neighborTable[curr]!=null) {
+                for(int next : neighborTable[curr]) {
+                    if(mem.add(next)) {
+                        if(next==target) {
+                            return true;
+                        }
+                        queue.offer(next);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 面试题 04.02. 最小高度树
+     * 给定一个有序整数数组，元素各不相同且按升序排列，编写一个算法，创建一棵高度最小的二叉搜索树。
+     *
+     * 示例:
+     * 给定有序数组: [-10,-3,0,5,9],
+     * 一个可能的答案是：[0,-3,9,-10,null,5]，它可以表示下面这个高度平衡二叉搜索树：
+     *           0
+     *          / \
+     *        -3   9
+     *        /   /
+     *      -10  5
+     */
+    public BinaryTreeNode sortedArrayToBST(int[] nums) {
+        if(nums==null||nums.length==0) {
+            return null;
+        }
+        return sortedArrayToBST(nums, 0, nums.length-1);
+    }
+
+    public BinaryTreeNode sortedArrayToBST(int[] nums, int start, int end) {
+        if(start>end) {
+            return null;
+        }
+        int mid = (start+end)/2;
+        BinaryTreeNode currNode = new BinaryTreeNode(nums[mid]);
+        currNode.left = sortedArrayToBST(nums, start, mid-1);
+        currNode.right = sortedArrayToBST(nums, mid+1, end);
+        return currNode;
+    }
+
+    /**
+     * 面试题 04.03. 特定深度节点链表
+     * 给定一棵二叉树，设计一个算法，创建含有某一深度上所有节点的链表（比如，若一棵树的深度为 D，则会创建出 D 个链表）。
+     * 返回一个包含所有深度的链表的数组。
+     *
+     * 示例：
+     * 输入：[1,2,3,4,5,null,7,8]
+     *         1
+     *        /  \
+     *       2    3
+     *      / \    \
+     *     4   5    7
+     *    /
+     *   8
+     * 输出：[[1],[2,3],[4,5,7],[8]]
+     */
+    public ListNode[] listOfDepth(BinaryTreeNode tree) {
+        if(tree==null) {
+            return new ListNode[0];
+        }
+        List<ListNode> result = new ArrayList<>();
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(tree);
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            ListNode head = new ListNode(0);
+            ListNode tail = head;
+            while(size-->0) {
+                BinaryTreeNode curr = queue.poll();
+                tail.next = new ListNode(curr.val);
+                tail = tail.next;
+                if(curr.left!=null) {
+                    queue.offer(curr.left);
+                }
+                if(curr.right!=null) {
+                    queue.offer(curr.right);
+                }
+            }
+            result.add(head.next);
+        }
+        return result.toArray(new ListNode[result.size()]);
+    }
+
+    /**
+     * 面试题 04.04. 检查平衡性
+     * 实现一个函数，检查二叉树是否平衡。在这个问题中，平衡树的定义如下：任意一个节点，其两棵子树的高度差不超过 1。
+     *
+     * 示例 1:
+     * 给定二叉树 [3,9,20,null,null,15,7]
+     *     3
+     *    / \
+     *   9  20
+     *     /  \
+     *    15   7
+     * 返回 true 。
+     *
+     * 示例 2:
+     * 给定二叉树 [1,2,2,3,3,null,null,4,4]
+     *       1
+     *      / \
+     *     2   2
+     *    / \
+     *   3   3
+     *  / \
+     * 4   4
+     * 返回 false 。
+     */
+    public boolean isBalanced(BinaryTreeNode root) {
+        return depth(root)==-1;
+    }
+
+    public int depth(BinaryTreeNode root) {
+        if(root==null) {
+            return 0;
+        }
+        int leftDepth = depth(root.left);
+        int rightDepth = depth(root.right);
+        return leftDepth==-1||rightDepth==-1||Math.abs(leftDepth-rightDepth)>1?
+                -1:Math.max(leftDepth, rightDepth)+1;
+    }
+
+    /**
+     * 面试题 04.05. 合法二叉搜索树
+     * 实现一个函数，检查一棵二叉树是否为二叉搜索树。
+     *
+     * 示例 1:
+     * 输入:
+     *     2
+     *    / \
+     *   1   3
+     * 输出: true
+     *
+     * 示例 2:
+     * 输入:
+     *     5
+     *    / \
+     *   1   4
+     *      / \
+     *     3   6
+     * 输出: false
+     * 解释: 输入为: [5,1,4,null,null,3,6]。
+     *      根节点的值为 5 ，但是其右子节点值为 4 。
+     */
+    public boolean isValidBST(BinaryTreeNode root) {
+        return isValidBST(root, null, null);
+    }
+
+    public boolean isValidBST(BinaryTreeNode root, Integer left, Integer right) {
+        if(root==null) {
+            return true;
+        }
+        if((left!=null&&root.val<=left)||(right!=null&&root.val>=right)) {
+            return false;
+        }
+        return isValidBST(root.left, left, root.val)&&isValidBST(root.right, root.val, right);
+    }
+
+    /**
+     * 面试题 04.06. 后继者
+     * 设计一个算法，找出二叉搜索树中指定节点的“下一个”节点（也即中序后继）。
+     * 如果指定节点没有对应的“下一个”节点，则返回null。
+     *
+     * 示例 1:
+     * 输入: root = [2,1,3], p = 1
+     *   2
+     *  / \
+     * 1   3
+     * 输出: 2
+     *
+     * 示例 2:
+     * 输入: root = [5,3,6,2,4,null,null,1], p = 6
+     *       5
+     *      / \
+     *     3   6
+     *    / \
+     *   2   4
+     *  /
+     * 1
+     * 输出: null
+     */
+    public BinaryTreeNode inorderSuccessor(BinaryTreeNode root, BinaryTreeNode p) {
+        Stack<BinaryTreeNode> stack = new Stack<>();
+        BinaryTreeNode curr = root;
+        while(curr!=null) {
+            stack.push(curr);
+            curr = curr.left;
+        }
+        boolean found = false;
+        while(!stack.isEmpty()) {
+            curr = stack.pop();
+            if(found) {
+                return curr;
+            }
+            if(curr==p) {
+                found = true;
+            }
+            BinaryTreeNode right = curr.right;
+            while(right!=null) {
+                stack.push(right);
+                right = right.left;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 面试题 04.08. 首个共同祖先
+     * 设计并实现一个算法，找出二叉树中某两个节点的第一个共同祖先。不得将其他的节点存储在另外的数据结构中。
+     * 注意：这不一定是二叉搜索树。
+     *
+     * 例如，给定如下二叉树: root = [3,5,1,6,2,0,8,null,null,7,4]
+     *     3
+     *    / \
+     *   5   1
+     *  / \ / \
+     * 6  2 0  8
+     *   / \
+     *  7   4
+     * 示例 1:
+     * 输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+     * 输入: 3
+     * 解释: 节点 5 和节点 1 的最近公共祖先是节点 3。
+     * 示例 2:
+     * 输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+     * 输出: 5
+     * 解释: 节点 5 和节点 4 的最近公共祖先是节点 5。因为根据定义最近公共祖先节点可以为节点本身。
+     * 说明:
+     * 所有节点的值都是唯一的。
+     * p、q 为不同节点且均存在于给定的二叉树中。
+     */
+    public BinaryTreeNode lowestCommonAncestor(BinaryTreeNode root, BinaryTreeNode p, BinaryTreeNode q) {
+        if(root==null) {
+            return null;
+        }
+        if(root==p||root==q) {
+            return root;
+        }
+        BinaryTreeNode leftResult = lowestCommonAncestor(root.left, p, q);
+        BinaryTreeNode rightResult = lowestCommonAncestor(root.right, p, q);
+        if(leftResult==null) {
+            return rightResult;
+        }
+        if(rightResult==null) {
+            return leftResult;
+        }
+        return root;
+    }
+
+    /**
+     * 面试题 04.09. 二叉搜索树序列
+     * 从左向右遍历一个数组，通过不断将其中的元素插入树中可以逐步地生成一棵二叉搜索树。给定一个由不同节点组成的二叉树，输出所有可能生成此树的数组。
+     *
+     * 示例:
+     * 给定如下二叉树
+     *         2
+     *        / \
+     *       1   3
+     * 返回:
+     * [
+     *    [2,1,3],
+     *    [2,3,1]
+     * ]
+     */
+    List<List<Integer>> result_int_list_list = new ArrayList<>();
+    public List<List<Integer>> BSTSequences(BinaryTreeNode root) {
+        List<BinaryTreeNode> nodes = new ArrayList<>();
+        if(root!=null) {
+            nodes.add(root);
+        }
+        BSTSequences(new ArrayList<>(), nodes);
+        return result_int_list_list;
+    }
+
+    public void BSTSequences(List<Integer> curr, List<BinaryTreeNode> nodes) {
+        if(nodes.size()==0) {
+            result_int_list_list.add(curr);
+        }
+        for(int i=0;i<nodes.size();i++) {
+            List<BinaryTreeNode> nextNodes = new ArrayList<>(nodes);
+            List<Integer> nextCurr = new ArrayList<>(curr);
+            BinaryTreeNode node = nextNodes.remove(i);
+            nextCurr.add(node.val);
+            if(node.left!=null) {
+                nextNodes.add(node.left);
+            }
+            if(node.right!=null) {
+                nextNodes.add(node.right);
+            }
+            BSTSequences(nextCurr, nextNodes);
+        }
+    }
+
+    /**
+     * 面试题 04.10. 检查子树
+     * 检查子树。你有两棵非常大的二叉树：T1，有几万个节点；T2，有几万个节点。设计一个算法，判断 T2 是否为 T1 的子树。
+     * 如果 T1 有这么一个节点 n，其子树与 T2 一模一样，则 T2 为 T1 的子树，也就是说，从节点 n 处把树砍断，得到的树与 T2 完全相同。
+     *
+     * 示例1:
+     *  输入：t1 = [1, 2, 3], t2 = [2]
+     *  输出：true
+     *
+     * 示例2:
+     *  输入：t1 = [1, null, 2, 4], t2 = [3, 2]
+     *  输出：false
+     *
+     * 提示：
+     * 树的节点数目范围为[0, 20000]。
+     */
+    public boolean checkSubTree(BinaryTreeNode t1, BinaryTreeNode t2) {
+        if(t1==null||t2==null) {
+            return false;
+        }
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(t1);
+        while(!queue.isEmpty()) {
+            BinaryTreeNode curr = queue.poll();
+            if(checkSameTree(curr, t2)) {
+                return true;
+            }
+            if(curr.left!=null) {
+                queue.offer(curr.left);
+            }
+            if(curr.right!=null) {
+                queue.offer(curr.right);
+            }
+        }
+        return false;
+    }
+
+    public boolean checkSameTree(BinaryTreeNode t1, BinaryTreeNode t2) {
+        if(t1==null&&t2==null) {
+            return true;
+        }
+        if(t1==null||t2==null||t1.val!=t2.val) {
+            return false;
+        }
+        return checkSameTree(t1.left, t2.left)&&checkSameTree(t1.right, t2.right);
+    }
+
+    /**
+     * 面试题 04.12. 求和路径
+     * 给定一棵二叉树，其中每个节点都含有一个整数数值(该值或正或负)。设计一个算法，打印节点数值总和等于某个给定值的所有路径的数量。
+     * 注意，路径不一定非得从二叉树的根节点或叶节点开始或结束，但是其方向必须向下(只能从父节点指向子节点方向)。
+     *
+     * 示例:
+     * 给定如下二叉树，以及目标和 sum = 22，
+     *               5
+     *              / \
+     *             4   8
+     *            /   / \
+     *           11  13  4
+     *          /  \    / \
+     *         7    2  5   1
+     * 返回:3
+     * 解释：和为 22 的路径有：[5,4,11,2], [5,8,4,5], [4,11,7]
+     *
+     * 提示：
+     * 节点总数 <= 10000
+     */
+    public int pathSum1(BinaryTreeNode root, int sum) {
+        if(root==null) {
+            return 0;
+        }
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int result = 0;
+        while(!queue.isEmpty()) {
+            BinaryTreeNode curr = queue.poll();
+            result += pathSum2(curr, sum);
+            if(curr.left!=null) {
+                queue.offer(curr.left);
+            }
+            if(curr.right!=null) {
+                queue.offer(curr.right);
+            }
+        }
+        return result;
+    }
+
+    public int pathSum2(BinaryTreeNode root, int sum) {
+        if (root == null) {
+            return 0;
+        }
+        int result = 0;
+        if (root.val == sum) {
+            result++;
+        }
+        return result + pathSum2(root.left, sum-root.val)
+                + pathSum2(root.right, sum-root.val);
+    }
+
+    /**
+     * 面试题 05.01. 插入
+     * 插入。给定两个32位的整数N与M，以及表示比特位置的i与j。编写一种方法，将M插入N，使得M从N的第j位开始，到第i位结束。
+     * 假定从j位到i位足以容纳M，也即若M = 10 011，那么j和i之间至少可容纳5个位。
+     * 例如，不可能出现j = 3和i = 2的情况，因为第3位和第2位之间放不下M。
+     *
+     * 示例1:
+     *  输入：N = 10000000000, M = 10011, i = 2, j = 6
+     *  输出：N = 10001001100
+     *
+     * 示例2:
+     *  输入： N = 0, M = 11111, i = 0, j = 4
+     *  输出：N = 11111
+     */
+    public int insertBits(int N, int M, int i, int j) {
+        for(int k=i;k<=j;k++) {
+            if(((1<<k)&N)>0) {
+                N -= (1<<k);
+            }
+        }
+        N += M<<i;
+        return N;
+    }
+
+    /**
+     * 在一个 8 x 8 的棋盘上，有一个白色车（rook）。也可能有空方块，白色的象（bishop）和黑色的卒（pawn）。
+     * 它们分别以字符 “R”，“.”，“B” 和 “p” 给出。大写字符表示白棋，小写字符表示黑棋。
+     * 车按国际象棋中的规则移动：它选择四个基本方向中的一个（北，东，西和南），然后朝那个方向移动，
+     * 直到它选择停止、到达棋盘的边缘或移动到同一方格来捕获该方格上颜色相反的卒。
+     * 另外，车不能与其他友方（白色）象进入同一个方格。
+     *
+     * 返回车能够在一次移动中捕获到的卒的数量。
+     *
+     * 示例 1：
+     * 输入：[
+     * [".",".",".",".",".",".",".","."],
+     * [".",".",".","p",".",".",".","."],
+     * [".",".",".","R",".",".",".","p"],
+     * [".",".",".",".",".",".",".","."],
+     * [".",".",".",".",".",".",".","."],
+     * [".",".",".","p",".",".",".","."],
+     * [".",".",".",".",".",".",".","."],
+     * [".",".",".",".",".",".",".","."]]
+     * 输出：3
+     * 解释：在本例中，车能够捕获所有的卒。
+     *
+     * 示例 2：
+     * 输入：[
+     * [".",".",".",".",".",".",".","."],
+     * [".","p","p","p","p","p",".","."],
+     * [".","p","p","B","p","p",".","."],
+     * [".","p","B","R","B","p",".","."],
+     * [".","p","p","B","p","p",".","."],
+     * [".","p","p","p","p","p",".","."],
+     * [".",".",".",".",".",".",".","."],
+     * [".",".",".",".",".",".",".","."]]
+     * 输出：0
+     * 解释：象阻止了车捕获任何卒。
+     *
+     * 示例 3：
+     * 输入：[
+     * [".",".",".",".",".",".",".","."],
+     * [".",".",".","p",".",".",".","."],
+     * [".",".",".","p",".",".",".","."],
+     * ["p","p",".","R",".","p","B","."],
+     * [".",".",".",".",".",".",".","."],
+     * [".",".",".","B",".",".",".","."],
+     * [".",".",".","p",".",".",".","."],
+     * [".",".",".",".",".",".",".","."]]
+     * 输出：3
+     * 解释： 车可以捕获位置 b5，d6 和 f5 的卒。
+     *  
+     * 提示：
+     * board.length == board[i].length == 8
+     * board[i][j] 可以是 'R'，'.'，'B' 或 'p'
+     * 只有一个格子上存在 board[i][j] == 'R'
+     */
+    public int numRookCaptures(char[][] board) {
+        int result = 0;
+        for(int i=0;i<8;i++) {
+            for(int j=0;j<8;j++) {
+                if(board[i][j]=='R') {
+                    result += numRookCaptures(board, i, j, 0);
+                    result += numRookCaptures(board, i, j, 1);
+                    result += numRookCaptures(board, i, j, 2);
+                    result += numRookCaptures(board, i, j, 3);
+                }
+            }
+        }
+        return result;
+    }
+
+    public int numRookCaptures(char[][] board, int i, int j, int direct) {
+        if(i<0||i>=8||j<0||j>=8||board[i][j]=='B') {
+            return 0;
+        }
+        if(board[i][j]=='p') {
+            return 1;
+        }
+        switch (direct) {
+            case 0 : return numRookCaptures(board, i-1, j, direct);
+            case 1 : return numRookCaptures(board, i, j-1, direct);
+            case 2 : return numRookCaptures(board, i+1, j, direct);
+            case 3 : return numRookCaptures(board, i, j+1, direct);
+            default : return 0;
+        }
+    }
+
+    /**
+     * 面试题 05.02. 二进制数转字符串
+     * 二进制数转字符串。给定一个介于0和1之间的实数（如0.72），类型为double，打印它的二进制表达式。如果该数字不在0和1之间，或者无法精确地用32位以内的二进制表示，则打印“ERROR”。
+     *
+     * 示例1:
+     *  输入：0.625
+     *  输出："0.101"
+     *
+     * 示例2:
+     *  输入：0.1
+     *  输出："ERROR"
+     *  提示：0.1无法被二进制准确表示
+     *
+     * 提示：
+     * 32位包括输出中的"0."这两位。
+     */
+    public String printBin(double num) {
+        if(num<0d) {
+            return "ERROR";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("0.");
+        double curr = 0.5d;
+        int cnt = 30;
+        while(cnt-->0&&num>0d) {
+            if(num>=curr) {
+                sb.append('1');
+                num -= curr;
+            }else {
+                sb.append('0');
+            }
+            curr /= 2d;
+        }
+        return num>0d?"ERROR":sb.toString();
+    }
+
+    /**
+     * 面试题 05.04. 下一个数
+     * 下一个数。给定一个正整数，找出与其二进制表达式中1的个数相同且大小最接近的那两个数（一个略大，一个略小）。
+     *
+     * 示例1:
+     *  输入：num = 2（或者0b10）
+     *  输出：[4, 1] 或者（[0b100, 0b1]）
+     *
+     * 示例2:
+     *  输入：num = 1
+     *  输出：[2, -1]
+     *
+     * 提示:
+     * num的范围在[1, 2147483647]之间；
+     * 如果找不到前一个或者后一个满足条件的正数，那么输出 -1。
+     */
+    public int[] findClosedNumbers(int num) {
+        int[] result = new int[]{-1, -1};
+        int left = 2;
+        int right = 1;
+        int cnt = 0;
+        while(right<=num) {
+            if((num&left)!=0&&(num&right)==0) {
+                result[1] = num/right*right-left+right;
+                right >>= 1;
+                while(cnt-->0) {
+                    result[1] += right;
+                    right >>= 1;
+                }
+                break;
+            }
+            if((right&num)!=0) {
+                cnt++;
+            }
+            left <<= 1;
+            right <<= 1;
+        }
+        left = 2;
+        right = 1;
+        cnt = 0;
+        while(right<=num) {
+            if((num&left)==0&&(num&right)!=0) {
+                result[0] = num/right*right-right+left;
+                right = 1;
+                while(cnt-->0) {
+                    result[0] += right;
+                    right *= 2;
+                }
+                break;
+            }
+            if((right&num)!=0) {
+                cnt++;
+            }
+            left <<= 1;
+            right <<= 1;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 05.03. 翻转数位
+     * 给定一个32位整数 num，你可以将一个数位从0变为1。请编写一个程序，找出你能够获得的最长的一串1的长度。
+     *
+     * 示例 1：
+     * 输入: num = 1775(110111011112)
+     * 输出: 8
+     *
+     * 示例 2：
+     * 输入: num = 7(01112)
+     * 输出: 4
+     */
+    public int reverseBits(int num) {
+        int result = 0;
+        int pre = 0;
+        int cnt = 0;
+        while(num!=0) {
+            if((num&1)==0) {
+                result = Math.max(pre+cnt+1, result);
+                pre = cnt;
+                cnt = 0;
+            }else {
+                cnt++;
+            }
+            num >>>= 1;
+        }
+        return Math.max(pre+cnt+1, result);
+    }
+
+    /**
+     * 面试题 05.06. 整数转换
+     * 整数转换。编写一个函数，确定需要改变几个位才能将整数A转成整数B。
+     *
+     * 示例1:
+     *  输入：A = 29 （或者0b11101）, B = 15（或者0b01111）
+     *  输出：2
+     *
+     * 示例2:
+     *  输入：A = 1，B = 2
+     *  输出：2
+     *
+     * 提示:
+     * A，B范围在[-2147483648, 2147483647]之间
+     */
+    public int convertInteger(int A, int B) {
+        int result = 0;
+        while(A!=0||B!=0) {
+            result += (A&1)^(B&1);
+            A >>>= 1;
+            B >>>= 1;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 05.07. 配对交换
+     * 配对交换。编写程序，交换某个整数的奇数位和偶数位，尽量使用较少的指令（也就是说，位0与位1交换，位2与位3交换，以此类推）。
+     *
+     * 示例1:
+     *  输入：num = 2（或者0b10）
+     *  输出 1 (或者 0b01)
+     *
+     * 示例2:
+     *  输入：num = 3
+     *  输出：3
+     *
+     * 提示:
+     * num的范围在[0, 2^30 - 1]之间，不会发生整数溢出。
+     */
+    public int exchangeBits(int num) {
+        int curr = 2;
+        int result = 0;
+        while(num>0) {
+            result += curr*(num&1);
+            num >>= 1;
+            result += curr/2*(num&1);
+            num >>= 1;
+            curr *= 4;
+        }
+        return result;
+    }
+
+    /**
+     * 面试题 08.01. 三步问题
+     * 三步问题。有个小孩正在上楼梯，楼梯有n阶台阶，小孩一次可以上1阶、2阶或3阶。
+     * 实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模1000000007。
+     *
+     * 示例1:
+     *  输入：n = 3
+     *  输出：4
+     *  说明: 有四种走法
+     *
+     * 示例2:
+     *  输入：n = 5
+     *  输出：13
+     *
+     * 提示:
+     * n范围在[1, 1000000]之间
+     */
+    public int waysToStep(int n) {
+        if(n==1) {
+            return 1;
+        }
+        if(n==2) {
+            return 2;
+        }
+        if(n==3) {
+            return 4;
+        }
+        int pre1 = 1;
+        int pre2 = 2;
+        int pre3 = 4;
+        int curr = 4;
+        while(curr++<=n) {
+            int tmp = pre3;
+            pre3 = ((pre1+pre2)%mod+pre3)%mod;
+            pre1 = pre2;
+            pre2 = tmp;
+        }
+        return pre3;
+    }
+
+    /**
+     * 面试题 08.02. 迷路的机器人
+     * 设想有个机器人坐在一个网格的左上角，网格 r 行 c 列。机器人只能向下或向右移动，但不能走到一些被禁止的网格（有障碍物）。
+     * 设计一种算法，寻找机器人从左上角移动到右下角的路径。
+     *
+     * 网格中的障碍物和空位置分别用 1 和 0 来表示。
+     * 返回一条可行的路径，路径由经过的网格的行号和列号组成。左上角为 0 行 0 列。
+     *
+     * 示例 1:
+     * 输入:
+     * [
+     *   [0,0,0],
+     *   [0,1,0],
+     *   [0,0,0]
+     * ]
+     * 输出: [[0,0],[0,1],[0,2],[1,2],[2,2]]
+     *
+     * 解释:
+     * 输入中标粗的位置即为输出表示的路径，即
+     * 0行0列（左上角） -> 0行1列 -> 0行2列 -> 1行2列 -> 2行2列（右下角）
+     * 说明：r 和 c 的值均不超过 100。
+     */
+    public List<List<Integer>> pathWithObstacles(int[][] obstacleGrid) {
+        List<List<Integer>> result = new LinkedList<>();
+        if(obstacleGrid==null||obstacleGrid.length==0||obstacleGrid[0].length==0) {
+            return result;
+        }
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        boolean[][] canGet = new boolean[m][n];
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(i==0&&j==0) {
+                    canGet[i][j] = obstacleGrid[i][j]==0;
+                }else if(((i>0&&canGet[i-1][j])||(j>0&&canGet[i][j-1]))&&obstacleGrid[i][j]==0) {
+                    canGet[i][j] = true;
+                }
+            }
+        }
+        if(!canGet[m-1][n-1]) {
+            return result;
+        }
+        int i = m-1;
+        int j = n-1;
+        while(i>=0&&j>=0) {
+            if(i>0&&canGet[i-1][j]) {
+                List<Integer> list = new ArrayList<>();
+                list.add(i--);
+                list.add(j);
+                result.add(0, list);
+            }else if(j>0&&canGet[i][j-1]) {
+                List<Integer> list = new ArrayList<>();
+                list.add(i);
+                list.add(j--);
+                result.add(0, list);
+            }else {
+                break;
+            }
+        }
+        List<Integer> list = new ArrayList<>();
+        list.add(0);
+        list.add(0);
+        result.add(0, list);
+        return result;
+    }
+
+    /**
+     * 面试题 08.03. 魔术索引
+     * 魔术索引。 在数组A[0...n-1]中，有所谓的魔术索引，满足条件A[i] = i。
+     * 给定一个有序整数数组，编写一种方法找出魔术索引，若有的话，在数组A中找出一个魔术索引，如果没有，则返回-1。
+     * 若有多个魔术索引，返回索引值最小的一个。
+     *
+     * 示例1:
+     *  输入：nums = [0, 2, 3, 4, 5]
+     *  输出：0
+     *  说明: 0下标的元素为0
+     *
+     * 示例2:
+     *  输入：nums = [1, 1, 1]
+     *  输出：1
+     *
+     * 提示:
+     * nums长度在[1, 1000000]之间
+     */
+    public int findMagicIndex(int[] nums) {
+        if(nums==null||nums.length==0) {
+            return -1;
+        }
+        return findMagicIndex(nums, 0, nums.length-1);
+    }
+
+    public int findMagicIndex(int[] nums, int start, int end) {
+        if(start>end) {
+            return -1;
+        }
+        if(start==end) {
+            return nums[start]==start?start:-1;
+        }
+        int left = start;
+        int right = end;
+        int mid = (left+right)/2;
+        if(nums[mid]>mid) {
+            int leftResult = findMagicIndex(nums, start, mid-1);
+            int rightResult = findMagicIndex(nums, nums[mid], end);
+            return leftResult!=-1?leftResult:rightResult;
+        }else if(nums[mid]<mid) {
+            int leftResult = findMagicIndex(nums, start, nums[mid]);
+            int rightResult = findMagicIndex(nums, mid+1, end);
+            return leftResult!=-1?leftResult:rightResult;
+        }else {
+            return findMagicIndex(nums, start, mid);
+        }
+    }
+
+    /**
+     * 面试题 08.04. 幂集
+     * 幂集。编写一种方法，返回某集合的所有子集。集合中不包含重复的元素。
+     * 说明：解集不能包含重复的子集。
+     * 示例:
+     *  输入： nums = [1,2,3]
+     *  输出：
+     * [
+     *   [3],
+     *   [1],
+     *   [2],
+     *   [1,2,3],
+     *   [1,3],
+     *   [2,3],
+     *   [1,2],
+     *   []
+     * ]
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(nums==null) {
+            return result;
+        }
+        subsets(result, new ArrayList<Integer>(), nums, 0);
+        return result;
+    }
+
+    public void subsets(List<List<Integer>> result, List<Integer> curr, int[] nums, int idx) {
+        if(idx>=nums.length) {
+            result.add(new ArrayList(curr));
+            return;
+        }
+        subsets(result, new ArrayList(curr), nums, idx+1);
+        List<Integer> list = new ArrayList<>(curr);
+        list.add(nums[idx]);
+        subsets(result, list, nums, idx+1);
     }
 
     /**
@@ -295,7 +1211,7 @@ public class Test {
         for(int coin : coins) {
             for(int i=1;i<=n;i++) {
                 if(i>=coin) {
-                    dp[i] = (dp[i]+dp[i-coin])%1000000007;
+                    dp[i] = (dp[i]+dp[i-coin])%mod;
                 }
             }
         }
@@ -4200,4 +5116,187 @@ class StreamRank {
         return result;
     }
 
+}
+
+/**
+ * 面试题 03.06. 动物收容所
+ * 动物收容所。有家动物收容所只收容狗与猫，且严格遵守“先进先出”的原则。在收养该收容所的动物时，
+ * 收养人只能收养所有动物中“最老”（由其进入收容所的时间长短而定）的动物，或者可以挑选猫或狗（同时必须收养此类动物中“最老”的）。
+ * 换言之，收养人不能自由挑选想收养的对象。请创建适用于这个系统的数据结构，实现各种操作方法，
+ * 比如enqueue、dequeueAny、dequeueDog和dequeueCat。允许使用Java内置的LinkedList数据结构。
+ * enqueue方法有一个animal参数，animal[0]代表动物编号，animal[1]代表动物种类，其中 0 代表猫，1 代表狗。
+ * dequeue*方法返回一个列表[动物编号, 动物种类]，若没有可以收养的动物，则返回[-1,-1]。
+ *
+ * 示例1:
+ *  输入：
+ * ["AnimalShelf", "enqueue", "enqueue", "dequeueCat", "dequeueDog", "dequeueAny"]
+ * [[], [[0, 0]], [[1, 0]], [], [], []]
+ *  输出：
+ * [null,null,null,[0,0],[-1,-1],[1,0]]
+ *
+ * 示例2:
+ *  输入：
+ * ["AnimalShelf", "enqueue", "enqueue", "enqueue", "dequeueDog", "dequeueCat", "dequeueAny"]
+ * [[], [[0, 0]], [[1, 0]], [[2, 1]], [], [], []]
+ *  输出：
+ * [null,null,null,null,[2,1],[0,0],[1,0]]
+ *
+ * 说明:
+ * 收纳所的最大容量为20000
+ */
+class AnimalShelf {
+
+    Queue<Integer> queueCat;
+    Queue<Integer> queueDog;
+
+    public AnimalShelf() {
+        queueCat = new LinkedList<>();
+        queueDog = new LinkedList<>();
+    }
+
+    public void enqueue(int[] animal) {
+        if(animal[1]==0) {
+            queueCat.offer(animal[0]);
+        }else {
+            queueDog.offer(animal[1]);
+        }
+    }
+
+    public int[] dequeueAny() {
+        if(queueCat.isEmpty()&&queueDog.isEmpty()) {
+            return new int[]{-1, -1};
+        }else if(queueCat.isEmpty()||(!queueDog.isEmpty()&&queueCat.peek()>queueDog.peek())) {
+            return new int[]{queueDog.poll(), 1};
+        }else {
+            return new int[]{queueCat.poll(), 0};
+        }
+    }
+
+    public int[] dequeueDog() {
+        return queueDog.isEmpty()?new int[]{-1,-1}:new int[]{queueDog.poll(), 1};
+    }
+
+    public int[] dequeueCat() {
+        return queueCat.isEmpty()?new int[]{-1,-1}:new int[]{queueCat.poll(), 0};
+    }
+
+}
+
+/**
+ * 面试题 03.05. 栈排序
+ * 栈排序。 编写程序，对栈进行排序使最小元素位于栈顶。
+ * 最多只能使用一个其他的临时栈存放数据，但不得将元素复制到别的数据结构（如数组）中。
+ * 该栈支持如下操作：push、pop、peek 和 isEmpty。当栈为空时，peek 返回 -1。
+ *
+ * 示例1:
+ *  输入：
+ * ["SortedStack", "push", "push", "peek", "pop", "peek"]
+ * [[], [1], [2], [], [], []]
+ *  输出：[null,null,null,1,null,2]
+ *
+ * 示例2:
+ *  输入：
+ * ["SortedStack", "pop", "pop", "push", "pop", "isEmpty"]
+ * [[], [], [], [1], [], []]
+ *  输出：[null,null,null,null,null,true]
+ *
+ * 说明:
+ * 栈中的元素数目在[0, 5000]范围内。
+ */
+class SortedStack {
+
+    Stack<Integer> stack1;
+    Stack<Integer> stack2;
+
+    public SortedStack() {
+        stack1 = new Stack<>();
+        stack2 = new Stack<>();
+    }
+
+    public void push(int val) {
+        while(!stack1.isEmpty()&&stack1.peek()<val) {
+            stack2.push(stack1.pop());
+        }
+        stack1.push(val);
+        while(!stack2.isEmpty()) {
+            stack1.push(stack2.pop());
+        }
+    }
+
+    public void pop() {
+        if(!stack1.isEmpty()) {
+            stack1.pop();
+        }
+    }
+
+    public int peek() {
+        if(!stack1.isEmpty()) {
+            return stack1.peek();
+        }
+        return -1;
+    }
+
+    public boolean isEmpty() {
+        return stack1.isEmpty();
+    }
+
+}
+
+/**
+ * 面试题 03.04. 化栈为队
+ * 实现一个MyQueue类，该类用两个栈来实现一个队列。
+ *
+ * 示例：
+ * MyQueue queue = new MyQueue();
+ * queue.push(1);
+ * queue.push(2);
+ * queue.peek();  // 返回 1
+ * queue.pop();   // 返回 1
+ * queue.empty(); // 返回 false
+ *
+ * 说明：
+ * 你只能使用标准的栈操作 -- 也就是只有 push to top, peek/pop from top, size 和 is empty 操作是合法的。
+ * 你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。
+ * 假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）。
+ */
+class MyQueue {
+
+    Stack<Integer> stack1;
+    Stack<Integer> stack2;
+
+    /** Initialize your data structure here. */
+    public MyQueue() {
+        stack1 = new Stack<>();
+        stack2  =new Stack<>();
+    }
+
+    /** Push element x to the back of queue. */
+    public void push(int x) {
+        stack1.push(x);
+    }
+
+    /** Removes the element from in front of queue and returns that element. */
+    public int pop() {
+        if(stack2.isEmpty()) {
+            while(!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+        return stack2.pop();
+    }
+
+    /** Get the front element. */
+    public int peek() {
+        if(stack2.isEmpty()) {
+            while(!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+        return stack2.peek();
+    }
+
+    /** Returns whether the queue is empty. */
+    public boolean empty() {
+        return stack1.isEmpty()&&stack2.isEmpty();
+    }
 }
