@@ -16,16 +16,639 @@ public class Test {
 //        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
 //        System.out.println(Integer.MAX_VALUE);
 //        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
-        //System.out.println(test.BSTSequences(null));
+        System.out.println(test.replaceSpaces("ds sdfs afs sdfa dfssf asdf             ", 27));
+    }
 
-        AnimalShelf as = new AnimalShelf();
-        //["AnimalShelf", "enqueue", "enqueue", "dequeueCat", "dequeueDog", "dequeueAny"]
-        //[[], [[0, 0]], [[1, 0]], [], [], []]
-        as.enqueue(new int[]{0,0});
-        as.enqueue(new int[]{1,0});
-        as.dequeueCat();
-        as.dequeueDog();
-        as.dequeueAny();
+    /**
+     * 面试题 01.02. 判定是否互为字符重排
+     * 给定两个字符串 s1 和 s2，请编写一个程序，确定其中一个字符串的字符重新排列后，能否变成另一个字符串。
+     *
+     * 示例 1：
+     * 输入: s1 = "abc", s2 = "bca"
+     * 输出: true
+     *
+     * 示例 2：
+     * 输入: s1 = "abc", s2 = "bad"
+     * 输出: false
+     *
+     * 说明：
+     * 0 <= len(s1) <= 100
+     * 0 <= len(s2) <= 100
+     */
+    public boolean CheckPermutation(String s1, String s2) {
+        if(s1==null||s2==null||s1.length()!=s2.length()) {
+            return false;
+        }
+        int[] cnts = new int[26];
+        for(char c : s1.toCharArray()) {
+            cnts[c-'a']++;
+        }
+        for(char c : s2.toCharArray()) {
+            cnts[c-'a']--;
+        }
+        for(int cnt : cnts) {
+            if(cnt!=0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 面试题 01.03. URL化
+     * URL化。编写一种方法，将字符串中的空格全部替换为%20。
+     * 假定该字符串尾部有足够的空间存放新增字符，并且知道字符串的“真实”长度。
+     * （注：用Java实现的话，请使用字符数组实现，以便直接在数组上操作。）
+     *
+     * 示例1:
+     *  输入："Mr John Smith    ", 13
+     *  输出："Mr%20John%20Smith"
+     *
+     * 示例2:
+     *  输入："               ", 5
+     *  输出："%20%20%20%20%20"
+     *
+     * 提示：
+     * 字符串长度在[0, 500000]范围内
+     */
+    public String replaceSpaces(String S, int length) {
+        char[] chars = S.toCharArray();
+        int spaceCnt = 0;
+        for(int i=0;i<length;i++) {
+            if(S.charAt(i)==' ') {
+                spaceCnt++;
+            }
+        }
+        int right = length+spaceCnt*2-1;
+        int left = length-1;
+        while(right>left) {
+            if(chars[left]==' ') {
+                left--;
+                chars[right--] = '0';
+                chars[right--] = '2';
+                chars[right--] = '%';
+            }else {
+                chars[right--] = chars[left--];
+            }
+        }
+        return new String(chars).trim();
+    }
+
+    /**
+     * 面试题 01.04. 回文排列
+     * 给定一个字符串，编写一个函数判定其是否为某个回文串的排列之一。
+     * 回文串是指正反两个方向都一样的单词或短语。排列是指字母的重新排列。
+     * 回文串不一定是字典当中的单词。
+     *
+     * 示例1：
+     * 输入："tactcoa"
+     * 输出：true（排列有"tacocat"、"atcocta"，等等）
+     */
+    public boolean canPermutePalindrome(String s) {
+        if(s==null) {
+            return false;
+        }
+        Map<Character, Integer> cnts = new HashMap<>();
+        for(char c : s.toCharArray()) {
+            cnts.put(c, cnts.getOrDefault(c, 0)+1);
+        }
+        boolean hasOdd = false;
+        for(Map.Entry<Character, Integer> entry : cnts.entrySet()) {
+            if(entry.getValue()%2==1) {
+                if(hasOdd) {
+                    return false;
+                }else {
+                    hasOdd = true;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 面试题 01.05. 一次编辑
+     * 字符串有三种编辑操作:插入一个字符、删除一个字符或者替换一个字符。 给定两个字符串，编写一个函数判定它们是否只需要一次(或者零次)编辑。
+     *
+     * 示例 1:
+     * 输入:
+     * first = "pale"
+     * second = "ple"
+     * 输出: True
+     *
+     * 示例 2:
+     * 输入:
+     * first = "pales"
+     * second = "pal"
+     * 输出: False
+     */
+    public boolean oneEditAway(String first, String second) {
+        if(first==null||second==null) {
+            return false;
+        }
+        int len1 = first.length();
+        int len2 = second.length();
+        if(Math.abs(len1-len2)>1) {
+            return false;
+        }
+        int idx1 = 0;
+        int idx2 = 0;
+        boolean  hasEdit =false;
+        while(idx1<len1&&idx2<len2) {
+            if(first.charAt(idx1)==second.charAt(idx2)) {
+                idx1++;
+                idx2++;
+            }else {
+                if(!hasEdit) {
+                    if(len1>len2) {
+                        idx1++;
+                    }else if(len1<len2) {
+                        idx2++;
+                    }else {
+                        idx1++;
+                        idx2++;
+                    }
+                    hasEdit = true;
+                }else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 面试题 01.07. 旋转矩阵
+     * 给定一幅由N × N矩阵表示的图像，其中每个像素的大小为4字节，编写一种方法，将图像旋转90度。
+     * 不占用额外内存空间能否做到？
+     *
+     * 示例 1:
+     * 给定 matrix =
+     * [
+     *   [1,2,3],
+     *   [4,5,6],
+     *   [7,8,9]
+     * ],
+     * 原地旋转输入矩阵，使其变为:
+     * [
+     *   [7,4,1],
+     *   [8,5,2],
+     *   [9,6,3]
+     * ]
+     *
+     * 示例 2:
+     * 给定 matrix =
+     * [
+     *   [ 5, 1, 9,11],
+     *   [ 2, 4, 8,10],
+     *   [13, 3, 6, 7],
+     *   [15,14,12,16]
+     * ],
+     * 原地旋转输入矩阵，使其变为:
+     * [
+     *   [15,13, 2, 5],
+     *   [14, 3, 4, 1],
+     *   [12, 6, 8, 9],
+     *   [16, 7,10,11]
+     * ]
+     */
+    public void rotate(int[][] matrix) {
+        if(matrix==null||matrix.length==0||matrix.length!=matrix[0].length) {
+            return;
+        }
+        int len = matrix.length;
+        for(int i=0;i<len-i-1;i++) {
+            for(int j=i;j<len-i-1;j++) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[len-j-1][i];
+                matrix[len-j-1][i] = matrix[len-i-1][len-j-1];
+                matrix[len-i-1][len-j-1] = matrix[j][len-i-1];
+                matrix[j][len-i-1] = tmp;
+            }
+        }
+    }
+
+    /**
+     * 面试题 01.08. 零矩阵
+     * 编写一种算法，若M × N矩阵中某个元素为0，则将其所在的行与列清零。
+     *
+     * 示例 1：
+     * 输入：
+     * [
+     *   [1,1,1],
+     *   [1,0,1],
+     *   [1,1,1]
+     * ]
+     * 输出：
+     * [
+     *   [1,0,1],
+     *   [0,0,0],
+     *   [1,0,1]
+     * ]
+     *
+     * 示例 2：
+     * 输入：
+     * [
+     *   [0,1,2,0],
+     *   [3,4,5,2],
+     *   [1,3,1,5]
+     * ]
+     * 输出：
+     * [
+     *   [0,0,0,0],
+     *   [0,4,5,0],
+     *   [0,3,1,0]
+     * ]
+     */
+    public void setZeroes(int[][] matrix) {
+        if(matrix==null||matrix.length==0||matrix[0].length==0) {
+            return;
+        }
+        int m = matrix.length;
+        int n = matrix[0].length;
+        boolean row0 = false;
+        boolean col0 = false;
+        for(int j=0;j<n;j++) {
+            if(matrix[0][j]==0) {
+                row0 = true;
+                break;
+            }
+        }
+        for(int i=0;i<m;i++) {
+            if(matrix[i][0]==0) {
+                col0 = true;
+                break;
+            }
+        }
+        for(int i=1;i<m;i++) {
+            for(int j=1;j<n;j++) {
+                if(matrix[i][j]==0) {
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+        for(int j=1;j<n;j++) {
+            if(matrix[0][j]==0) {
+                for(int i=1;i<m;i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        for(int i=0;i<m;i++) {
+            if(matrix[i][0]==0) {
+                for(int j=1;j<n;j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        if(row0) {
+            for(int j=0;j<n;j++) {
+                matrix[0][j] = 0;
+            }
+        }
+        if(col0) {
+            for(int i=0;i<m;i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+
+    /**
+     * 面试题 01.09. 字符串轮转
+     * 字符串轮转。给定两个字符串s1和s2，请编写代码检查s2是否为s1旋转而成（比如，waterbottle是erbottlewat旋转后的字符串）。
+     *
+     * 示例1:
+     *  输入：s1 = "waterbottle", s2 = "erbottlewat"
+     *  输出：True
+     *
+     * 示例2:
+     *  输入：s1 = "aa", "aba"
+     *  输出：False
+     *
+     * 提示：
+     * 字符串长度在[0, 100000]范围内。
+     *
+     * 说明:
+     * 你能只调用一次检查子串的方法吗？
+     */
+    public boolean isFlipedString(String s1, String s2) {
+        if(s1.length()!=s2.length()) {
+            return false;
+        }
+        s1 += s1;
+        return s1.contains(s2);
+    }
+
+    /**
+     * 面试题 02.01. 移除重复节点
+     * 编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+     *
+     * 示例1:
+     *  输入：[1, 2, 3, 3, 2, 1]
+     *  输出：[1, 2, 3]
+     *
+     * 示例2:
+     *  输入：[1, 1, 1, 1, 2]
+     *  输出：[1, 2]
+     *
+     * 提示：
+     * 链表长度在[0, 20000]范围内。
+     * 链表元素在[0, 20000]范围内。
+     *
+     * 进阶：
+     * 如果不得使用临时缓冲区，该怎么解决？
+     */
+    public ListNode removeDuplicateNodes(ListNode head) {
+        if(head==null) {
+            return null;
+        }
+        ListNode curr = head;
+        Set<Integer> set = new HashSet<>();
+        set.add(curr.val);
+        while(curr!=null&&curr.next!=null&&set.add(curr.next.val)) {
+            curr = curr.next;
+        }
+        ListNode next = curr.next;
+        while(next!=null) {
+            while(next!=null&&!set.add(next.val)) {
+                next = next.next;
+            }
+            curr.next = next;
+            curr = curr.next;
+            if(curr!=null) {
+                next = curr.next;
+            }
+        }
+        return head;
+    }
+
+    /**
+     * 面试题 02.02. 返回倒数第 k 个节点
+     * 实现一种算法，找出单向链表中倒数第 k 个节点。返回该节点的值。
+     * 注意：本题相对原题稍作改动
+     *
+     * 示例：
+     * 输入： 1->2->3->4->5 和 k = 2
+     * 输出： 4
+     *
+     * 说明：
+     * 给定的 k 保证是有效的。
+     */
+    public int kthToLast(ListNode head, int k) {
+        if(head==null||k<1) {
+            return -1;
+        }
+        ListNode right = head;
+        while(k-->0) {
+            right = right.next;
+        }
+        ListNode left = head;
+        while(right!=null) {
+            left = left.next;
+            right = right.next;
+        }
+        return left.val;
+    }
+
+    /**
+     * 面试题 02.03. 删除中间节点
+     * 实现一种算法，删除单向链表中间的某个节点（除了第一个和最后一个节点，不一定是中间节点），假定你只能访问该节点。
+     *
+     * 示例：
+     * 输入：单向链表a->b->c->d->e->f中的节点c
+     * 结果：不返回任何数据，但该链表变为a->b->d->e->f
+     */
+    public void deleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+
+    /**
+     * 面试题 02.04. 分割链表
+     * 编写程序以 x 为基准分割链表，使得所有小于 x 的节点排在大于或等于 x 的节点之前。
+     * 如果链表中包含 x，x 只需出现在小于 x 的元素之后(如下所示)。
+     * 分割元素 x 只需处于“右半部分”即可，其不需要被置于左右两部分之间。
+     *
+     * 示例:
+     * 输入: head = 3->5->8->5->10->2->1, x = 5
+     * 输出: 3->1->2->10->5->5->8
+     */
+    public ListNode partition(ListNode head, int x) {
+        if(head==null) {
+            return head;
+        }
+        ListNode newHead = new ListNode(0);
+        newHead.next = head;
+        ListNode preTail = newHead;
+        while(preTail!=null&&preTail.next!=null&&preTail.next.val<x) {
+            preTail = preTail.next;
+        }
+        ListNode curr = preTail.next;
+        while(curr!=null&&curr.next!=null) {
+            while(curr!=null&&curr.next!=null&&curr.next.val>=x) {
+                curr = curr.next;
+            }
+            if(curr!=null&&curr.next!=null) {
+                ListNode preNext = curr.next;
+                curr.next = curr.next.next;
+                ListNode tmp = preTail.next;
+                preTail.next = preNext;
+                preNext.next = tmp;
+                preTail = preTail.next;
+            }
+        }
+        return newHead.next;
+    }
+
+    /**
+     * 面试题 02.05. 链表求和
+     * 给定两个用链表表示的整数，每个节点包含一个数位。
+     * 这些数位是反向存放的，也就是个位排在链表首部。
+     * 编写函数对这两个整数求和，并用链表形式返回结果。
+     *
+     * 示例：
+     * 输入：(7 -> 1 -> 6) + (5 -> 9 -> 2)，即617 + 295
+     * 输出：2 -> 1 -> 9，即912
+     *
+     * 进阶：假设这些数位是正向存放的，请再做一遍。
+     * 示例：
+     * 输入：(6 -> 1 -> 7) + (2 -> 9 -> 5)，即617 + 295
+     * 输出：9 -> 1 -> 2，即912
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode result = new ListNode(0);
+        ListNode reaultTail = result;
+        ListNode node1 = l1;
+        ListNode node2 = l2;
+        int carry = 0;
+        while(node1!=null||node2!=null) {
+            if(node1!=null) {
+                carry += node1.val;
+                node1 = node1.next;
+            }
+            if(node2!=null) {
+                carry += node2.val;
+                node2 = node2.next;
+            }
+            reaultTail.next = new ListNode(carry%10);
+            reaultTail = reaultTail.next;
+            carry = carry/10;
+        }
+        if(carry>0) {
+            reaultTail.next = new ListNode(carry);
+        }
+        return result.next;
+    }
+
+    /**
+     * 面试题 02.06. 回文链表
+     * 编写一个函数，检查输入的链表是否是回文的。
+     *
+     * 示例 1：
+     * 输入： 1->2
+     * 输出： false
+     *
+     * 示例 2：
+     * 输入： 1->2->2->1
+     * 输出： true
+     *
+     * 进阶：
+     * 你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题
+     */
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast!=null&&fast.next!=null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        if(fast!=null) {
+            slow = slow.next;
+        }
+        ListNode pre = null;
+        while(slow!=null) {
+            ListNode tmp = slow.next;
+            slow.next = pre;
+            pre = slow;
+            slow = tmp;
+        }
+        ListNode curr1 = head;
+        ListNode curr2 = pre;
+        while(curr1!=null&&curr2!=null) {
+            if(curr1.val!=curr2.val) {
+                return false;
+            }
+            curr1 = curr1.next;
+            curr2 = curr2.next;
+        }
+        return true;
+    }
+
+    /**
+     * 面试题 02.08. 环路检测
+     * 给定一个有环链表，实现一个算法返回环路的开头节点。
+     * 有环链表的定义：在链表中某个节点的next元素指向在它前面出现过的节点，则表明该链表存在环路。
+     *
+     * 示例 1：
+     * 输入：head = [3,2,0,-4], pos = 1
+     * 输出：tail connects to node index 1a
+     * 解释：链表中有一个环，其尾部连接到第二个节点。
+     *
+     * 示例 2：
+     * 输入：head = [1,2], pos = 0
+     * 输出：tail connects to node index 0
+     * 解释：链表中有一个环，其尾部连接到第一个节点。
+     *
+     * 示例 3：
+     * 输入：head = [1], pos = -1
+     * 输出：no cycle
+     * 解释：链表中没有环。
+     *
+     * 进阶：
+     * 你是否可以不用额外空间解决此题？
+     */
+    public ListNode detectCycle(ListNode head) {
+        if(head==null) {
+            return null;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast!=null&&fast.next!=null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow==fast) {
+                break;
+            }
+        }
+        if(fast==null||fast.next==null) {
+            return null;
+        }
+        fast = head;
+        while(slow!=fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return fast;
+    }
+
+    /**
+     * 914. 卡牌分组
+     * 给定一副牌，每张牌上都写着一个整数。
+     * 此时，你需要选定一个数字 X，使我们可以将整副牌按下述规则分成 1 组或更多组：
+     * 每组都有 X 张牌。
+     * 组内所有的牌上都写着相同的整数。
+     * 仅当你可选的 X >= 2 时返回 true。
+     *
+     * 示例 1：
+     * 输入：[1,2,3,4,4,3,2,1]
+     * 输出：true
+     * 解释：可行的分组是 [1,1]，[2,2]，[3,3]，[4,4]
+     *
+     * 示例 2：
+     * 输入：[1,1,1,2,2,2,3,3]
+     * 输出：false
+     * 解释：没有满足要求的分组。
+     *
+     * 示例 3：
+     * 输入：[1]
+     * 输出：false
+     * 解释：没有满足要求的分组。
+     *
+     * 示例 4：
+     * 输入：[1,1]
+     * 输出：true
+     * 解释：可行的分组是 [1,1]
+     *
+     * 示例 5：
+     * 输入：[1,1,2,2,2,2]
+     * 输出：true
+     * 解释：可行的分组是 [1,1]，[2,2]，[2,2]
+     *
+     * 提示：
+     * 1 <= deck.length <= 10000
+     * 0 <= deck[i] < 10000
+     */
+    public boolean hasGroupsSizeX(int[] deck) {
+        if(deck==null||deck.length<2) {
+            return false;
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int num : deck) {
+            map.put(num, map.getOrDefault(num, 0)+1);
+        }
+        int X = deck.length;
+        for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int curr = entry.getValue();
+            while(curr!=0) {
+                int tmp = X;
+                X = curr;
+                curr = tmp%curr;
+            }
+            if(X==1) {
+                return false;
+            }
+        }
+        return X>1;
     }
 
     /**
@@ -5299,4 +5922,63 @@ class MyQueue {
     public boolean empty() {
         return stack1.isEmpty()&&stack2.isEmpty();
     }
+}
+
+/**
+ * 面试题 03.01. 三合一
+ * 三合一。描述如何只用一个数组来实现三个栈。
+ * 你应该实现push(stackNum, value)、pop(stackNum)、isEmpty(stackNum)、peek(stackNum)方法。stackNum表示栈下标，value表示压入的值。
+ * 构造函数会传入一个stackSize参数，代表每个栈的大小。
+ *
+ * 示例1:
+ *  输入：
+ * ["TripleInOne", "push", "push", "pop", "pop", "pop", "isEmpty"]
+ * [[1], [0, 1], [0, 2], [0], [0], [0], [0]]
+ *  输出：[null, null, null, 1, -1, -1, true]
+ * 说明：当栈为空时`pop, peek`返回-1，当栈满时`push`不压入元素。
+ *
+ * 示例2:
+ *  输入：
+ * ["TripleInOne", "push", "push", "push", "pop", "pop", "pop", "peek"]
+ * [[2], [0, 1], [0, 2], [0, 3], [0], [0], [0], [0]]
+ *  输出：[null, null, null, null, 2, 1, -1, -1]
+ */
+class TripleInOne {
+
+    int[] stack;
+    int[] idxs;
+
+    public TripleInOne(int stackSize) {
+        stack = new int[stackSize*3];
+        idxs = new int[]{0,1,2};
+    }
+
+    public void push(int stackNum, int value) {
+        if(idxs[stackNum]<stack.length) {
+            stack[idxs[stackNum]] = value;
+            idxs[stackNum] += 3;
+        }
+    }
+
+    public int pop(int stackNum) {
+        if(idxs[stackNum]<3) {
+            return -1;
+        }else {
+            stackNum -= 3;
+            return stack[idxs[stackNum]];
+        }
+    }
+
+    public int peek(int stackNum) {
+        if(idxs[stackNum]<3) {
+            return -1;
+        }else {
+            return stack[idxs[stackNum]-3];
+        }
+    }
+
+    public boolean isEmpty(int stackNum) {
+        return idxs[stackNum]<3;
+    }
+
 }
