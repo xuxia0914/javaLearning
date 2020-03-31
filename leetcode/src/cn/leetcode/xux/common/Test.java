@@ -16,7 +16,6 @@ public class Test {
 //        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
 //        System.out.println(Integer.MAX_VALUE);
 //        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
-        System.out.println(test.replaceSpaces("ds sdfs afs sdfa dfssf asdf             ", 27));
     }
 
     /**
@@ -3658,8 +3657,10 @@ public class Test {
 
     /**
      * 面试题12. 矩阵中的路径
-     * 请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。
-     * 如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。例如，在下面的3×4的矩阵中包含一条字符串“bfce”的路径（路径中的字母用加粗标出）。
+     * 请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。
+     * 路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。
+     * 如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。
+     * 例如，在下面的3×4的矩阵中包含一条字符串“bfce”的路径（路径中的字母用加粗标出）。
      * [["a","b","c","e"],
      * ["s","f","c","s"],
      * ["a","d","e","e"]]
@@ -4576,7 +4577,8 @@ public class Test {
 
     /**
      * 面试题34. 二叉树中和为某一值的路径
-     * 输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
+     * 输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。
+     * 从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
      *
      * 示例:
      * 给定如下二叉树，以及目标和 sum = 22，
@@ -4736,7 +4738,7 @@ public class Test {
      * 限制：
      * 1 <= s 的长度 <= 8
      */
-    public String[] permutation(String s) {
+    public String[] permutation0(String s) {
         List<String> list = permutationHelper(s);
         return list.toArray(new String[list.size()]);
     }
@@ -5134,15 +5136,12 @@ public class Test {
         int[] tmp = new int[end-start+1];
         while(index<end-start+1) {
             if(index2==end+1) {
-                result_int += end-index2+1;
                 tmp[index++] = nums[index1++];
             }else if(index1==mid+1) {
                 tmp[index++] = nums[index2++];
             }else if(nums[index1]>nums[index2]) {
                 result_int += end-index2+1;
                 tmp[index++] = nums[index1++];
-            }else if(nums[index2]>nums[index1]) {
-                tmp[index++] = nums[index2++];
             }else {
                 tmp[index++] = nums[index2++];
             }
@@ -5414,7 +5413,7 @@ public class Test {
         for(int num : nums) {
             ret ^= num;
         }
-        int h = ret^(-ret);
+        int h = ret&(-ret);
         for(int num : nums) {
             if((num&h)==0) {
                 a ^= num;
