@@ -1,27 +1,28 @@
 package cn.leetcode.xux.hard;
 
 /**
- * Given a positive integer n, return the number of all possible attendance records with length n, which will be regarded as rewardable. The answer may be very large, return it after mod 109 + 7.
- * A student attendance record is a string that only contains the following three characters:
- * 'A' : Absent.
- * 'L' : Late.
- * 'P' : Present.
- * A record is regarded as rewardable if it doesn't contain more than one 'A' (absent) or more than two continuous 'L' (late).
- * Example 1:
- * Input: n = 2
- * Output: 8
- * Explanation:
- * There are 8 records with length 2 will be regarded as rewardable:
+ * 552. 学生出勤记录 II
+ * 给定一个正整数 n，返回长度为 n 的所有可被视为可奖励的出勤记录的数量。 答案可能非常大，你只需返回结果mod 109 + 7的值。
+ * 学生出勤记录是只包含以下三个字符的字符串：
+ * 'A' : Absent，缺勤
+ * 'L' : Late，迟到
+ * 'P' : Present，到场
+ * 如果记录不包含多于一个'A'（缺勤）或超过两个连续的'L'（迟到），则该记录被视为可奖励的。
+ *
+ * 示例 1:
+ * 输入: n = 2
+ * 输出: 8
+ * 解释：
+ * 有8个长度为2的记录将被视为可奖励：
  * "PP" , "AP", "PA", "LP", "PL", "AL", "LA", "LL"
- * Only "AA" won't be regarded as rewardable owing to more than one absent times.
- * Note: The value of n won't exceed 100,000.
+ * 只有"AA"不会被视为可奖励，因为缺勤次数超过一次。
+ * 注意：n 的值不会超过100000。
  */
 public class StudentAttendanceRecordII {
 
-    static int M = 1000000007;
+    int M = 1000000007;
 
-    /**n>28之后就不对了，不知道为什么*/
-    public static int checkRecord(int n) {
+    public int checkRecord(int n) {
         if(n<1) {
             return 0;
         }
@@ -32,18 +33,18 @@ public class StudentAttendanceRecordII {
         for(int i=1;i<n;i++) {
             int A0L0,A0L1,A0L2,A1L0,A1L1,A1L2;
             tmp = dp[i-1];
-            A0L0 = (tmp[0]+tmp[1]+tmp[2]);
+            A0L0 = ((tmp[0]+tmp[1])%M+tmp[2])%M;
             A0L1 = tmp[0];
             A0L2 = tmp[1];
-            A1L0 = (tmp[0]+tmp[1]+tmp[2]+tmp[3]+tmp[4]+tmp[5]);
+            A1L0 = (((((tmp[0]+tmp[1])%M+tmp[2])%M+tmp[3])%M+tmp[4])%M+tmp[5])%M;
             A1L1 = tmp[3];
             A1L2 = tmp[4];
             dp[i] = new int[]{A0L0,A0L1,A0L2,A1L0,A1L1,A1L2};
         }
-        return (dp[n-1][0]+dp[n-1][1]+dp[n-1][2]+dp[n-1][3]+dp[n-1][4]+dp[n-1][5])%M;
+        return (((((dp[n-1][0]+dp[n-1][1])%M+dp[n-1][2])%M+dp[n-1][3])%M+dp[n-1][4])%M+dp[n-1][5])%M;
     }
 
-    public static int checkRecord1(int n) {
+    public int checkRecord1(int n) {
         if(n == 1) return 3;
         // has 'A' , 0: not end with 'L' , 1: end with 'L'
         long[][] A = new long[n+1][2];
@@ -66,8 +67,9 @@ public class StudentAttendanceRecordII {
     }
 
     public static void main(String[] args) {
-        System.out.println(checkRecord(2));
-        System.out.println(checkRecord(100));   //985598218
+        StudentAttendanceRecordII sa = new StudentAttendanceRecordII();
+        System.out.println(sa.checkRecord(2));  //6
+        System.out.println(sa.checkRecord(100));   //985598218
     }
 
 }

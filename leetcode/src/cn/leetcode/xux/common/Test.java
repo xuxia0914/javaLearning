@@ -19,6 +19,231 @@ public class Test {
     }
 
     /**
+     * 面试题67. 把字符串转换成整数
+     * 写一个函数 StrToInt，实现把字符串转换成整数这个功能。不能使用 atoi 或者其他类似的库函数。
+     * 首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。
+     * 当我们寻找到的第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字组合起来，作为该整数的正负号；
+     * 假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成整数。
+     * 该字符串除了有效的整数部分之后也可能会存在多余的字符，这些字符可以被忽略，它们对于函数不应该造成影响。
+     * 注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换。
+     * 在任何情况下，若函数不能进行有效的转换时，请返回 0。
+     * 说明：
+     * 假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−231,  231 − 1]。如果数值超过这个范围，请返回  INT_MAX (231 − 1) 或 INT_MIN (−231) 。
+     *
+     * 示例 1:
+     * 输入: "42"
+     * 输出: 42
+     *
+     *  示例 2:
+     * 输入: "   -42"
+     * 输出: -42
+     * 解释: 第一个非空白字符为 '-', 它是一个负号。
+     *      我们尽可能将负号与后面所有连续出现的数字组合起来，最后得到 -42 。
+     *
+     *  示例 3:
+     * 输入: "4193 with words"
+     * 输出: 4193
+     * 解释: 转换截止于数字 '3' ，因为它的下一个字符不为数字。
+     *
+     *  示例 4:
+     * 输入: "words and 987"
+     * 输出: 0
+     * 解释: 第一个非空字符是 'w', 但它不是数字或正、负号。
+     *      因此无法执行有效的转换。
+     *
+     *  示例 5:
+     * 输入: "-91283472332"
+     * 输出: -2147483648
+     * 解释: 数字 "-91283472332" 超过 32 位有符号整数范围。
+     *      因此返回 INT_MIN (−231) 。
+     */
+    public int strToInt(String str) {
+        if(str==null||str.length()==0) {
+            return 0;
+        }
+        str = str.trim();
+        if(str.length()==0) {
+            return 0;
+        }
+        boolean started = false;
+        boolean sign = true;
+        long result = 0;
+        for(char c : str.toCharArray()) {
+            if(c<'0'||c>'9') {
+                if(started) {
+                    break;
+                }else {
+                    if(c=='+') {
+                        started = true;
+                    }else if(c=='-') {
+                        started = true;
+                        sign = false;
+                    }else {
+                        break;
+                    }
+                }
+            }else {
+                result = result*10+c-'0';
+                if(sign&&result>Integer.MAX_VALUE) {
+                    return Integer.MAX_VALUE;
+                }else if(!sign&&-result<Integer.MIN_VALUE) {
+                    return Integer.MIN_VALUE;
+                }
+                started = true;
+            }
+        }
+        result = sign?result:-result;
+        if(result>Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }else if(result<Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        }else {
+            return (int)result;
+        }
+    }
+
+    /**
+     * 面试题57. 和为s的两个数字
+     * 输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+     *
+     * 示例 1：
+     * 输入：nums = [2,7,11,15], target = 9
+     * 输出：[2,7] 或者 [7,2]
+     *
+     *  示例 2：
+     * 输入：nums = [10,26,30,31,47,60], target = 40
+     * 输出：[10,30] 或者 [30,10]
+     *
+     * 限制：
+     * 1 <= nums.length <= 10^5
+     * 1 <= nums[i] <= 10^6
+     */
+    public int[] twoSum(int[] nums, int target) {
+        if(nums==null||nums.length<2) {
+            return new int[]{};
+        }
+        int left = 0;
+        int right = nums.length-1;
+        while(left<right) {
+            int curr = nums[left]+nums[right];
+            if(curr==target) {
+                return new int[]{nums[left], nums[right]};
+            }else if(curr<target) {
+                left++;
+            }else {
+                right--;
+            }
+        }
+        return new int[]{};
+    }
+
+    /**
+     * 面试题58 - II. 左旋转字符串
+     * 字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。
+     * 比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+     *
+     * 示例 1：
+     * 输入: s = "abcdefg", k = 2
+     * 输出: "cdefgab"
+     *
+     *  示例 2：
+     * 输入: s = "lrloseumgh", k = 6
+     * 输出: "umghlrlose"
+     *
+     * 限制：
+     * 1 <= k < s.length <= 10000
+     */
+    public String reverseLeftWords(String s, int n) {
+        return s.substring(n)+s.substring(0, n);
+    }
+
+    /**
+     * 面试题58 - I. 翻转单词顺序
+     * 输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。
+     * 例如输入字符串"I am a student. "，则输出"student. a am I"。
+     *
+     * 示例 1：
+     * 输入: "the sky is blue"
+     * 输出: "blue is sky the"
+     *
+     *  示例 2：
+     * 输入: "  hello world!  "
+     * 输出: "world! hello"
+     * 解释: 输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。
+     *
+     *  示例 3：
+     * 输入: "a good   example"
+     * 输出: "example good a"
+     * 解释: 如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+     *
+     * 说明：
+     * 无空格字符构成一个单词。
+     * 输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。
+     * 如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+     */
+    public String reverseWords(String s) {
+        if(s==null||s.length()==0) {
+            return s;
+        }
+        String[] strs = s.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for(int i=strs.length-1;i>=0;i--) {
+            if(!"".equals(strs[i])) {
+                sb.append(strs[i]).append(" ");
+            }
+        }
+        return sb.toString().trim();
+    }
+
+    /**
+     * 面试题 17.15. 最长单词
+     * 给定一组单词words，编写一个程序，找出其中的最长单词，且该单词由这组单词中的其他单词组合而成。
+     * 若有多个长度相同的结果，返回其中字典序最小的一项，若没有符合要求的单词则返回空字符串。
+     *
+     * 示例：
+     * 输入： ["cat","banana","dog","nana","walk","walker","dogwalker"]
+     * 输出： "dogwalker"
+     * 解释： "dogwalker"可由"dog"和"walker"组成。
+     *
+     * 提示：
+     * 0 <= len(words) <= 100
+     * 1 <= len(words[i]) <= 100
+     */
+    public String longestWord(String[] words) {
+        if(words==null||words.length<2) {
+            return "";
+        }
+        Set<String> set = new HashSet<>();
+        for(String word : words) {
+            if(word!=null&&word.length()>0) {
+                set.add(word);
+            }
+        }
+        String result = "";
+        for(String word : words) {
+            set.remove(word);
+            if((word.length()>result.length()||(word.length()==result.length()&&word.compareTo(result)<0))
+                    &&isCombined(word, set)) {
+                result = word;
+            }
+            set.add(word);
+        }
+        return result;
+    }
+
+    public boolean isCombined(String target, Set<String> set) {
+        if(target.equals("")) {
+            return true;
+        }
+        for(String s : set) {
+            if(target.startsWith(s)&&isCombined(target.substring(s.length()), set)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 面试题 01.02. 判定是否互为字符重排
      * 给定两个字符串 s1 和 s2，请编写一个程序，确定其中一个字符串的字符重新排列后，能否变成另一个字符串。
      *

@@ -1,5 +1,7 @@
 package cn.leetcode.xux.midium;
 
+import javafx.util.Pair;
+
 import java.util.*;
 
 /**
@@ -51,7 +53,7 @@ public class TimeBasedKeyValueStore {
 
 class TimeMap {
 
-    Map<String, List<Pair>> map;
+    Map<String, List<Pair<String, Integer>>> map;
 
     /** Initialize your data structure here. */
     public TimeMap() {
@@ -71,64 +73,25 @@ class TimeMap {
         if(!this.map.containsKey(key)) {
             return "";
         }
-        List<Pair> list = this.map.get(key);
+        List<Pair<String, Integer>> list = this.map.get(key);
         int left = 0;
         int right = list.size()-1;
         int mid;
-        if(list.get(0).timestamp>timestamp) {
+        if(list.get(0).getValue()>timestamp) {
             return "";
         }
         while(left<right) {
             mid = (left+right+1)/2;
-            if(list.get(mid).timestamp>timestamp) {
+            if(list.get(mid).getValue()>timestamp) {
                 right = mid-1;
             }else {
                 left = mid;
             }
         }
-        return list.get(left).value;
+        return list.get(left).getKey();
     }
 
 }
-
-class Pair {
-    String value;
-    Integer timestamp;
-
-
-    Pair(String value, Integer timestamp) {
-        this.value = value;
-        this.timestamp = timestamp;
-    }
-}
-
-/*class TimeMap {
-
-    Map<String, TreeMap<Integer, String>> map;
-
-    *//** Initialize your data structure here. *//*
-    public TimeMap() {
-        this.map = new HashMap<>();
-    }
-
-    //O(logn)
-    public void set(String key, String value, int timestamp) {
-        if(!this.map.containsKey(key)) {
-            this.map.put(key, new TreeMap<>());
-        }
-        this.map.get(key).put(timestamp, value);
-    }
-
-    //O(logn)
-    public String get(String key, int timestamp) {
-        if(!this.map.containsKey(key)) {
-            return "";
-        }
-        Integer i = this.map.get(key).floorKey(timestamp);
-        return i==null?"":this.map.get(key).get(i);
-    }
-
-}*/
 
 /**
  * Your TimeMap object will be instantiated and called as such:

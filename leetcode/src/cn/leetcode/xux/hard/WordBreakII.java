@@ -1,7 +1,9 @@
 package cn.leetcode.xux.hard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 140. 单词拆分 II
@@ -42,24 +44,33 @@ import java.util.List;
  */
 public class WordBreakII {
 
-    List<String> result = new ArrayList<>();
+    Map<String, List<String>> mem = new HashMap<>();
+
     //递归
     public List<String> wordBreak(String s, List<String> wordDict) {
-        result.clear();
-        wordBreak(s, 0, "", wordDict);
-        return result;
-    }
-
-    public void wordBreak(String s, int start, String curr, List<String> wordDict) {
-        if(start==s.length()) {
-            result.add(curr.trim());
+        List<String> result = new ArrayList<>();
+        if(s.equals("")) {
+            result.add("");
+            return result;
         }
-        for(int i=start+1;i<=s.length();i++) {
-            String tmp = s.substring(start, i);
+        if(mem.containsKey(s)) {
+            return mem.get(s);
+        }
+        for(int i=1;i<=s.length();i++) {
+            String tmp = s.substring(0, i);
             if(wordDict.contains(tmp)) {
-                wordBreak(s, i, curr+" "+tmp, wordDict);
+                List<String> postResult = wordBreak(s.substring(i), wordDict);
+                for(String str : postResult) {
+                    if(str.equals("")) {
+                        result.add(tmp);
+                    }else {
+                        result.add(tmp+" "+str);
+                    }
+                }
             }
         }
+        mem.put(s, result);
+        return result;
     }
 
     //动态规划
