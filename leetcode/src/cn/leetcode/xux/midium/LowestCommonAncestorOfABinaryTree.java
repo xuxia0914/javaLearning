@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 236. 二叉树的最近公共祖先
@@ -31,15 +31,15 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class LowestCommonAncestorOfABinaryTree {
 
-    public BinaryTreeNode lowestCommonAncestor(BinaryTreeNode root, BinaryTreeNode p, BinaryTreeNode q) {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if(root==null) {
             return null;
         }
         if(root==p||root==q) {
             return root;
         }
-        BinaryTreeNode left = lowestCommonAncestor(root.left, p, q);
-        BinaryTreeNode right = lowestCommonAncestor(root.right, p, q);
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
         if(left==null) {
             return right;
         }else if(right==null) {

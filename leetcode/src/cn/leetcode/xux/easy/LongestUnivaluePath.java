@@ -1,9 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
-
-import java.util.LinkedList;
-import java.util.Queue;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * Given a binary tree, find the length of the longest path where each node in the path has the same value.
@@ -31,7 +28,7 @@ public class LongestUnivaluePath {
 
     int max = 0;
 
-    public int longestUnivaluePath(BinaryTreeNode root) {
+    public int longestUnivaluePath(TreeNode root) {
         max = 0;
         if(root==null) {
             return 0;
@@ -40,7 +37,7 @@ public class LongestUnivaluePath {
         return max;
     }
 
-    public int helper(BinaryTreeNode node) {
+    public int helper(TreeNode node) {
         int len1;
         int len2;
         int curr = 0;
@@ -65,8 +62,8 @@ public class LongestUnivaluePath {
 
     public static void main(String[] args) {
         LongestUnivaluePath lup = new LongestUnivaluePath();
-        System.out.println(lup.longestUnivaluePath(new BinaryTreeNode(new Integer[]{5,4,5,1,1,5})));
-        System.out.println(lup.longestUnivaluePath(new BinaryTreeNode(new Integer[]{1,4,5,4,4,5})));
+        System.out.println(lup.longestUnivaluePath(new TreeNode(new Integer[]{5,4,5,1,1,5})));
+        System.out.println(lup.longestUnivaluePath(new TreeNode(new Integer[]{1,4,5,4,4,5})));
     }
 
 }

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 226. 翻转二叉树
@@ -22,12 +22,12 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class InvertBinaryTree {
 
-    public BinaryTreeNode invertTree(BinaryTreeNode root) {
+    public TreeNode invertTree(TreeNode root) {
         if(root==null) {
             return null;
         }
-        BinaryTreeNode right = invertTree(root.left);
-        BinaryTreeNode left = invertTree(root.right);
+        TreeNode right = invertTree(root.left);
+        TreeNode left = invertTree(root.right);
         root.left = left;
         root.right = right;
         return root;

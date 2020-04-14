@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.Stack;
 
@@ -39,18 +39,18 @@ import java.util.Stack;
  */
 public class IncreasingOrderSearchTree {
 
-    public BinaryTreeNode increasingBST(BinaryTreeNode root) {
+    public TreeNode increasingBST(TreeNode root) {
         if(root==null) {
             return null;
         }
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        BinaryTreeNode curr = root;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
         while(curr!=null) {
             stack.push(curr);
             curr = curr.left;
         }
-        BinaryTreeNode res = new BinaryTreeNode();
-        BinaryTreeNode tail = res;
+        TreeNode res = new TreeNode();
+        TreeNode tail = res;
         while(!stack.isEmpty()) {
             curr = stack.pop();
             tail.left = null;
@@ -70,7 +70,7 @@ public class IncreasingOrderSearchTree {
     public static void main(String[] args) {
         IncreasingOrderSearchTree i = new IncreasingOrderSearchTree();
 //        System.out.println(i.increasingBST(new BinaryTreeNode(new Integer[]{5,3,6,2,4,null,8,1,null,null,null,7,9})));
-        System.out.println(i.increasingBST(new BinaryTreeNode(new Integer[]{1,2})));
+        System.out.println(i.increasingBST(new TreeNode(new Integer[]{1,2})));
     }
 
 }

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 222. 完全二叉树的节点个数
@@ -20,7 +20,7 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class CountCompleteTreeNodes {
 
-    public int countNodes(BinaryTreeNode root) {
+    public int countNodes(TreeNode root) {
         if(root==null) {
             return 0;
         }
@@ -33,8 +33,8 @@ public class CountCompleteTreeNodes {
         }
     }
 
-    public int level(BinaryTreeNode root) {
-        BinaryTreeNode node = root;
+    public int level(TreeNode root) {
+        TreeNode node = root;
         int h = 0;
         while(node!=null) {
             h++;

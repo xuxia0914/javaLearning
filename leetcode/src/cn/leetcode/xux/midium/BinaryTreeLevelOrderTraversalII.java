@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,18 +25,18 @@ import java.util.Queue;
  */
 public class BinaryTreeLevelOrderTraversalII {
 
-    public List<List<Integer>> levelOrderBottom(BinaryTreeNode root) {
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
         List<List<Integer>> res = new LinkedList<>();
         if(root==null) {
             return res;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
             int n = queue.size();
             List<Integer> list = new ArrayList<>();
             for(int i=0;i<n;i++) {
-                BinaryTreeNode node = queue.poll();
+                TreeNode node = queue.poll();
                 list.add(node.val);
                 if(node.left!=null) {
                     queue.offer(node.left);
@@ -52,7 +52,7 @@ public class BinaryTreeLevelOrderTraversalII {
 
     public static void main(String[] args) {
         BinaryTreeLevelOrderTraversalII b = new BinaryTreeLevelOrderTraversalII();
-        System.out.println(b.levelOrderBottom(new BinaryTreeNode(new Integer[]{3,9,20,null,null,15,7})));
+        System.out.println(b.levelOrderBottom(new TreeNode(new Integer[]{3,9,20,null,null,15,7})));
     }
 
 }

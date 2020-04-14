@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 563. 二叉树的坡度
@@ -28,13 +28,13 @@ public class BinaryTreeTilt {
 
     int tilt;
 
-    public int findTilt(BinaryTreeNode root) {
+    public int findTilt(TreeNode root) {
         tilt = 0;
         sum(root);
         return tilt;
     }
 
-    public int sum(BinaryTreeNode root) {
+    public int sum(TreeNode root) {
         if(root==null) {
             return 0;
         }

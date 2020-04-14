@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.*;
 
@@ -27,12 +27,12 @@ import java.util.*;
  */
 public class BinaryTreePruning {
 
-    public BinaryTreeNode pruneTree(BinaryTreeNode root) {
+    public TreeNode pruneTree(TreeNode root) {
         if(root==null||(root.left==null&&root.right==null)) {
             return root;
         }
-        Deque<BinaryTreeNode> deque = new LinkedList<>();
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Deque<TreeNode> deque = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         if(root.left!=null) {
             queue.offer(root.left);
         }
@@ -40,7 +40,7 @@ public class BinaryTreePruning {
             queue.offer(root.right);
         }
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             deque.offerLast(curr);
             if(curr.left!=null) {
                 queue.offer(curr.left);
@@ -49,9 +49,9 @@ public class BinaryTreePruning {
                 queue.offer(curr.right);
             }
         }
-        Map<BinaryTreeNode, Boolean> map = new HashMap<>();
+        Map<TreeNode, Boolean> map = new HashMap<>();
         while(!deque.isEmpty()) {
-            BinaryTreeNode curr = deque.pollLast();
+            TreeNode curr = deque.pollLast();
             if(curr.val==1
                     ||(curr.left!=null&&!map.get(curr.left))
                     ||(curr.right!=null&&!map.get(curr.right))) {
@@ -62,7 +62,7 @@ public class BinaryTreePruning {
         }
         queue.offer(root);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             if(curr.left!=null) {
                 if(map.get(curr.left)) {
                     curr.left = null;
@@ -82,7 +82,7 @@ public class BinaryTreePruning {
     }
 
     public static void main(String[] args) {
-        new BinaryTreePruning().pruneTree(new BinaryTreeNode(new Integer[]{1,null,0,0,1}));
+        new BinaryTreePruning().pruneTree(new TreeNode(new Integer[]{1,null,0,0,1}));
     }
 
 }

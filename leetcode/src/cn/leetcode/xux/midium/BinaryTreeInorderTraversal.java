@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.Stack;
 public class BinaryTreeInorderTraversal {
 
     /**递归*/
-    public List<Integer> inorderTraversal(BinaryTreeNode root) {
+    public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         if(root==null) {
             return res;
@@ -37,13 +37,13 @@ public class BinaryTreeInorderTraversal {
     }
 
     /**迭代*/
-    public List<Integer> inorderTraversal1(BinaryTreeNode root) {
+    public List<Integer> inorderTraversal1(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         if(root==null) {
             return res;
         }
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        BinaryTreeNode node = root;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root;
         while(node!=null) {
             stack.push(node);
             node = node.left;

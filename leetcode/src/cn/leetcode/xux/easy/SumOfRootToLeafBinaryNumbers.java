@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.Stack;
 
@@ -22,14 +22,14 @@ import java.util.Stack;
  */
 public class SumOfRootToLeafBinaryNumbers {
 
-    public int sumRootToLeaf(BinaryTreeNode root) {
+    public int sumRootToLeaf(TreeNode root) {
         if(root==null) {
             return 0;
         }
         int res = 0;
-        Stack<BinaryTreeNode> stack = new Stack<>();
+        Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
-        BinaryTreeNode curr;
+        TreeNode curr;
         while(!stack.isEmpty()) {
             curr = stack.pop();
             if(curr.left==null&&curr.right==null) {

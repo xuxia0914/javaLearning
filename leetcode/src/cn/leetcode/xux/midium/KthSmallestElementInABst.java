@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.Stack;
 
@@ -37,20 +37,20 @@ import java.util.Stack;
 public class KthSmallestElementInABst {
 
     //中序遍历
-    public int kthSmallest(BinaryTreeNode root, int k) {
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        BinaryTreeNode node = root;
+    public int kthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root;
         while(node!=null) {
             stack.push(node);
             node = node.left;
         }
         while(k>0) {
-            BinaryTreeNode curr = stack.pop();
+            TreeNode curr = stack.pop();
             k--;
             if(k==0) {
                 return curr.val;
             }
-            BinaryTreeNode right = curr.right;
+            TreeNode right = curr.right;
             while(right!=null) {
                 stack.push(right);
                 right = right.left;

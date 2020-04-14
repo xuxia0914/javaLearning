@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 110. 平衡二叉树
@@ -30,11 +30,11 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class BalancedBinaryTree {
 
-    public boolean isBalanced(BinaryTreeNode root) {
+    public boolean isBalanced(TreeNode root) {
         return helper(root)!=-1;
     }
 
-    public int helper(BinaryTreeNode root) {
+    public int helper(TreeNode root) {
         if(root==null) {
             return 0;
         }

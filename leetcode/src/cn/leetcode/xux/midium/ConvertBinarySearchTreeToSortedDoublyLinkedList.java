@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 import cn.leetcode.xux.common.DoublyLinkedList;
 
 import java.util.Stack;
@@ -15,19 +15,19 @@ import java.util.Stack;
  */
 public class ConvertBinarySearchTreeToSortedDoublyLinkedList {
 
-    public static DoublyLinkedList treeToDoublyList(BinaryTreeNode root) {
+    public static DoublyLinkedList treeToDoublyList(TreeNode root) {
         if(root==null) {
             return null;
         }
         DoublyLinkedList resHead = new DoublyLinkedList(0);
         DoublyLinkedList resTail = resHead;
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        BinaryTreeNode left = root;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode left = root;
         while(left!=null) {
             stack.push(left);
             left = left.left;
         }
-        BinaryTreeNode curr, tmp;
+        TreeNode curr, tmp;
         while(!stack.isEmpty()) {
             curr = stack.pop();
             DoublyLinkedList newNode = new DoublyLinkedList(curr.val);
@@ -47,7 +47,7 @@ public class ConvertBinarySearchTreeToSortedDoublyLinkedList {
 
     public static void main(String[] args) {
 
-        BinaryTreeNode root = new BinaryTreeNode(new Integer[]{4,3,5,2,null,null,null,1,null});
+        TreeNode root = new TreeNode(new Integer[]{4,3,5,2,null,null,null,1,null});
         treeToDoublyList(root);
 
     }

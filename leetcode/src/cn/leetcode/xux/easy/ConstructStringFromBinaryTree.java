@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 606. 根据二叉树创建字符串
@@ -32,7 +32,7 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class ConstructStringFromBinaryTree {
 
-    public String tree2str(BinaryTreeNode t) {
+    public String tree2str(TreeNode t) {
         if(t==null) {
             return "";
         }

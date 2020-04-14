@@ -1,6 +1,6 @@
 package cn.leetcode.xux.hard;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 124. 二叉树中的最大路径和
@@ -29,13 +29,13 @@ public class BinaryTreeMaximumPathSum {
 
     int result;
 
-    public int maxPathSum(BinaryTreeNode root) {
+    public int maxPathSum(TreeNode root) {
         result = Integer.MIN_VALUE;
         helper(root);
         return result;
     }
 
-    public int helper(BinaryTreeNode root) {
+    public int helper(TreeNode root) {
         if(root==null) {
             return 0;
         }

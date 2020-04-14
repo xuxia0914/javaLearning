@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class SmallestStringStartingFromLeaf {
 
-    public String smallestFromLeaf(BinaryTreeNode root) {
+    public String smallestFromLeaf(TreeNode root) {
         if(root==null) {
             return "";
         }
@@ -39,7 +39,7 @@ public class SmallestStringStartingFromLeaf {
         return new StringBuilder(res).reverse().toString();
     }
 
-    public void listAll(List<String> list, BinaryTreeNode root, String curr) {
+    public void listAll(List<String> list, TreeNode root, String curr) {
         if(root.left==null&&root.right==null) {
             list.add(curr+(char)(root.val+'a'));
             return;
@@ -74,7 +74,7 @@ public class SmallestStringStartingFromLeaf {
 
     public static void main(String[] args) {
         SmallestStringStartingFromLeaf s = new SmallestStringStartingFromLeaf();
-        System.out.println(s.smallestFromLeaf(new BinaryTreeNode(new Integer[]{25,1,null,0,0,1,null,null,null,0})));
+        System.out.println(s.smallestFromLeaf(new TreeNode(new Integer[]{25,1,null,0,0,1,null,null,null,0})));
     }
 
 }

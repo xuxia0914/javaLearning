@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 108. 将有序数组转换为二叉搜索树
@@ -19,16 +19,16 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class ConvertSortedArrayToBinarySearchTree {
 
-    public BinaryTreeNode sortedArrayToBST(int[] nums) {
+    public TreeNode sortedArrayToBST(int[] nums) {
         return sortedArrayToBST(nums, 0, nums.length-1);
     }
 
-    public BinaryTreeNode sortedArrayToBST(int[] nums, int start, int end) {
+    public TreeNode sortedArrayToBST(int[] nums, int start, int end) {
         if(start>end) {
             return null;
         }
         int mid = (start+end)/2;
-        BinaryTreeNode res = new BinaryTreeNode(nums[mid]);
+        TreeNode res = new TreeNode(nums[mid]);
         res.left = sortedArrayToBST(nums, start, mid-1);
         res.right = sortedArrayToBST(nums, mid+1, end);
         return res;

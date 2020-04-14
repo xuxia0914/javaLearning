@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 二叉搜索树的最近共同父节点
@@ -18,7 +18,7 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class LowestCommonAncestorOfABinarySearchTree {
 
-    public BinaryTreeNode lowestCommonAncestor(BinaryTreeNode root, BinaryTreeNode p, BinaryTreeNode q) {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if(root.val<Math.min(p.val, q.val)) {
             return lowestCommonAncestor(root.right, p, q);
         }else if(root.val>Math.max(p.val, q.val)) {

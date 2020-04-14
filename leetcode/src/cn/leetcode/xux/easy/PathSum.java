@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * Given a binary tree and a sum,
@@ -19,14 +19,14 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class PathSum {
 
-    public boolean hasPathSum(BinaryTreeNode root, int sum) {
+    public boolean hasPathSum(TreeNode root, int sum) {
         if(root==null) {
             return false;
         }
         return helper(root, sum);
     }
 
-    public boolean helper(BinaryTreeNode node, int sum) {
+    public boolean helper(TreeNode node, int sum) {
         if(node.left==null&&node.right==null) {
             return sum==node.val;
         }

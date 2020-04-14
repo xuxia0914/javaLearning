@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class BinaryTreePaths {
 
-    public List<String> binaryTreePaths(BinaryTreeNode root) {
+    public List<String> binaryTreePaths(TreeNode root) {
         List<String> res = new ArrayList<>();
         if(root==null) {
             return res;
@@ -29,7 +29,7 @@ public class BinaryTreePaths {
         return res;
     }
 
-    public void helper(List<String> res, BinaryTreeNode node, String curr) {
+    public void helper(List<String> res, TreeNode node, String curr) {
         if(node.left==null&&node.right==null) {
             res.add(curr+node.val);
         }

@@ -936,19 +936,19 @@ public class Test {
      *        /   /
      *      -10  5
      */
-    public BinaryTreeNode sortedArrayToBST(int[] nums) {
+    public TreeNode sortedArrayToBST(int[] nums) {
         if(nums==null||nums.length==0) {
             return null;
         }
         return sortedArrayToBST(nums, 0, nums.length-1);
     }
 
-    public BinaryTreeNode sortedArrayToBST(int[] nums, int start, int end) {
+    public TreeNode sortedArrayToBST(int[] nums, int start, int end) {
         if(start>end) {
             return null;
         }
         int mid = (start+end)/2;
-        BinaryTreeNode currNode = new BinaryTreeNode(nums[mid]);
+        TreeNode currNode = new TreeNode(nums[mid]);
         currNode.left = sortedArrayToBST(nums, start, mid-1);
         currNode.right = sortedArrayToBST(nums, mid+1, end);
         return currNode;
@@ -970,19 +970,19 @@ public class Test {
      *   8
      * 输出：[[1],[2,3],[4,5,7],[8]]
      */
-    public ListNode[] listOfDepth(BinaryTreeNode tree) {
+    public ListNode[] listOfDepth(TreeNode tree) {
         if(tree==null) {
             return new ListNode[0];
         }
         List<ListNode> result = new ArrayList<>();
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(tree);
         while(!queue.isEmpty()) {
             int size = queue.size();
             ListNode head = new ListNode(0);
             ListNode tail = head;
             while(size-->0) {
-                BinaryTreeNode curr = queue.poll();
+                TreeNode curr = queue.poll();
                 tail.next = new ListNode(curr.val);
                 tail = tail.next;
                 if(curr.left!=null) {
@@ -1021,11 +1021,11 @@ public class Test {
      * 4   4
      * 返回 false 。
      */
-    public boolean isBalanced(BinaryTreeNode root) {
+    public boolean isBalanced(TreeNode root) {
         return depth(root)==-1;
     }
 
-    public int depth(BinaryTreeNode root) {
+    public int depth(TreeNode root) {
         if(root==null) {
             return 0;
         }
@@ -1057,11 +1057,11 @@ public class Test {
      * 解释: 输入为: [5,1,4,null,null,3,6]。
      *      根节点的值为 5 ，但是其右子节点值为 4 。
      */
-    public boolean isValidBST(BinaryTreeNode root) {
+    public boolean isValidBST(TreeNode root) {
         return isValidBST(root, null, null);
     }
 
-    public boolean isValidBST(BinaryTreeNode root, Integer left, Integer right) {
+    public boolean isValidBST(TreeNode root, Integer left, Integer right) {
         if(root==null) {
             return true;
         }
@@ -1094,9 +1094,9 @@ public class Test {
      * 1
      * 输出: null
      */
-    public BinaryTreeNode inorderSuccessor(BinaryTreeNode root, BinaryTreeNode p) {
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        BinaryTreeNode curr = root;
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
         while(curr!=null) {
             stack.push(curr);
             curr = curr.left;
@@ -1110,7 +1110,7 @@ public class Test {
             if(curr==p) {
                 found = true;
             }
-            BinaryTreeNode right = curr.right;
+            TreeNode right = curr.right;
             while(right!=null) {
                 stack.push(right);
                 right = right.left;
@@ -1144,15 +1144,15 @@ public class Test {
      * 所有节点的值都是唯一的。
      * p、q 为不同节点且均存在于给定的二叉树中。
      */
-    public BinaryTreeNode lowestCommonAncestor(BinaryTreeNode root, BinaryTreeNode p, BinaryTreeNode q) {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if(root==null) {
             return null;
         }
         if(root==p||root==q) {
             return root;
         }
-        BinaryTreeNode leftResult = lowestCommonAncestor(root.left, p, q);
-        BinaryTreeNode rightResult = lowestCommonAncestor(root.right, p, q);
+        TreeNode leftResult = lowestCommonAncestor(root.left, p, q);
+        TreeNode rightResult = lowestCommonAncestor(root.right, p, q);
         if(leftResult==null) {
             return rightResult;
         }
@@ -1178,8 +1178,8 @@ public class Test {
      * ]
      */
     List<List<Integer>> result_int_list_list = new ArrayList<>();
-    public List<List<Integer>> BSTSequences(BinaryTreeNode root) {
-        List<BinaryTreeNode> nodes = new ArrayList<>();
+    public List<List<Integer>> BSTSequences(TreeNode root) {
+        List<TreeNode> nodes = new ArrayList<>();
         if(root!=null) {
             nodes.add(root);
         }
@@ -1187,14 +1187,14 @@ public class Test {
         return result_int_list_list;
     }
 
-    public void BSTSequences(List<Integer> curr, List<BinaryTreeNode> nodes) {
+    public void BSTSequences(List<Integer> curr, List<TreeNode> nodes) {
         if(nodes.size()==0) {
             result_int_list_list.add(curr);
         }
         for(int i=0;i<nodes.size();i++) {
-            List<BinaryTreeNode> nextNodes = new ArrayList<>(nodes);
+            List<TreeNode> nextNodes = new ArrayList<>(nodes);
             List<Integer> nextCurr = new ArrayList<>(curr);
-            BinaryTreeNode node = nextNodes.remove(i);
+            TreeNode node = nextNodes.remove(i);
             nextCurr.add(node.val);
             if(node.left!=null) {
                 nextNodes.add(node.left);
@@ -1222,14 +1222,14 @@ public class Test {
      * 提示：
      * 树的节点数目范围为[0, 20000]。
      */
-    public boolean checkSubTree(BinaryTreeNode t1, BinaryTreeNode t2) {
+    public boolean checkSubTree(TreeNode t1, TreeNode t2) {
         if(t1==null||t2==null) {
             return false;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(t1);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             if(checkSameTree(curr, t2)) {
                 return true;
             }
@@ -1243,7 +1243,7 @@ public class Test {
         return false;
     }
 
-    public boolean checkSameTree(BinaryTreeNode t1, BinaryTreeNode t2) {
+    public boolean checkSameTree(TreeNode t1, TreeNode t2) {
         if(t1==null&&t2==null) {
             return true;
         }
@@ -1273,15 +1273,15 @@ public class Test {
      * 提示：
      * 节点总数 <= 10000
      */
-    public int pathSum1(BinaryTreeNode root, int sum) {
+    public int pathSum1(TreeNode root, int sum) {
         if(root==null) {
             return 0;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         int result = 0;
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             result += pathSum2(curr, sum);
             if(curr.left!=null) {
                 queue.offer(curr.left);
@@ -1293,7 +1293,7 @@ public class Test {
         return result;
     }
 
-    public int pathSum2(BinaryTreeNode root, int sum) {
+    public int pathSum2(TreeNode root, int sum) {
         if (root == null) {
             return 0;
         }
@@ -3235,18 +3235,18 @@ public class Test {
      * 提示：
      * 节点数量不会超过 100000。
      */
-    public BinaryTreeNode convertBiNode(BinaryTreeNode root) {
+    public TreeNode convertBiNode(TreeNode root) {
         if(root==null) {
             return null;
         }
-        BinaryTreeNode left = convertBiNode(root.left);
-        BinaryTreeNode right = convertBiNode(root.right);
+        TreeNode left = convertBiNode(root.left);
+        TreeNode right = convertBiNode(root.right);
         root.left = null;
         root.right = right;
         if(left==null) {
             return root;
         }
-        BinaryTreeNode result = left;
+        TreeNode result = left;
         while(left.right!=null) {
             left = left.right;
         }
@@ -3764,14 +3764,14 @@ public class Test {
      * 限制：
      * 0 <= 节点个数 <= 5000
      */
-    public BinaryTreeNode buildTree(int[] preorder, int[] inorder) {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
         if(preorder==null||preorder.length==0) {
             return null;
         }
         return buildTree(preorder, 0, inorder, 0, preorder.length);
     }
 
-    public BinaryTreeNode buildTree(int[] preorder, int preStart, int[] inorder, int inStart, int len) {
+    public TreeNode buildTree(int[] preorder, int preStart, int[] inorder, int inStart, int len) {
         if(len<=0) {
             return null;
         }
@@ -3782,7 +3782,7 @@ public class Test {
                 break;
             }
         }
-        BinaryTreeNode node = new BinaryTreeNode(value);
+        TreeNode node = new TreeNode(value);
         node.left = buildTree(preorder, preStart+1, inorder, inStart, leftLen);
         node.right = buildTree(preorder, preStart+1+leftLen, inorder, inStart+leftLen+1, len-leftLen-1);
         return node;
@@ -4393,14 +4393,14 @@ public class Test {
      * 限制：
      * 0 <= 节点个数 <= 10000
      */
-    public boolean isSubStructure(BinaryTreeNode A, BinaryTreeNode B) {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
         if(A==null||B==null) {
             return false;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(A);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             if(isSame(curr, B)) {
                 return true;
             }else {
@@ -4415,7 +4415,7 @@ public class Test {
         return false;
     }
 
-    public boolean isSame(BinaryTreeNode A, BinaryTreeNode B) {
+    public boolean isSame(TreeNode A, TreeNode B) {
         if(B==null) {
             return true;
         }
@@ -4449,11 +4449,11 @@ public class Test {
      * 限制：
      * 0 <= 节点个数 <= 1000
      */
-    public BinaryTreeNode mirrorTree(BinaryTreeNode root) {
+    public TreeNode mirrorTree(TreeNode root) {
         if(root==null) {
             return null;
         }
-        BinaryTreeNode result = new BinaryTreeNode(root.val);
+        TreeNode result = new TreeNode(root.val);
         result.left = mirrorTree(root.right);
         result.right = mirrorTree(root.left);
         return result;
@@ -4487,14 +4487,14 @@ public class Test {
      * 0 <= 节点个数 <= 1000
      */
     //递归
-    public boolean isSymmetric(BinaryTreeNode root) {
+    public boolean isSymmetric(TreeNode root) {
         if(root==null) {
             return true;
         }
         return isSymmetric(root.left, root.right);
     }
 
-    public boolean isSymmetric(BinaryTreeNode left, BinaryTreeNode right) {
+    public boolean isSymmetric(TreeNode left, TreeNode right) {
         if(left==null&&right==null) {
             return true;
         }
@@ -4610,15 +4610,15 @@ public class Test {
      *
      * 提示：节点总数 <= 1000
      */
-    public int[] levelOrderI(BinaryTreeNode root) {
+    public int[] levelOrderI(TreeNode root) {
         if(root==null) {
             return new int[0];
         }
         List<Integer> list = new ArrayList<>();
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             list.add(curr.val);
             if(curr.left!=null) {
                 queue.offer(curr.left);
@@ -4654,18 +4654,18 @@ public class Test {
      * 提示：
      * 节点总数 <= 1000
      */
-    public List<List<Integer>> levelOrderII(BinaryTreeNode root) {
+    public List<List<Integer>> levelOrderII(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
         if(root==null) {
             return result;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
             int size = queue.size();
             List<Integer> list = new ArrayList<>();
             while(size-->0) {
-                BinaryTreeNode curr = queue.poll();
+                TreeNode curr = queue.poll();
                 list.add(curr.val);
                 if(curr.left!=null) {
                     queue.offer(curr.left);
@@ -4700,19 +4700,19 @@ public class Test {
      * 提示：
      * 节点总数 <= 1000
      */
-    public List<List<Integer>> levelOrderIII(BinaryTreeNode root) {
+    public List<List<Integer>> levelOrderIII(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
         if(root==null) {
             return result;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         boolean asc = true;
         while(!queue.isEmpty()) {
             int size = queue.size();
             List<Integer> list = new LinkedList<>();
             while(size-->0) {
-                BinaryTreeNode curr = queue.poll();
+                TreeNode curr = queue.poll();
                 if(asc) {
                     list.add(curr.val);
                 }else {
@@ -4826,7 +4826,7 @@ public class Test {
      * 节点总数 <= 10000
      */
     List<List<Integer>> result_list = new ArrayList<>();
-    public List<List<Integer>> pathSum(BinaryTreeNode root, int sum) {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
         result_list.clear();
         if(root==null) {
             return result_list;
@@ -4835,7 +4835,7 @@ public class Test {
         return result_list;
     }
 
-    public void pathSum(List<Integer> curr, BinaryTreeNode node, int pre, int sum) {
+    public void pathSum(List<Integer> curr, TreeNode node, int pre, int sum) {
         pre += node.val;
         List<Integer> newCurr = new ArrayList<>(curr);
         newCurr.add(node.val);
@@ -4923,18 +4923,18 @@ public class Test {
      * 下图展示了上面的二叉搜索树转化成的链表。“head” 表示指向链表中有最小元素的节点。
      * 特别地，我们希望可以就地完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中的第一个节点的指针。
      */
-    public BinaryTreeNode treeToDoublyList(BinaryTreeNode root) {
+    public TreeNode treeToDoublyList(TreeNode root) {
         if(root==null) {
             return null;
         }
-        BinaryTreeNode curr = root;
-        Stack<BinaryTreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+        Stack<TreeNode> stack = new Stack<>();
         while(curr!=null) {
             stack.push(curr);
             curr = curr.left;
         }
-        BinaryTreeNode head = stack.peek();
-        BinaryTreeNode pre = null;
+        TreeNode head = stack.peek();
+        TreeNode pre = null;
         while(!stack.isEmpty()) {
             curr = stack.pop();
             curr.left = pre;
@@ -5569,9 +5569,9 @@ public class Test {
      * 限制：
      * 1 ≤ k ≤ 二叉搜索树元素个数
      */
-    public int kthLargest(BinaryTreeNode root, int k) {
-        Stack<BinaryTreeNode> stack = new Stack();
-        BinaryTreeNode curr = root;
+    public int kthLargest(TreeNode root, int k) {
+        Stack<TreeNode> stack = new Stack();
+        TreeNode curr = root;
         while(curr!=null) {
             stack.push(curr);
             curr = curr.right;

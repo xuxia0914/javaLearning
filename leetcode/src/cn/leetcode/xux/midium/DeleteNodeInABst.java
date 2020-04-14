@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 450. 删除二叉搜索树中的节点
@@ -36,18 +36,18 @@ import cn.leetcode.xux.common.BinaryTreeNode;
 public class DeleteNodeInABst {
 
     public static void main(String[] args) {
-        BinaryTreeNode root = new BinaryTreeNode(new Integer[]{28,12,45,4,24,35,47,2,9,14,25,31,42,46,48,0,3,8,11,13,20,null,26,30,33,41,43,null,null,null,49,null,1,null,null,7,null,10,null,null,null,17,22,null,27,29,null,32,34,36,null,null,44,null,null,null,null,6,null,null,null,16,18,21,23,null,null,null,null,null,null,null,null,null,37,null,null,5,null,15,null,null,19,null,null,null,null,null,40,null,null,null,null,null,null,39,null,38});
+        TreeNode root = new TreeNode(new Integer[]{28,12,45,4,24,35,47,2,9,14,25,31,42,46,48,0,3,8,11,13,20,null,26,30,33,41,43,null,null,null,49,null,1,null,null,7,null,10,null,null,null,17,22,null,27,29,null,32,34,36,null,null,44,null,null,null,null,6,null,null,null,16,18,21,23,null,null,null,null,null,null,null,null,null,37,null,null,5,null,15,null,null,19,null,null,null,null,null,40,null,null,null,null,null,null,39,null,38});
         new DeleteNodeInABst().deleteNode(root, 5);
     }
 
-    public BinaryTreeNode deleteNode(BinaryTreeNode root, int key) {
+    public TreeNode deleteNode(TreeNode root, int key) {
         if(root==null) {
             return null;
         }
-        BinaryTreeNode newRoot = new BinaryTreeNode(0);
-        BinaryTreeNode parent = newRoot;
+        TreeNode newRoot = new TreeNode(0);
+        TreeNode parent = newRoot;
         parent.left = root;
-        BinaryTreeNode curr = root;
+        TreeNode curr = root;
         Boolean isLeft = true;
         while(curr!=null) {
             if(curr.val==key) {
@@ -62,18 +62,18 @@ public class DeleteNodeInABst {
                 isLeft = false;
             }
         }
-        BinaryTreeNode next = null;
+        TreeNode next = null;
         if(curr!=null) {
             if(curr.left!=null) {
                 next = curr.left;
-                BinaryTreeNode combine = next;
+                TreeNode combine = next;
                 while(combine.right!=null) {
                     combine = combine.right;
                 }
                 combine.right = curr.right;
             }else if(curr.right!=null) {
                 next = curr.right;
-                BinaryTreeNode combine = next;
+                TreeNode combine = next;
                 while(combine.left!=null) {
                     combine = combine.left;
                 }

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 250 Count Univalue Subtrees 计数相同值子树的个数
@@ -19,7 +19,7 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class CountUnivalueSubtrees {
 
-    public int countUnivalSubtrees(BinaryTreeNode root) {
+    public int countUnivalSubtrees(TreeNode root) {
         if(root==null) {
             return 0;
         }
@@ -41,7 +41,7 @@ public class CountUnivalueSubtrees {
 
     public static void main(String[] args) {
         CountUnivalueSubtrees cus = new CountUnivalueSubtrees();
-        System.out.println(cus.countUnivalSubtrees(new BinaryTreeNode(new Integer[]{5,1,5,5,5,5})));
+        System.out.println(cus.countUnivalSubtrees(new TreeNode(new Integer[]{5,1,5,5,5,5})));
     }
 
 }

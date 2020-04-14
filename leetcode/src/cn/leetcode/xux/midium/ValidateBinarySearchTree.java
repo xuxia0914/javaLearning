@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.Stack;
 
@@ -33,11 +33,11 @@ import java.util.Stack;
 public class ValidateBinarySearchTree {
 
     //递归
-    public boolean isValidBST(BinaryTreeNode root) {
+    public boolean isValidBST(TreeNode root) {
         return isValidBST(root, null, null);
     }
 
-    public boolean isValidBST(BinaryTreeNode root, Integer low, Integer high) {
+    public boolean isValidBST(TreeNode root, Integer low, Integer high) {
         if(root==null) {
             return true;
         }
@@ -57,12 +57,12 @@ public class ValidateBinarySearchTree {
     }
 
     //迭代，利用搜索二叉树的中序遍历为有序递增的性质
-    public boolean isValidBST1(BinaryTreeNode root) {
+    public boolean isValidBST1(TreeNode root) {
         if(root==null) {
             return true;
         }
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        BinaryTreeNode curr = root;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
         while(curr!=null) {
             stack.push(curr);
             curr = curr.left;
@@ -85,7 +85,7 @@ public class ValidateBinarySearchTree {
 
     public static void main(String[] args) {
         ValidateBinarySearchTree v = new ValidateBinarySearchTree();
-        System.out.println(v.isValidBST(new BinaryTreeNode(new Integer[]{10,5,15,null,null,6,20})));
+        System.out.println(v.isValidBST(new TreeNode(new Integer[]{10,5,15,null,null,6,20})));
     }
 
 }

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 543. 二叉树的直径
@@ -18,7 +18,7 @@ public class DiameterOfBinaryTree {
 
     int result = 0;
 
-    public int diameterOfBinaryTree(BinaryTreeNode root) {
+    public int diameterOfBinaryTree(TreeNode root) {
         if(root==null) {
             return 0;
         }
@@ -26,7 +26,7 @@ public class DiameterOfBinaryTree {
         return depth(root.left)+depth(root.right)+1;
     }
 
-    public int depth(BinaryTreeNode node) {
+    public int depth(TreeNode node) {
         if(node==null) {
             return 0;
         }

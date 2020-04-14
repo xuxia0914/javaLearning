@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 import cn.leetcode.xux.common.ListNode;
 
 /**
@@ -17,7 +17,7 @@ import cn.leetcode.xux.common.ListNode;
  */
 public class ConvertSortedListToBinarySearchTree {
 
-    public BinaryTreeNode sortedListToBST(ListNode head) {
+    public TreeNode sortedListToBST(ListNode head) {
         if(head==null) {
             return null;
         }
@@ -28,13 +28,13 @@ public class ConvertSortedListToBinarySearchTree {
             curr = curr.next;
         }
         if(len==1) {
-            return new BinaryTreeNode(head.val);
+            return new TreeNode(head.val);
         }
-        BinaryTreeNode left, right, res;
+        TreeNode left, right, res;
 
         if(len==2) {
-            left = new BinaryTreeNode(head.val);
-            res = new BinaryTreeNode(head.next.val);
+            left = new TreeNode(head.val);
+            res = new TreeNode(head.next.val);
             res.left = left;
             return res;
         }
@@ -44,7 +44,7 @@ public class ConvertSortedListToBinarySearchTree {
         }
         curr = pre.next;
         pre.next = null;
-        res = new BinaryTreeNode(curr.val);
+        res = new TreeNode(curr.val);
         left = sortedListToBST(head);
         right = sortedListToBST(curr.next);
         res.left = left;
@@ -55,7 +55,7 @@ public class ConvertSortedListToBinarySearchTree {
     public static void main(String[] args) {
         ConvertSortedListToBinarySearchTree c = new ConvertSortedListToBinarySearchTree();
         ListNode head = new ListNode(new int[]{-10,-3,0,5,9,10});
-        BinaryTreeNode res = c.sortedListToBST(head);
+        TreeNode res = c.sortedListToBST(head);
         System.out.println("---");
     }
 

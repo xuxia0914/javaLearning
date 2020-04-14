@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
@@ -35,7 +35,7 @@ public class SumRootToLeafNumbers {
 
     int res = 0;
 
-    public int sumNumbers(BinaryTreeNode root) {
+    public int sumNumbers(TreeNode root) {
         if(root==null) {
             return 0;
         }
@@ -43,7 +43,7 @@ public class SumRootToLeafNumbers {
         return res;
     }
 
-    public void helper(BinaryTreeNode node, int curr) {
+    public void helper(TreeNode node, int curr) {
         if(node.left==null&&node.right==null) {
             res += curr*10 + node.val;
             return;

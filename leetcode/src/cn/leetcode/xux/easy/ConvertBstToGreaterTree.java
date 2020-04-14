@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.Stack;
 
@@ -20,22 +20,22 @@ import java.util.Stack;
  */
 public class ConvertBstToGreaterTree {
 
-    public BinaryTreeNode convertBST(BinaryTreeNode root) {
+    public TreeNode convertBST(TreeNode root) {
         if(root==null) {
             return null;
         }
         int pre = 0;
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        BinaryTreeNode node = root;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root;
         while(node!=null) {
             stack.push(node);
             node = node.right;
         }
         while(!stack.isEmpty()) {
-            BinaryTreeNode curr = stack.pop();
+            TreeNode curr = stack.pop();
             curr.val += pre;
             pre = curr.val;
-            BinaryTreeNode left = curr.left;
+            TreeNode left = curr.left;
             while(left!=null) {
                 stack.push(left);
                 left = left.right;

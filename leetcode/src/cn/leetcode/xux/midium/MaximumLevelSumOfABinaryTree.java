@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -25,13 +25,13 @@ import java.util.Queue;
  */
 public class MaximumLevelSumOfABinaryTree {
 
-    public int maxLevelSum(BinaryTreeNode root) {
+    public int maxLevelSum(TreeNode root) {
         if (root == null) {
             return -1;
         }
         int maxSum = Integer.MIN_VALUE;
         int maxLevel = 1;
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         int currLevel = 0;
         while (!queue.isEmpty()) {
@@ -39,7 +39,7 @@ public class MaximumLevelSumOfABinaryTree {
             currLevel++;
             int currSum = 0;
             for (int i = 0; i < size; i++) {
-                BinaryTreeNode currNode = queue.poll();
+                TreeNode currNode = queue.poll();
                 currSum += currNode.val;
                 if (currNode.left != null) {
                     queue.offer(currNode.left);

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -17,15 +17,15 @@ import java.util.Queue;
  */
 public class SumOfLeftLeaves {
 
-    public int sumOfLeftLeaves(BinaryTreeNode root) {
+    public int sumOfLeftLeaves(TreeNode root) {
         int res = 0;
         if(root==null) {
             return res;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             if(curr.left!=null) {
                 if(curr.left.left==null&&curr.left.right==null) {
                     res += curr.left.val;
@@ -40,7 +40,7 @@ public class SumOfLeftLeaves {
         return res;
     }
 
-    public int sumOfLeftLeaves1(BinaryTreeNode root) {
+    public int sumOfLeftLeaves1(TreeNode root) {
         int res = 0;
         if(root==null) {
             return 0;

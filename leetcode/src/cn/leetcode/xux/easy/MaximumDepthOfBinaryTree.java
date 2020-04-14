@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 104. 二叉树的最大深度
@@ -20,7 +20,7 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class MaximumDepthOfBinaryTree {
 
-    public int maxDepth(BinaryTreeNode root) {
+    public int maxDepth(TreeNode root) {
         if(root==null) {
             return 0;
         }

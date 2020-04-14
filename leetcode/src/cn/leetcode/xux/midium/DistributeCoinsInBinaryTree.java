@@ -1,11 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 979. 在二叉树中分配硬币
@@ -39,12 +34,12 @@ public class DistributeCoinsInBinaryTree {
 
     int res = 0;
 
-    public int distributeCoins(BinaryTreeNode root) {
+    public int distributeCoins(TreeNode root) {
         helper(root);
         return res;
     }
 
-    public int helper(BinaryTreeNode root) {
+    public int helper(TreeNode root) {
         if(root==null) {
             return 0;
         }

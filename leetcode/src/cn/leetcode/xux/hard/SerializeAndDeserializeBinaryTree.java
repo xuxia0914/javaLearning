@@ -1,8 +1,7 @@
 package cn.leetcode.xux.hard;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -28,16 +27,16 @@ import java.util.Queue;
 public class SerializeAndDeserializeBinaryTree {
 
     // Encodes a tree to a single string.
-    public String serialize(BinaryTreeNode root) {
+    public String serialize(TreeNode root) {
         StringBuilder sb = new StringBuilder();
         if(root==null) {
             return null;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         sb.append("[").append(root.val);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             if(curr.left!=null) {
                 sb.append(",").append(curr.left.val);
                 queue.offer(curr.left);
@@ -56,25 +55,25 @@ public class SerializeAndDeserializeBinaryTree {
     }
 
     // Decodes your encoded data to tree.
-    public BinaryTreeNode deserialize(String data) {
+    public TreeNode deserialize(String data) {
         if(data==null||data.length()<=2) {
             return null;
         }
         String[] s = data.substring(1, data.length()-1).split(",");
-        BinaryTreeNode root = new BinaryTreeNode(Integer.valueOf(s[0]));
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        TreeNode root = new TreeNode(Integer.valueOf(s[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         int len = s.length;
         int i = 1;
         while(i<len) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             if(!"null".equals(s[i])) {
-                curr.left = new BinaryTreeNode(Integer.valueOf(s[i]));
+                curr.left = new TreeNode(Integer.valueOf(s[i]));
                 queue.offer(curr.left);
             }
             i++;
             if(!"null".equals(s[i])) {
-                curr.right = new BinaryTreeNode(Integer.valueOf(s[i]));
+                curr.right = new TreeNode(Integer.valueOf(s[i]));
                 queue.offer(curr.right);
             }
             i++;
@@ -83,11 +82,11 @@ public class SerializeAndDeserializeBinaryTree {
     }
 
     public static void main(String[] args) {
-        BinaryTreeNode node1 = new BinaryTreeNode(1);
-        BinaryTreeNode node2 = new BinaryTreeNode(2);
-        BinaryTreeNode node3 = new BinaryTreeNode(3);
-        BinaryTreeNode node4 = new BinaryTreeNode(4);
-        BinaryTreeNode node5 = new BinaryTreeNode(5);
+        TreeNode node1 = new TreeNode(1);
+        TreeNode node2 = new TreeNode(2);
+        TreeNode node3 = new TreeNode(3);
+        TreeNode node4 = new TreeNode(4);
+        TreeNode node5 = new TreeNode(5);
         node3.left = node4;
         node3.right = node5;
         node1.left = node2;

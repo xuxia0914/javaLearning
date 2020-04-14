@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,30 +31,30 @@ import java.util.List;
  */
 public class UniqueBinarySearchTreesII {
 
-    public List<BinaryTreeNode> generateTrees(int n) {
-        List<BinaryTreeNode> res = new ArrayList<BinaryTreeNode>();
+    public List<TreeNode> generateTrees(int n) {
+        List<TreeNode> res = new ArrayList<TreeNode>();
         if(n<1) {
             return res;
         }
         return helper(1, n);
     }
 
-    List<BinaryTreeNode> helper(int start, int end) {
-        List<BinaryTreeNode> res = new ArrayList<BinaryTreeNode>();
+    List<TreeNode> helper(int start, int end) {
+        List<TreeNode> res = new ArrayList<TreeNode>();
         if(start>end) {
             res.add(null);
             return res;
         }
         if(start==end) {
-            res.add(new BinaryTreeNode(start));
+            res.add(new TreeNode(start));
             return res;
         }
         for(int i=start;i<=end;i++) {
-            List<BinaryTreeNode> leftList = helper(start, i-1);
-            List<BinaryTreeNode> rightList = helper(i+1, end);
-            for(BinaryTreeNode left : leftList) {
-                for(BinaryTreeNode right : rightList) {
-                    BinaryTreeNode curr = new BinaryTreeNode(i);
+            List<TreeNode> leftList = helper(start, i-1);
+            List<TreeNode> rightList = helper(i+1, end);
+            for(TreeNode left : leftList) {
+                for(TreeNode right : rightList) {
+                    TreeNode curr = new TreeNode(i);
                     curr.left = left;
                     curr.right = right;
                     res.add(curr);

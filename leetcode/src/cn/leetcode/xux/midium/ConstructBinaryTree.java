@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 public class ConstructBinaryTree {
 
@@ -21,15 +21,15 @@ public class ConstructBinaryTree {
      *     /  \
      *    15   7
      */
-    public BinaryTreeNode buildTreeFromPreorderAndInorderTraversal(int[] preorder, int[] inorder) {
+    public TreeNode buildTreeFromPreorderAndInorderTraversal(int[] preorder, int[] inorder) {
         if(preorder==null||preorder.length==0) {
             return null;
         }
         return helper1(preorder, inorder, 0, 0, preorder.length);
     }
 
-    public BinaryTreeNode helper1(int[] preorder, int[] inorder, int preStart, int inStart, int n) {
-        BinaryTreeNode node = new BinaryTreeNode(preorder[preStart]);
+    public TreeNode helper1(int[] preorder, int[] inorder, int preStart, int inStart, int n) {
+        TreeNode node = new TreeNode(preorder[preStart]);
         if(n==1) {
             return node;
         }
@@ -63,15 +63,15 @@ public class ConstructBinaryTree {
      *     /  \
      *    15   7
      */
-    public BinaryTreeNode buildTreeFromInorderAndPostorderTraversal(int[] inorder, int[] postorder) {
+    public TreeNode buildTreeFromInorderAndPostorderTraversal(int[] inorder, int[] postorder) {
         if(inorder==null||inorder.length==0) {
             return null;
         }
         return helper2(inorder, postorder, 0, 0, inorder.length);
     }
 
-    public BinaryTreeNode helper2(int[] inorder, int[] postorder, int postStart, int inStart, int n) {
-        BinaryTreeNode node = new BinaryTreeNode(postorder[postStart+n-1]);
+    public TreeNode helper2(int[] inorder, int[] postorder, int postStart, int inStart, int n) {
+        TreeNode node = new TreeNode(postorder[postStart+n-1]);
         if(n==1) {
             return node;
         }

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -30,17 +30,17 @@ import java.util.Queue;
  */
 public class FindBottomLeftTreeValue {
 
-    public int findBottomLeftValue(BinaryTreeNode root) {
+    public int findBottomLeftValue(TreeNode root) {
         if(root==null) {
             return -1;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         int res = root.val;
         while(!queue.isEmpty()) {
             int n = queue.size();
             for(int i=0;i<n;i++) {
-                BinaryTreeNode curr = queue.poll();
+                TreeNode curr = queue.poll();
                 if(i==0) {
                     res = curr.val;
                 }

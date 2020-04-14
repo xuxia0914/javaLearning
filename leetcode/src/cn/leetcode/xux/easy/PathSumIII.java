@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -29,14 +29,14 @@ public class PathSumIII {
 
     int res = 0;
 
-    public int pathSum(BinaryTreeNode root, int sum) {
+    public int pathSum(TreeNode root, int sum) {
         if(root==null) {
             return 0;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             helper(curr, sum, 0);
             if(curr.left!=null) {
                 queue.offer(curr.left);
@@ -48,7 +48,7 @@ public class PathSumIII {
         return res;
     }
 
-    public void helper(BinaryTreeNode node, int sum, int preSum) {
+    public void helper(TreeNode node, int sum, int preSum) {
         if(preSum+node.val==sum) {
             res++;
         }
@@ -62,8 +62,8 @@ public class PathSumIII {
 
     public static void main(String[] args) {
         PathSumIII ps = new PathSumIII();
-        System.out.println(ps.pathSum(new BinaryTreeNode(new Integer[]{10,5,-3,3,2,null,11,3,-2,null,1}), 8));  //3
-        System.out.println(ps.pathSum(new BinaryTreeNode(new Integer[]{1,null,2,null,3,null,4,null,5}), 3));    //5
+        System.out.println(ps.pathSum(new TreeNode(new Integer[]{10,5,-3,3,2,null,11,3,-2,null,1}), 8));  //3
+        System.out.println(ps.pathSum(new TreeNode(new Integer[]{1,null,2,null,3,null,4,null,5}), 3));    //5
     }
 
 }

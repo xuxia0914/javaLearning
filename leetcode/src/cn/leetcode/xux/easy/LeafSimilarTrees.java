@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.*;
 
@@ -16,45 +16,45 @@ import java.util.*;
  */
 public class LeafSimilarTrees {
 
-    public boolean leafSimilar(BinaryTreeNode root1, BinaryTreeNode root2) {
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
         if(root1==null&&root2==null) {
             return true;
         }
         if(root1==null||root2==null) {
             return false;
         }
-        Stack<BinaryTreeNode> stack1 = new Stack<>();
-        BinaryTreeNode node1 = root1;
+        Stack<TreeNode> stack1 = new Stack<>();
+        TreeNode node1 = root1;
         while(node1!=null) {
             stack1.push(node1);
             node1 = node1.left;
         }
         List<Integer> list1 = new ArrayList();
         while(!stack1.isEmpty()) {
-            BinaryTreeNode curr1 = stack1.pop();
+            TreeNode curr1 = stack1.pop();
             if(curr1.left==null&&curr1.right==null) {
                 list1.add(curr1.val);
             }else {
-                BinaryTreeNode right1 = curr1.right;
+                TreeNode right1 = curr1.right;
                 while(right1!=null) {
                     stack1.push(right1);
                     right1 = right1.left;
                 }
             }
         }
-        Stack<BinaryTreeNode> stack2 = new Stack<>();
-        BinaryTreeNode node2 = root2;
+        Stack<TreeNode> stack2 = new Stack<>();
+        TreeNode node2 = root2;
         while(node2!=null) {
             stack2.push(node2);
             node2 = node2.left;
         }
         int idx = 0;
         while(!stack2.isEmpty()) {
-            BinaryTreeNode curr2 = stack2.pop();
+            TreeNode curr2 = stack2.pop();
             if(curr2.left==null&&curr2.right==null&&(idx>=list1.size()||list1.get(idx++)!=curr2.val)) {
                 return false;
             }else {
-                BinaryTreeNode right2 = curr2.right;
+                TreeNode right2 = curr2.right;
                 while(right2!=null) {
                     stack2.push(right2);
                     right2 = right2.left;
@@ -65,7 +65,7 @@ public class LeafSimilarTrees {
     }
 
     public static void main(String[] args) {
-        System.out.println(new LeafSimilarTrees().leafSimilar(new BinaryTreeNode(new Integer[]{3,5,1,6,2,9,8,null,null,7,4}),new BinaryTreeNode(new Integer[]{3,5,1,6,7,4,2,null,null,null,null,null,null,9,8})));
+        System.out.println(new LeafSimilarTrees().leafSimilar(new TreeNode(new Integer[]{3,5,1,6,2,9,8,null,null,7,4}),new TreeNode(new Integer[]{3,5,1,6,7,4,2,null,null,null,null,null,null,9,8})));
     }
 
 }

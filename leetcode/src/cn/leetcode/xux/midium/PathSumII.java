@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class PathSumII {
 
-    public List<List<Integer>> pathSum(BinaryTreeNode root, int sum) {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
         List<List<Integer>> res = new ArrayList<>();
         if(root==null) {
             return res;
@@ -35,7 +35,7 @@ public class PathSumII {
         return res;
     }
 
-    public void helper(List<List<Integer>> res, BinaryTreeNode node, List<Integer> list, int sum) {
+    public void helper(List<List<Integer>> res, TreeNode node, List<Integer> list, int sum) {
         List<Integer> tmp = new ArrayList<>(list);
         if(node.left==null&&node.right==null) {
             tmp.add(node.val);
@@ -58,7 +58,7 @@ public class PathSumII {
 
     public static void main(String[] args) {
         PathSumII ps = new PathSumII();
-        System.out.println(ps.pathSum(new BinaryTreeNode(new Integer[]{5,4,8,11,null,13,4,7,2,null,null,5,1}), 22));
+        System.out.println(ps.pathSum(new TreeNode(new Integer[]{5,4,8,11,null,13,4,7,2,null,null,5,1}), 22));
     }
 
 }

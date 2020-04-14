@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 100. 相同的树
@@ -33,7 +33,7 @@ import cn.leetcode.xux.common.BinaryTreeNode;
  */
 public class SameTree {
 
-    public boolean isSameTree(BinaryTreeNode p, BinaryTreeNode q) {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
         if(p==null&&q==null) {
             return true;
         }

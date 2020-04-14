@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,16 +30,16 @@ import java.util.Map;
  */
 public class FindDuplicateSubtrees {
 
-    List<BinaryTreeNode> res = new ArrayList<>();
+    List<TreeNode> res = new ArrayList<>();
     Map<String, Integer> map = new HashMap<>();
 
-    public List<BinaryTreeNode> findDuplicateSubtrees(BinaryTreeNode root) {
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
         res.clear();
         helper(root);
         return res;
     }
 
-    public String helper(BinaryTreeNode node) {
+    public String helper(TreeNode node) {
         if(node==null) {
             return "";
         }
@@ -53,7 +53,7 @@ public class FindDuplicateSubtrees {
 
     public static void main(String[] args) {
         FindDuplicateSubtrees fds = new FindDuplicateSubtrees();
-        System.out.println(fds.findDuplicateSubtrees(new BinaryTreeNode(new Integer[]{1,2,3,4,null,2,4,null,null,4})));
+        System.out.println(fds.findDuplicateSubtrees(new TreeNode(new Integer[]{1,2,3,4,null,2,4,null,null,4})));
     }
 
 }

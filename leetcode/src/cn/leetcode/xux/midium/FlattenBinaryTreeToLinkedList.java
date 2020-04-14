@@ -1,8 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
-
-import java.util.Stack;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 114. 二叉树展开为链表
@@ -29,13 +27,13 @@ import java.util.Stack;
  */
 public class FlattenBinaryTreeToLinkedList {
 
-    public void flatten(BinaryTreeNode root) {
+    public void flatten(TreeNode root) {
         while(root!=null) {
             if(root.left==null) {
                 root = root.right;
                 continue;
             }
-            BinaryTreeNode pre = root.left;
+            TreeNode pre = root.left;
             while(pre.right!=null) {
                 pre = pre.right;
             }
@@ -46,14 +44,14 @@ public class FlattenBinaryTreeToLinkedList {
         }
     }
 
-    public void flatten1(BinaryTreeNode root) {
+    public void flatten1(TreeNode root) {
         if(root==null) {
             return;
         }
-        BinaryTreeNode tmp = root.right;
+        TreeNode tmp = root.right;
         root.right = root.left;
         root.left = null;
-        BinaryTreeNode curr = root;
+        TreeNode curr = root;
         while(curr.right!=null) {
             curr = curr.right;
         }

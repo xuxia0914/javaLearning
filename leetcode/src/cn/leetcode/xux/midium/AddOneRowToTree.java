@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -56,19 +56,19 @@ import java.util.Queue;
  */
 public class AddOneRowToTree {
 
-    public BinaryTreeNode addOneRow(BinaryTreeNode root, int v, int d) {
+    public TreeNode addOneRow(TreeNode root, int v, int d) {
         if(d==1) {
-            BinaryTreeNode newTree = new BinaryTreeNode(v);
+            TreeNode newTree = new TreeNode(v);
             newTree.left = root;
             return newTree;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<BinaryTreeNode>();
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
         queue.offer(root);
         int currDeep=2;
         while(currDeep<d) {
             int size = queue.size();
             for(int i=0;i<size;i++) {
-                BinaryTreeNode node = queue.poll();
+                TreeNode node = queue.poll();
                 if(node.left!=null) {
                     queue.offer(node.left);
                 }
@@ -79,13 +79,13 @@ public class AddOneRowToTree {
             currDeep++;
         }
         while(!queue.isEmpty()) {
-            BinaryTreeNode node = queue.poll();
-            BinaryTreeNode left = node.left;
-            BinaryTreeNode right = node.right;
-            BinaryTreeNode newLeft = new BinaryTreeNode(v);
+            TreeNode node = queue.poll();
+            TreeNode left = node.left;
+            TreeNode right = node.right;
+            TreeNode newLeft = new TreeNode(v);
             newLeft.left = left;
             node.left = newLeft;
-            BinaryTreeNode newRight = new BinaryTreeNode(v);
+            TreeNode newRight = new TreeNode(v);
             newRight.right = right;
             node.right = newRight;
         }

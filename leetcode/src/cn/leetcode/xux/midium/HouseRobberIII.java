@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * The thief has found himself a new place for his thievery again.
@@ -31,7 +31,7 @@ import cn.leetcode.xux.common.BinaryTreeNode;
 public class HouseRobberIII {
 
     /**递归，太慢了*/
-    public int rob(BinaryTreeNode root) {
+    public int rob(TreeNode root) {
         if(root==null) {
             return 0;
         }
@@ -47,13 +47,13 @@ public class HouseRobberIII {
         return Math.max(res, curr);
     }
 
-    public int rob1(BinaryTreeNode root) {
+    public int rob1(TreeNode root) {
         if (root == null) return 0;
         int[] ret = robHelper(root);
         return Math.max(ret[0], ret[1]);
     }
 
-    private int[] robHelper(BinaryTreeNode root) {
+    private int[] robHelper(TreeNode root) {
         int[] ret = new int[2];
         if (root == null) return ret;
         int[] lRet = robHelper(root.left);

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -32,14 +32,14 @@ public class SymmetricTree {
      * @param root
      * @return
      */
-    public boolean isSymmetric(BinaryTreeNode root) {
+    public boolean isSymmetric(TreeNode root) {
         if(root==null) {
             return true;
         }
         return helper(root.left, root.right);
     }
 
-    public boolean helper(BinaryTreeNode left, BinaryTreeNode right) {
+    public boolean helper(TreeNode left, TreeNode right) {
         if(left==null&&right==null) {
             return true;
         }
@@ -59,22 +59,22 @@ public class SymmetricTree {
      * @param root
      * @return
      */
-    public boolean isSymmetric1(BinaryTreeNode root) {
+    public boolean isSymmetric1(TreeNode root) {
         if(root==null||(root.left==null&&root.right==null)) {
             return true;
         }
-        BinaryTreeNode left = root.left;
-        BinaryTreeNode right = root.right;
+        TreeNode left = root.left;
+        TreeNode right = root.right;
         if(left==null||right==null||left.val!=right.val) {
             return false;
         }
-        Queue<BinaryTreeNode> leftQueue = new LinkedList<>();
+        Queue<TreeNode> leftQueue = new LinkedList<>();
         leftQueue.offer(left);
-        Queue<BinaryTreeNode> rightQueue = new LinkedList<>();
+        Queue<TreeNode> rightQueue = new LinkedList<>();
         rightQueue.offer(right);
         while(!leftQueue.isEmpty()&&!rightQueue.isEmpty()) {
-            BinaryTreeNode currLeft = leftQueue.poll();
-            BinaryTreeNode currRight = rightQueue.poll();
+            TreeNode currLeft = leftQueue.poll();
+            TreeNode currRight = rightQueue.poll();
             if(currLeft.left!=null&&currRight.right!=null) {
                 if(currLeft.left.val!=currRight.right.val) {
                     return false;

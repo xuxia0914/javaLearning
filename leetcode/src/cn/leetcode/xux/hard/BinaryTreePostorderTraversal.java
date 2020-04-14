@@ -1,6 +1,6 @@
 package cn.leetcode.xux.hard;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ import java.util.*;
 public class BinaryTreePostorderTraversal {
 
     /**递归*/
-    public List<Integer> postorderTraversal(BinaryTreeNode root) {
+    public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         if(root==null) {
             return res;
@@ -33,14 +33,14 @@ public class BinaryTreePostorderTraversal {
     }
 
     /**迭代*/
-    public List<Integer> postorderTraversal1(BinaryTreeNode root) {
+    public List<Integer> postorderTraversal1(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         if(root==null) {
             return res;
         }
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        Set<BinaryTreeNode> set = new HashSet<>();
-        BinaryTreeNode node = root;
+        Stack<TreeNode> stack = new Stack<>();
+        Set<TreeNode> set = new HashSet<>();
+        TreeNode node = root;
         while(node!=null) {
             stack.push(node);
             node = node.left;
@@ -64,7 +64,7 @@ public class BinaryTreePostorderTraversal {
 
     public static void main(String[] args) {
         BinaryTreePostorderTraversal btpt = new BinaryTreePostorderTraversal();
-        BinaryTreeNode root = new BinaryTreeNode(new Integer[]{1,null,2,3});
+        TreeNode root = new TreeNode(new Integer[]{1,null,2,3});
         System.out.println(btpt.postorderTraversal1(root));
     }
 

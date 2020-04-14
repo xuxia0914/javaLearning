@@ -1,8 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
-
-import java.util.Stack;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * 285. Inorder Successor in BST 二叉搜索树中的中序后继节点
@@ -25,16 +23,16 @@ import java.util.Stack;
  */
 public class InorderSuccessorInBST {
 
-    public BinaryTreeNode inorderSuccessor(BinaryTreeNode root, BinaryTreeNode p) {
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
         if(p.right!=null) {
-            BinaryTreeNode node = p.right;
+            TreeNode node = p.right;
             while(node.left!=null) {
                 node = node.left;
             }
             return node;
         }
-        BinaryTreeNode pre = null;
-        BinaryTreeNode node = root;
+        TreeNode pre = null;
+        TreeNode node = root;
         while(node!=null) {
             if(node.val>p.val) {
                 pre = node;
@@ -50,12 +48,12 @@ public class InorderSuccessorInBST {
 
     public static void main(String[] args) {
 //        BinaryTreeNode root = new BinaryTreeNode(new Integer[]{5,3,6,2,4,null,null,1});
-        BinaryTreeNode node1 = new BinaryTreeNode(1);
-        BinaryTreeNode node2 = new BinaryTreeNode(2);
-        BinaryTreeNode node3 = new BinaryTreeNode(3);
-        BinaryTreeNode node4 = new BinaryTreeNode(4);
-        BinaryTreeNode node5 = new BinaryTreeNode(5);
-        BinaryTreeNode node6 = new BinaryTreeNode(6);
+        TreeNode node1 = new TreeNode(1);
+        TreeNode node2 = new TreeNode(2);
+        TreeNode node3 = new TreeNode(3);
+        TreeNode node4 = new TreeNode(4);
+        TreeNode node5 = new TreeNode(5);
+        TreeNode node6 = new TreeNode(6);
         node5.left = node3;
         node5.right = node6;
         node3.left = node2;

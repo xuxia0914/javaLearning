@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -20,12 +20,12 @@ import java.util.Queue;
 public class SerializeAndDeserializeBst {
 
     public static void main(String[] args) {
-        BinaryTreeNode node1 = new BinaryTreeNode(5);
-        BinaryTreeNode node2 = new BinaryTreeNode(3);
-        BinaryTreeNode node3 = new BinaryTreeNode(6);
-        BinaryTreeNode node4 = new BinaryTreeNode(2);
-        BinaryTreeNode node5 = new BinaryTreeNode(4);
-        BinaryTreeNode node6 = new BinaryTreeNode(1);
+        TreeNode node1 = new TreeNode(5);
+        TreeNode node2 = new TreeNode(3);
+        TreeNode node3 = new TreeNode(6);
+        TreeNode node4 = new TreeNode(2);
+        TreeNode node5 = new TreeNode(4);
+        TreeNode node6 = new TreeNode(1);
         node1.left = node2;
         node1.right = node3;
         node2.left = node4;
@@ -41,16 +41,16 @@ public class SerializeAndDeserializeBst {
 class Codec {
 
     // Encodes a tree to a single string.
-    public String serialize(BinaryTreeNode root) {
+    public String serialize(TreeNode root) {
         if(root==null) {
             return "null";
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         StringBuilder sb = new StringBuilder();
         sb.append(root.val);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             if(curr.left==null) {
                 sb.append(",null");
             }else {
@@ -68,26 +68,26 @@ class Codec {
     }
 
     // Decodes your encoded data to tree.
-    public BinaryTreeNode deserialize(String data) {
+    public TreeNode deserialize(String data) {
         if(data==null||"null".equals(data)) {
             return null;
         }
         String[] strs = data.split(",");
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         int idx = 1;
-        BinaryTreeNode root = new BinaryTreeNode(Integer.parseInt(strs[0]));
+        TreeNode root = new TreeNode(Integer.parseInt(strs[0]));
         queue.offer(root);
         while(idx<strs.length&&!queue.isEmpty()) {
             int size = queue.size();
             while(size-->0) {
-                BinaryTreeNode curr = queue.poll();
+                TreeNode curr = queue.poll();
                 if(idx<strs.length&&!"null".equals(strs[idx++])) {
-                    BinaryTreeNode left = new BinaryTreeNode(Integer.parseInt(strs[idx-1]));
+                    TreeNode left = new TreeNode(Integer.parseInt(strs[idx-1]));
                     curr.left = left;
                     queue.offer(left);
                 }
                 if(idx<strs.length&&!"null".equals(strs[idx++])) {
-                    BinaryTreeNode right = new BinaryTreeNode(Integer.parseInt(strs[idx-1]));
+                    TreeNode right = new TreeNode(Integer.parseInt(strs[idx-1]));
                     curr.right = right;
                     queue.offer(right);
                 }

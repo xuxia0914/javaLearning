@@ -1,9 +1,8 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -31,19 +30,19 @@ import java.util.Queue;
  */
 public class CousinsInBinaryTree {
 
-    public boolean isCousins(BinaryTreeNode root, int x, int y) {
+    public boolean isCousins(TreeNode root, int x, int y) {
         if(root==null||(root.left==null||root.right==null)) {
             return false;
         }
-        Queue<BinaryTreeNode[]> queue = new LinkedList<>();
-        queue.offer(new BinaryTreeNode[]{root, null});
-        BinaryTreeNode[] curr;
+        Queue<TreeNode[]> queue = new LinkedList<>();
+        queue.offer(new TreeNode[]{root, null});
+        TreeNode[] curr;
         while(!queue.isEmpty()) {
             int size = queue.size();
             boolean flag1 = false;
             boolean flag2 = false;
-            BinaryTreeNode  parent1 = null;
-            BinaryTreeNode  parent2 = null;
+            TreeNode parent1 = null;
+            TreeNode parent2 = null;
             while(size-->0) {
                 curr = queue.poll();
                 if(curr[0].val==x) {
@@ -58,10 +57,10 @@ public class CousinsInBinaryTree {
                     return true;
                 }
                 if(curr[0].left!=null) {
-                    queue.offer(new BinaryTreeNode[]{curr[0].left, curr[0]});
+                    queue.offer(new TreeNode[]{curr[0].left, curr[0]});
                 }
                 if(curr[0].right!=null) {
-                    queue.offer(new BinaryTreeNode[]{curr[0].right, curr[0]});
+                    queue.offer(new TreeNode[]{curr[0].right, curr[0]});
                 }
             }
         }

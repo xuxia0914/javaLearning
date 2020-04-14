@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.*;
 
@@ -23,18 +23,18 @@ import java.util.*;
  */
 public class BinaryTreeLevelOrderTraversal {
 
-    public List<List<Integer>> levelOrder(BinaryTreeNode root) {
+    public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> res = new LinkedList<>();
         if(root==null) {
             return res;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
             int n = queue.size();
             List<Integer> list = new ArrayList<>();
             for(int i=0;i<n;i++) {
-                BinaryTreeNode node = queue.poll();
+                TreeNode node = queue.poll();
                 list.add(node.val);
                 if(node.left!=null) {
                     queue.offer(node.left);
@@ -50,7 +50,7 @@ public class BinaryTreeLevelOrderTraversal {
 
     public static void main(String[] args) {
         BinaryTreeLevelOrderTraversal b = new BinaryTreeLevelOrderTraversal();
-        System.out.println(b.levelOrder(new BinaryTreeNode(new Integer[]{3,9,20,null,null,15,7})));
+        System.out.println(b.levelOrder(new TreeNode(new Integer[]{3,9,20,null,null,15,7})));
     }
 
 }

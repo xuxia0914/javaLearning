@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class MostFrequentSubtreeSum {
 
     Map<Integer, Integer> map = new HashMap<>();
 
-    public int[] findFrequentTreeSum(BinaryTreeNode root) {
+    public int[] findFrequentTreeSum(TreeNode root) {
         helper(root);
         List<Integer> list = new ArrayList<>();
         for(Integer i : map.keySet()) {
@@ -53,7 +53,7 @@ public class MostFrequentSubtreeSum {
         return res;
     }
 
-    public int helper(BinaryTreeNode root) {
+    public int helper(TreeNode root) {
         if(root==null) {
             return 0;
         }

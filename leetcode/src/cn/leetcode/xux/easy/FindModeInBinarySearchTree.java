@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +31,13 @@ import java.util.Stack;
  */
 public class FindModeInBinarySearchTree {
 
-    public int[] findMode(BinaryTreeNode root) {
+    public int[] findMode(TreeNode root) {
         if(root==null) {
             return new int[]{};
         }
         List<Integer> list = new ArrayList<>();
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        BinaryTreeNode node = root;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root;
         while(node!=null) {
             stack.push(node);
             node = node.left;
@@ -45,7 +45,7 @@ public class FindModeInBinarySearchTree {
         int max=0;
         int cnt=0;
         int pre = root.val;
-        BinaryTreeNode curr;
+        TreeNode curr;
         while(!stack.isEmpty()) {
             curr = stack.pop();
             if(curr.val==pre) {
@@ -82,7 +82,7 @@ public class FindModeInBinarySearchTree {
 
     public static void main(String[] args) {
         FindModeInBinarySearchTree f = new FindModeInBinarySearchTree();
-        f.findMode(new BinaryTreeNode(new Integer[]{2,1,2}));
+        f.findMode(new TreeNode(new Integer[]{2,1,2}));
     }
 
 }

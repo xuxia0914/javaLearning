@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.*;
 
@@ -23,19 +23,19 @@ import java.util.*;
  */
 public class BinaryTreeZigzagLevelOrderTraversal {
 
-    public static List<List<Integer>> solution(BinaryTreeNode root) {
+    public static List<List<Integer>> solution(TreeNode root) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
         if(root==null) {
             return result;
         }
-        Queue<Map<Integer, BinaryTreeNode>> q = new LinkedList<Map<Integer, BinaryTreeNode>>();
-        Map<Integer, BinaryTreeNode> map = new HashMap<Integer, BinaryTreeNode>();
+        Queue<Map<Integer, TreeNode>> q = new LinkedList<Map<Integer, TreeNode>>();
+        Map<Integer, TreeNode> map = new HashMap<Integer, TreeNode>();
         map.put(1, root);
         q.offer(map);
         while(!q.isEmpty()) {
-            Map<Integer, BinaryTreeNode> tmp = q.poll();
+            Map<Integer, TreeNode> tmp = q.poll();
             for(Integer i : tmp.keySet()) {
-                BinaryTreeNode node = tmp.get(i);
+                TreeNode node = tmp.get(i);
                 if(result.size()<i) {
                     List<Integer> list = new ArrayList<Integer>();
                     list.add(node.val);
@@ -48,12 +48,12 @@ public class BinaryTreeZigzagLevelOrderTraversal {
                     }
                 }
                 if(node.left!=null) {
-                    Map<Integer, BinaryTreeNode> left = new HashMap<Integer, BinaryTreeNode>();
+                    Map<Integer, TreeNode> left = new HashMap<Integer, TreeNode>();
                     left.put(i+1, node.left);
                     q.offer(left);
                 }
                 if(node.right!=null) {
-                    Map<Integer, BinaryTreeNode> right = new HashMap<Integer, BinaryTreeNode>();
+                    Map<Integer, TreeNode> right = new HashMap<Integer, TreeNode>();
                     right.put(i+1, node.right);
                     q.offer(right);
                 }
@@ -62,19 +62,19 @@ public class BinaryTreeZigzagLevelOrderTraversal {
         return result;
     }
 
-    public static List<List<Integer>> solution1(BinaryTreeNode root) {
+    public static List<List<Integer>> solution1(TreeNode root) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
         if(root==null) {
             return result;
         }
-        Queue<BinaryTreeNode> q = new LinkedList<BinaryTreeNode>();
+        Queue<TreeNode> q = new LinkedList<TreeNode>();
         q.offer(root);
         int cnt = 0;
         while(!q.isEmpty()) {
             int n = q.size();
             List<Integer> list = new LinkedList<>();
             while(n-->0) {
-                BinaryTreeNode curr = q.poll();
+                TreeNode curr = q.poll();
                 if(cnt%2==0) {
                     list.add(curr.val);
                 }else {
@@ -94,11 +94,11 @@ public class BinaryTreeZigzagLevelOrderTraversal {
     }
 
     public static void main(String[] args) {
-        BinaryTreeNode node1 = new BinaryTreeNode(3);
-        BinaryTreeNode node2 = new BinaryTreeNode(9);
-        BinaryTreeNode node3 = new BinaryTreeNode(20);
-        BinaryTreeNode node4 = new BinaryTreeNode(15);
-        BinaryTreeNode node5 = new BinaryTreeNode(17);
+        TreeNode node1 = new TreeNode(3);
+        TreeNode node2 = new TreeNode(9);
+        TreeNode node3 = new TreeNode(20);
+        TreeNode node4 = new TreeNode(15);
+        TreeNode node5 = new TreeNode(17);
 
         node3.left = node4;
         node3.right = node5;

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -31,11 +31,11 @@ public class MinimumAbsoluteDifferenceInBst {
      * @param root
      * @return
      */
-    public int getMinimumDifference(BinaryTreeNode root) {
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+    public int getMinimumDifference(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
-            BinaryTreeNode curr = queue.poll();
+            TreeNode curr = queue.poll();
             helper(curr);
             if(curr.left!=null&&!(curr.left.left==null&&curr.left.right==null)) {
                 queue.add(curr.left);
@@ -47,16 +47,16 @@ public class MinimumAbsoluteDifferenceInBst {
         return res;
     }
 
-    public void helper(BinaryTreeNode node) {
+    public void helper(TreeNode node) {
         if(node.left!=null) {
-            BinaryTreeNode left = node.left;
+            TreeNode left = node.left;
             while(left.right!=null) {
                 left = left.right;
             }
             res = Math.min(node.val-left.val, res);
         }
         if(node.right!=null) {
-            BinaryTreeNode right = node.right;
+            TreeNode right = node.right;
             while(right.left!=null) {
                 right = right.left;
             }

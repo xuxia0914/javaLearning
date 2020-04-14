@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,14 +23,14 @@ import java.util.Queue;
  */
 public class BinaryTreeRightSideView {
 
-    public List<Integer> rightSideView(BinaryTreeNode root) {
+    public List<Integer> rightSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         if(root==null) {
             return list;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
-        BinaryTreeNode curr;
+        TreeNode curr;
         int size;
         while(!queue.isEmpty()) {
             size = queue.size();

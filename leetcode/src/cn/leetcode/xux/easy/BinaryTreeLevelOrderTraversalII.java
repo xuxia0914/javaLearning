@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.*;
 
@@ -22,19 +22,19 @@ import java.util.*;
  */
 public class BinaryTreeLevelOrderTraversalII {
 
-    public static List<List<Integer>> solution(BinaryTreeNode tree) {
+    public static List<List<Integer>> solution(TreeNode tree) {
         List<List<Integer>> result = new LinkedList<List<Integer>>();
         if(tree==null) {
             return result;
         }
-        Queue<Map<Integer, BinaryTreeNode>> q = new LinkedList<Map<Integer, BinaryTreeNode>>();
-        Map<Integer, BinaryTreeNode> map = new HashMap<Integer, BinaryTreeNode>();
+        Queue<Map<Integer, TreeNode>> q = new LinkedList<Map<Integer, TreeNode>>();
+        Map<Integer, TreeNode> map = new HashMap<Integer, TreeNode>();
         map.put(1, tree);
         q.offer(map);
         while(!q.isEmpty()) {
-            Map<Integer, BinaryTreeNode> tmp = q.poll();
+            Map<Integer, TreeNode> tmp = q.poll();
             for(Integer i : tmp.keySet()) {
-                BinaryTreeNode node = tmp.get(i);
+                TreeNode node = tmp.get(i);
                 if(result.size()<i) {
                     List<Integer> list = new ArrayList<Integer>();
                     list.add(node.val);
@@ -43,12 +43,12 @@ public class BinaryTreeLevelOrderTraversalII {
                     result.get(0).add(node.val);
                 }
                 if(node.left!=null) {
-                    Map<Integer, BinaryTreeNode> left = new HashMap<Integer, BinaryTreeNode>();
+                    Map<Integer, TreeNode> left = new HashMap<Integer, TreeNode>();
                     left.put(i+1, node.left);
                     q.offer(left);
                 }
                 if(node.left!=null) {
-                    Map<Integer, BinaryTreeNode> right = new HashMap<Integer, BinaryTreeNode>();
+                    Map<Integer, TreeNode> right = new HashMap<Integer, TreeNode>();
                     right.put(i+1, node.right);
                     q.offer(right);
                 }
@@ -58,11 +58,11 @@ public class BinaryTreeLevelOrderTraversalII {
     }
 
     public static void main(String[] args) {
-        BinaryTreeNode node1 = new BinaryTreeNode(3);
-        BinaryTreeNode node2 = new BinaryTreeNode(9);
-        BinaryTreeNode node3 = new BinaryTreeNode(20);
-        BinaryTreeNode node4 = new BinaryTreeNode(15);
-        BinaryTreeNode node5 = new BinaryTreeNode(17);
+        TreeNode node1 = new TreeNode(3);
+        TreeNode node2 = new TreeNode(9);
+        TreeNode node3 = new TreeNode(20);
+        TreeNode node4 = new TreeNode(15);
+        TreeNode node5 = new TreeNode(17);
 
         node3.left = node4;
         node3.right = node5;

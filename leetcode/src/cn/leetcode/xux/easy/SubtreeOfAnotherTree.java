@@ -1,6 +1,6 @@
 package cn.leetcode.xux.easy;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -40,10 +40,10 @@ import java.util.Queue;
  */
 public class SubtreeOfAnotherTree {
 
-    public boolean isSubtree(BinaryTreeNode s, BinaryTreeNode t) {
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(s);
-        BinaryTreeNode curr;
+        TreeNode curr;
         while(!queue.isEmpty()) {
             curr = queue.poll();
             if(helper(curr, t)) {
@@ -59,7 +59,7 @@ public class SubtreeOfAnotherTree {
         return false;
     }
 
-    public boolean helper(BinaryTreeNode s, BinaryTreeNode t) {
+    public boolean helper(TreeNode s, TreeNode t) {
         if(s==null&&t==null) {
             return true;
         }

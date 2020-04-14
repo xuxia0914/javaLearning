@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 /**
  * Given a binary tree where all the right nodes are either leaf nodes
@@ -29,15 +29,15 @@ public class BinaryTreeUpsideDown {
      * @param root
      * @return
      */
-    public BinaryTreeNode upsideDownBinaryTree(BinaryTreeNode root) {
+    public TreeNode upsideDownBinaryTree(TreeNode root) {
         if(root==null) {
             return null;
         }
-        BinaryTreeNode parent = root;
-        BinaryTreeNode left = root.left;
-        BinaryTreeNode right = root.right;
+        TreeNode parent = root;
+        TreeNode left = root.left;
+        TreeNode right = root.right;
         if(left!=null) {
-            BinaryTreeNode ret = upsideDownBinaryTree(left);
+            TreeNode ret = upsideDownBinaryTree(left);
             left.left = right;
             left.right = parent;
             return ret;
@@ -50,15 +50,15 @@ public class BinaryTreeUpsideDown {
      * @param root
      * @return
      */
-    public BinaryTreeNode upsideDownBinaryTree1(BinaryTreeNode root) {
+    public TreeNode upsideDownBinaryTree1(TreeNode root) {
         if(root==null) {
             return null;
         }
-        BinaryTreeNode curr = root;
-        BinaryTreeNode parent = null;
-        BinaryTreeNode parentRight = null;
+        TreeNode curr = root;
+        TreeNode parent = null;
+        TreeNode parentRight = null;
         while(curr!=null) {
-            BinaryTreeNode left = curr.left;
+            TreeNode left = curr.left;
             curr.left = parentRight;
             parentRight = curr.right;
             curr.right = parent;

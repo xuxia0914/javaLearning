@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.Stack;
 
@@ -14,10 +14,10 @@ import java.util.Stack;
  */
 public class BinarySearchTreeIterator {
 
-    private Stack<BinaryTreeNode> stack;
+    private Stack<TreeNode> stack;
 
-    public BinarySearchTreeIterator(BinaryTreeNode root) {
-        this.stack = new Stack<BinaryTreeNode>();
+    public BinarySearchTreeIterator(TreeNode root) {
+        this.stack = new Stack<TreeNode>();
         while (root != null) {
             this.stack.push(root);
             root = root.left;
@@ -29,9 +29,9 @@ public class BinarySearchTreeIterator {
     }
 
     public int next() {
-        BinaryTreeNode node = this.stack.pop();
+        TreeNode node = this.stack.pop();
         if(node.right != null) {
-            BinaryTreeNode tmp = node.right;
+            TreeNode tmp = node.right;
             while(tmp != null) {
                 this.stack.push(tmp);
                 tmp = tmp.left;

@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -60,11 +60,11 @@ import java.util.List;
 public class PrintBinaryTree {
 
     public static void main(String[] args) {
-        BinaryTreeNode root = new BinaryTreeNode(new Integer[]{1,2});
+        TreeNode root = new TreeNode(new Integer[]{1,2});
         System.out.println(new PrintBinaryTree().printTree(root));
     }
 
-    public List<List<String>> printTree(BinaryTreeNode root) {
+    public List<List<String>> printTree(TreeNode root) {
         int m = height(root);
         int n = (int)Math.pow(2, m)-1;
         String[][] resultArr = new String[m][n];
@@ -83,7 +83,7 @@ public class PrintBinaryTree {
         return result;
     }
 
-    public void printTree(String[][] resultArr, BinaryTreeNode root, int level, int start, int end) {
+    public void printTree(String[][] resultArr, TreeNode root, int level, int start, int end) {
         if(root==null) {
             return;
         }
@@ -93,7 +93,7 @@ public class PrintBinaryTree {
         printTree(resultArr, root.right, level+1, mid+1, end);
     }
 
-    public int height(BinaryTreeNode root) {
+    public int height(TreeNode root) {
         if(root==null) {
             return 0;
         }

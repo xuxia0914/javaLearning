@@ -1,6 +1,6 @@
 package cn.leetcode.xux.midium;
 
-import cn.leetcode.xux.common.BinaryTreeNode;
+import cn.leetcode.xux.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,18 +24,18 @@ import java.util.Queue;
  */
 public class FindLargestValueInEachTreeRow {
 
-    public List<Integer> largestValues(BinaryTreeNode root) {
+    public List<Integer> largestValues(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         if(root==null) {
             return res;
         }
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
             int size = queue.size();
             int max = Integer.MIN_VALUE;
             while(size-->0) {
-                BinaryTreeNode curr = queue.poll();
+                TreeNode curr = queue.poll();
                 max = Math.max(max, curr.val);
                 if(curr.left!=null) {
                     queue.offer(curr.left);
