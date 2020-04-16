@@ -42,7 +42,8 @@ class MyCalendar {
     public boolean book(int start, int end) {
         int[] curr = new int[]{start, end-1};
         int len = books.length;
-        int idx = Arrays.binarySearch(books,
+        int idx = Arrays.binarySearch(
+                books,
                 curr,
                 (o1, o2)->o1[0]!=o2[0]?o1[0]-o2[0]:o1[1]-o2[1]
         );
