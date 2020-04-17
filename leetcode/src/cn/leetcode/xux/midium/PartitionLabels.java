@@ -1,9 +1,7 @@
 package cn.leetcode.xux.midium;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 763. 划分字母区间
@@ -25,31 +23,6 @@ import java.util.Map;
 public class PartitionLabels {
 
     public List<Integer> partitionLabels(String S) {
-        List<Integer> result = new LinkedList<>();
-        int[] cnts = new int[26];
-        for(char c : S.toCharArray()) {
-            cnts[c-'a']++;
-        }
-        Map<Character, Integer> map = new HashMap<>();
-        int start = 0;
-        for(int i=0;i<S.length();i++) {
-            char c = S.charAt(i);
-            if(!map.containsKey(c)) {
-                map.put(c, cnts[c-'a']);
-            }
-            map.put(c, map.get(c)-1);
-            if(map.get(c)==0) {
-                map.remove(c);
-            }
-            if(map.size()==0) {
-                result.add(i-start+1);
-                start = i+1;
-            }
-        }
-        return result;
-    }
-
-    public List<Integer> partitionLabels1(String S) {
         List<Integer> result = new LinkedList<>();
         int[] lasts = new int[26];
         for(int i=0;i<S.length();i++) {
