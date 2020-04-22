@@ -3,18 +3,22 @@ package cn.leetcode.xux.hard;
 import java.util.Arrays;
 
 /**
- * Given a 2D binary matrix filled with 0's and 1's,  find the largest rectangle containing only 1's and return its area.
- * For example, given the following matrix:
- * 1 0 1 0 0
- * 1 0 1 1 1
- * 1 1 1 1 1
- * 1 0 0 1 0
- * Return 6.
+ * 85. 最大矩形
+ * 给定一个仅包含 0 和 1 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
+ * 示例:
+ * 输入:
+ * [
+ *   ["1","0","1","0","0"],
+ *   ["1","0","1","1","1"],
+ *   ["1","1","1","1","1"],
+ *   ["1","0","0","1","0"]
+ * ]
+ * 输出: 6
  */
 public class MaximalRectangle {
 
-    public static int solution(int[][] matrix) {    //TODO
-        if(matrix.length==0|matrix[0].length==0) {
+    public int maximalRectangle(char[][] matrix) {
+        if(matrix.length==0||matrix[0].length==0) {
             return 0;
         }
         int m = matrix.length;
@@ -31,7 +35,7 @@ public class MaximalRectangle {
             int currRight = n;
 
             for(int j=0;j<n;j++) {
-                if(matrix[i][j]==1) {
+                if(matrix[i][j]=='1') {
                     height[j]++;
                 }else {
                     height[j] = 0;
@@ -39,7 +43,7 @@ public class MaximalRectangle {
             }
 
             for(int j=0;j<n;j++) {
-                if(matrix[i][j]==1) {
+                if(matrix[i][j]=='1') {
                     left[j] = Math.max(currLeft, left[j]);
                 }else {
                     left[j] = 0;
@@ -48,7 +52,7 @@ public class MaximalRectangle {
             }
 
             for(int j=n-1;j>=0;j--) {
-                if(matrix[i][j]==1) {
+                if(matrix[i][j]=='1') {
                     right[j] = Math.min(currRight, right[j]);
                 }else {
                     right[j] = n;
@@ -61,15 +65,6 @@ public class MaximalRectangle {
             }
         }
         return maxA;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(solution(new int[][]{
-                {1, 0, 1, 0, 0},
-                {1, 0, 1, 1, 1},
-                {1, 1, 1, 1, 1},
-                {1, 0, 0, 1, 0}
-        }));
     }
 
 }

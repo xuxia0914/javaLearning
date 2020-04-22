@@ -1,8 +1,5 @@
 package cn.leetcode.xux.midium;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 474. 一和零
  * 在计算机界中，我们总是追求用有限的资源获取最大的收益。
