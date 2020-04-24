@@ -57,21 +57,21 @@ public class DesignFileSystem {
 
 class FileSystem {
 
-    TreeNode root;
+    TreeNode2 root;
 
     public FileSystem() {
-        root = new TreeNode("", -1);
+        root = new TreeNode2("", -1);
     }
 
     public boolean create(String path, int value) {
         String[] ss = path.split("/");
-        TreeNode node = this.root;
+        TreeNode2 node = this.root;
         int idx = 0;
         boolean flag;
         while(idx<ss.length-1) {
             flag = false;
-            List<TreeNode> children  = node.children;
-            for(TreeNode  child : children) {
+            List<TreeNode2> children  = node.children;
+            for(TreeNode2  child : children) {
                 if(child.path.equals(ss[idx+1])) {
                     idx++;
                     node = child;
@@ -86,19 +86,19 @@ class FileSystem {
         if(idx!=ss.length-2) {
             return false;
         }
-        node.children.add(new TreeNode(ss[ss.length-1], value));
+        node.children.add(new TreeNode2(ss[ss.length-1], value));
         return true;
     }
 
     public int get(String path) {
         String[] ss = path.split("/");
-        TreeNode node = this.root;
+        TreeNode2 node = this.root;
         int idx = 0;
         boolean flag;
         while(idx<ss.length-1) {
             flag = false;
-            List<TreeNode> children  = node.children;
-            for(TreeNode  child : children) {
+            List<TreeNode2> children  = node.children;
+            for(TreeNode2  child : children) {
                 if(child.path.equals(ss[idx+1])) {
                     idx++;
                     node = child;
@@ -119,12 +119,12 @@ class FileSystem {
 
 }
 
-class TreeNode {
+class TreeNode2 {
     String path;
     int val;
-    List<TreeNode> children  = new ArrayList<>();
+    List<TreeNode2> children  = new ArrayList<>();
 
-    TreeNode(String path, int val) {
+    TreeNode2(String path, int val) {
         this.path = path;
         this.val = val;
     }
