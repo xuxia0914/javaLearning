@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 5142. 石子游戏 II  显示英文描述
+ * 1140. 石子游戏 II
  * 亚历克斯和李继续他们的石子游戏。许多堆石子 排成一行，每堆都有正整数颗石子 piles[i]。游戏以谁手中的石子最多来决出胜负。
  * 亚历克斯和李轮流进行，亚历克斯先开始。最初，M = 1。
  * 在每个玩家的回合中，该玩家可以拿走剩下的 前 X 堆的所有石子，其中 1 <= X <= 2M。然后，令 M = max(M, X)。
@@ -24,7 +24,38 @@ import java.util.Map;
  */
 public class StoneGameII {
 
-    Map<Integer, int[]> map = new HashMap<>();  //记录每次递归的计算结果避免重复计算
+    public static void main(String[] args) {
+        System.out.println(new StoneGameII().stoneGameII0(new int[]{8,9,5,4,5,4,1,1,9,3,1,10,5,9,6,2,7,6,6,9}));
+    }
+
+    //dp
+    public int stoneGameII0(int[] piles) {
+        int len = piles.length;
+        //m=j时从i开始拿能拿到的最大的石头数
+        int[][] dp = new int[len][len+1];
+        int[] sums = new int[len+1];
+        for(int i=1;i<=len;i++) {
+            sums[i] = sums[i-1]+piles[i-1];
+        }
+        for(int i=0;i<len;i++) {
+            int total = sums[len]-sums[i];
+            for(int j=len;2*j>=len-i;j--) {
+                dp[i][j] = total;
+            }
+        }
+        for(int i=len-2;i>=0;i--) {
+            int total = sums[len]-sums[i];
+            for(int j=1;2*j<len-i;j++) {
+                for(int k=1;k<=2*j&&i+k<len&&k<=len;k++) {
+                    dp[i][j] = Math.max(dp[i][j], total-dp[i+k][Math.max(j, k)]);
+                }
+            }
+        }
+        return dp[0][1];
+    }
+
+    //记录每次递归的计算结果避免重复计算
+    Map<Integer, int[]> map = new HashMap<>();
 
     public int stoneGameII(int[] piles) {
         if(piles==null||piles.length==0) {
@@ -60,14 +91,6 @@ public class StoneGameII {
             map.put(start, nums);
         }
         return currRes;
-    }
-
-    public static void main(String[] args) {
-//        System.out.println(new StoneGameII().stoneGameII(new int[]{1,5,7,9,9}));  //17
-//        System.out.println(new StoneGameII().stoneGameII(new int[]{8,9,5,4,5,4,1,1,9,3,1,10,5,9,6,2,7,6,6,9})); //56
-//        System.out.println(new StoneGameII().stoneGameII(new int[]{5,9,6,2,7,6,6,9})); //29
-//        System.out.println(new StoneGameII().stoneGameII(new int[]{3111,4303,2722,2183,6351,5227,8964,7167,9286,6626,2347,1465,5201,7240,5463,8523,8163,9391,8616,5063,7837,7050,1246,9579,7744,6932,7704,9841,6163,4829,7324,6006,4689,8781,621})); //112766
-        System.out.println(new StoneGameII().stoneGameII(new int[]{7468,6245,9261,3958,1986,1074,5677,9386,1408,1384,8811,3885,9678,8470,8893,7514,4941,2148,5217,5425,5307,747,1253,3518,5238,5834,9133,8391,6100,3362,7807,2581,6121,7684,8744,9584,4068,7204,4285,8635})); //115357
     }
 
 }

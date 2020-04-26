@@ -2,6 +2,9 @@ package cn.leetcode.xux.hard;
 
 import cn.leetcode.xux.common.ListNode;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 /**
  * Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
  * Example:
@@ -15,8 +18,32 @@ import cn.leetcode.xux.common.ListNode;
  */
 public class MergeKSortedLists {
 
-    /**时间复杂度 O(k(length0+length1+length2+...length(k-1)))*/
     public ListNode mergeKLists(ListNode[] lists) {
+        if(lists==null||lists.length==0) {
+            return null;
+        }
+        PriorityQueue<ListNode> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.val));
+        for(ListNode node : lists) {
+            if(node!=null) {
+                queue.offer(node);
+            }
+        }
+        ListNode head = new ListNode(0);
+        ListNode tail = head;
+        while(!queue.isEmpty()) {
+            ListNode curr = queue.poll();
+            tail.next = new ListNode(curr.val);
+            tail = tail.next;
+            curr = curr.next;
+            if(curr!=null) {
+                queue.offer(curr);
+            }
+        }
+        return head.next;
+    }
+
+    /**时间复杂度 O(k(length0+length1+length2+...length(k-1)))*/
+    public ListNode mergeKLists1(ListNode[] lists) {
         if(lists==null||lists.length==0) {
             return null;
         }
