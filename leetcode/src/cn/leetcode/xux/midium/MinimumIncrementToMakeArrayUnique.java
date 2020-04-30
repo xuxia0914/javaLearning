@@ -28,6 +28,24 @@ public class MinimumIncrementToMakeArrayUnique {
         if(A==null||A.length<2) {
             return 0;
         }
+        int[] cnts = new int[80000];
+        for(int num : A) {
+            cnts[num]++;
+        }
+        int result = 0;
+        for(int i=0;i<79999;i++) {
+            if(cnts[i]>1) {
+                result += cnts[i]-1;
+                cnts[i+1] += cnts[i]-1;
+            }
+        }
+        return result;
+    }
+
+    public int minIncrementForUnique1(int[] A) {
+        if(A==null||A.length<2) {
+            return 0;
+        }
         TreeMap<Integer, Integer> map = new TreeMap<>();
         for(int i : A) {
             map.put(i, map.getOrDefault(i, 0)+1);
