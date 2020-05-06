@@ -39,7 +39,7 @@ public class MaximumWidthRamp {
         }
         int i=len-1;
         int result = 0;
-        while(i>result) {
+        while(i>result&&!stack.isEmpty()&&i>stack.peek()) {
             while(!stack.isEmpty()&&A[i]>=A[stack.peek()]) {
                 result = Math.max(i-stack.pop(), result);
             }

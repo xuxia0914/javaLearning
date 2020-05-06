@@ -45,7 +45,7 @@ import java.util.Arrays;
 public class MinimumCostForTickets {
 
     /**
-     * 时间复杂度O(n),空间复杂度O(n)（其中max(days[i])）
+     * 时间复杂度O(n),空间复杂度O(n)（其中n=max(days[i])）
      * @param days
      * @param costs
      * @return
@@ -55,13 +55,12 @@ public class MinimumCostForTickets {
         int maxDay = days[n-1];
         int[] dp = new int[maxDay+1];
         Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
         int idx = 0;
-        int pre = 0;
-        for(int i=0;i<=maxDay;i++) {
+        for(int i=1;i<=maxDay;i++) {
             if(i<days[idx]) {
-                dp[i] = pre;
-            }
-            if(i==days[idx]) {
+                dp[i] = dp[i-1];
+            }else if(i==days[idx]) {
                 if(i-1>=0) {
                     dp[i] = Math.min(dp[i], dp[i-1]+costs[0]);
                 }else {
@@ -77,7 +76,6 @@ public class MinimumCostForTickets {
                 }else {
                     dp[i] = Math.min(dp[i], costs[2]);
                 }
-                pre = dp[i];
                 idx++;
             }
         }
