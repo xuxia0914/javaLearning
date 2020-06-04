@@ -57,6 +57,7 @@ public class MinimumTimeToCollectAllApplesInATree {
     }
 
     public int minTime(int n, int[][] edges, List<Boolean> hasApple) {
+        //绘图
         List<Integer>[] graph = new List[n];
         for(int[] edge : edges) {
             if(graph[edge[0]]==null) {
@@ -73,12 +74,12 @@ public class MinimumTimeToCollectAllApplesInATree {
     }
 
     // res[0] 从当前节点开始向后遍历有无苹果，1 有， 0 无
-    // res[1] 从当前节点向后遍历完所有苹果并返回该节点所需时间
+    // res[1] 从当前节点向后遍历完所有苹果并返回该节点所需最短时间
     private int[] dfs(int curr, int pre, List<Integer>[] graph, List<Boolean> hasApple) {
         int[] ans = new int[2];
         ans[0] = hasApple.get(curr)?1:0;
         for(int nei : graph[curr]) {
-            if(nei!=pre) {
+            if(nei!=pre) {  //不能往回遍历
                 int[] neiAns = dfs(nei, curr, graph, hasApple);
                 if(neiAns[0]==1) {
                     ans[0] = 1;
