@@ -1,4 +1,4 @@
-package cn.leetcode.xux.lcp.midium;
+package cn.leetcode.xux.lcci.midium;
 
 /**
  * 面试题 16.09. 运算

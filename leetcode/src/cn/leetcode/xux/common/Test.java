@@ -18,8 +18,6 @@ public class Test {
 //        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
     }
 
-
-
     /**
      * 面试题67. 把字符串转换成整数
      * 写一个函数 StrToInt，实现把字符串转换成整数这个功能。不能使用 atoi 或者其他类似的库函数。
@@ -106,7 +104,8 @@ public class Test {
 
     /**
      * 面试题57. 和为s的两个数字
-     * 输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+     * 输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。
+     * 如果有多对数字的和等于s，则输出任意一对即可。
      *
      * 示例 1：
      * 输入：nums = [2,7,11,15], target = 9
@@ -353,7 +352,8 @@ public class Test {
 
     /**
      * 面试题 01.05. 一次编辑
-     * 字符串有三种编辑操作:插入一个字符、删除一个字符或者替换一个字符。 给定两个字符串，编写一个函数判定它们是否只需要一次(或者零次)编辑。
+     * 字符串有三种编辑操作:插入一个字符、删除一个字符或者替换一个字符。
+     * 给定两个字符串，编写一个函数判定它们是否只需要一次(或者零次)编辑。
      *
      * 示例 1:
      * 输入:
@@ -378,7 +378,7 @@ public class Test {
         }
         int idx1 = 0;
         int idx2 = 0;
-        boolean  hasEdit =false;
+        boolean hasEdit = false;
         while(idx1<len1&&idx2<len2) {
             if(first.charAt(idx1)==second.charAt(idx2)) {
                 idx1++;
@@ -541,7 +541,8 @@ public class Test {
 
     /**
      * 面试题 01.09. 字符串轮转
-     * 字符串轮转。给定两个字符串s1和s2，请编写代码检查s2是否为s1旋转而成（比如，waterbottle是erbottlewat旋转后的字符串）。
+     * 字符串轮转。给定两个字符串s1和s2，请编写代码检查s2是否为s1旋转而成
+     * （比如，waterbottle是erbottlewat旋转后的字符串）。
      *
      * 示例1:
      *  输入：s1 = "waterbottle", s2 = "erbottlewat"
@@ -563,49 +564,6 @@ public class Test {
         }
         s1 += s1;
         return s1.contains(s2);
-    }
-
-    /**
-     * 面试题 02.01. 移除重复节点
-     * 编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
-     *
-     * 示例1:
-     *  输入：[1, 2, 3, 3, 2, 1]
-     *  输出：[1, 2, 3]
-     *
-     * 示例2:
-     *  输入：[1, 1, 1, 1, 2]
-     *  输出：[1, 2]
-     *
-     * 提示：
-     * 链表长度在[0, 20000]范围内。
-     * 链表元素在[0, 20000]范围内。
-     *
-     * 进阶：
-     * 如果不得使用临时缓冲区，该怎么解决？
-     */
-    public ListNode removeDuplicateNodes(ListNode head) {
-        if(head==null) {
-            return null;
-        }
-        ListNode curr = head;
-        Set<Integer> set = new HashSet<>();
-        set.add(curr.val);
-        while(curr!=null&&curr.next!=null&&set.add(curr.next.val)) {
-            curr = curr.next;
-        }
-        ListNode next = curr.next;
-        while(next!=null) {
-            while(next!=null&&!set.add(next.val)) {
-                next = next.next;
-            }
-            curr.next = next;
-            curr = curr.next;
-            if(curr!=null) {
-                next = curr.next;
-            }
-        }
-        return head;
     }
 
     /**
@@ -3157,33 +3115,6 @@ public class Test {
             bitIdx++;
         }
         return result;
-    }
-
-    /**
-     * 面试题 17.09. 第 k 个数
-     * 有些数的素因子只有 3，5，7，请设计一个算法找出第 k 个数。注意，不是必须有这些素因子，而是必须不包含其他的素因子。
-     * 例如，前几个数按顺序应该是 1，3，5，7，9，15，21。
-     *
-     * 示例 1:
-     * 输入: k = 5
-     * 输出: 9
-     */
-    public int getKthMagicNumber(int k) {
-        if(k<0) {
-            return -1;
-        }
-        int[] dp = new int[k];
-        dp[0] = 1;
-        int idx3 = 0;
-        int idx5 = 0;
-        int idx7 = 0;
-        for(int i=1;i<k;i++) {
-            dp[i] = Math.min(dp[idx3]*3, Math.min(dp[idx5]*5, dp[idx7]*7));
-            idx3 += dp[i]==dp[idx3]*3?1:0;
-            idx5 += dp[i]==dp[idx3]*3?1:0;
-            idx7 += dp[i]==dp[idx3]*3?1:0;
-        }
-        return dp[k-1];
     }
 
     /**
