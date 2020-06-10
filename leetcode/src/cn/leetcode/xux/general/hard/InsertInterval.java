@@ -4,64 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Insert Interval 插入区间
- * Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary).
- * You may assume that the intervals were initially sorted according to their start times.
- * Example 1:
- * Given intervals [1,3],[6,9], insert and merge [2,5] in as [1,5],[6,9].
- * Example 2:
- * Given [1,2],[3,5],[6,7],[8,10],[12,16], insert and merge [4,9] in as [1,2],[3,10],[12,16].
- * This is because the new interval [4,9] overlaps with [3,5],[6,7],[8,10].
+ * 57. 插入区间
+ * 给出一个无重叠的 ，按照区间起始端点排序的区间列表。
+ * 在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
+ *
+ * 示例 1:
+ * 输入: intervals = [[1,3],[6,9]], newInterval = [2,5]
+ * 输出: [[1,5],[6,9]]
+ *
+ * 示例 2:
+ * 输入: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+ * 输出: [[1,2],[3,10],[12,16]]
+ * 解释: 这是因为新的区间 [4,8] 与 [3,5],[6,7],[8,10] 重叠。
  */
 public class InsertInterval {
 
-    public static List<List<Integer>> solution(List<List<Integer>> intervals, List<Integer> interval) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        for(int i=0;i<intervals.size();i++) {
-            List<Integer> list = intervals.get(i);
-            if(list.get(1)<interval.get(0)) {
-                result.add(list);
-            }else if(interval.get(1)<list.get(0)) {
-                result.add(interval);
-                result.addAll(intervals.subList(i, intervals.size()));
-                return result;
-            }else {
-                interval.set(0, Math.min(interval.get(0), list.get(0)));
-                interval.set(1, Math.max(interval.get(1), list.get(1)));
-            }
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        if(intervals==null||intervals.length==0) {
+            return new int[][]{newInterval};
         }
-        result.add(interval);
-        return result;
-    }
-
-    public static void main(String[] args) {
-        List<List<Integer>> intervalList = new ArrayList<List<Integer>>();
-        List<Integer> interval1 = new ArrayList<Integer>();
-        interval1.add(1);
-        interval1.add(2);
-        intervalList.add(interval1);
-        List<Integer> interval2 = new ArrayList<Integer>();
-        interval2.add(3);
-        interval2.add(5);
-        intervalList.add(interval2);
-        List<Integer> interval3 = new ArrayList<Integer>();
-        interval3.add(6);
-        interval3.add(7);
-        intervalList.add(interval3);
-        List<Integer> interval4 = new ArrayList<Integer>();
-        interval4.add(8);
-        interval4.add(10);
-        intervalList.add(interval4);
-        List<Integer> interval5 = new ArrayList<Integer>();
-        interval5.add(12);
-        interval5.add(16);
-        intervalList.add(interval5);
-
-        List<Integer> interval = new ArrayList<Integer>();
-        interval.add(4);
-        interval.add(9);
-
-        System.out.println(solution(intervalList, interval));
+        int n = intervals.length;
+        List<int[]> list = new ArrayList<>();
+        int idx = 0;
+        while(idx<n&&intervals[idx][1]<newInterval[0]) {
+            list.add(intervals[idx++]);
+        }
+        if(idx==n) {
+            list.add(newInterval);
+        }else {
+            int left = Math.min(newInterval[0], intervals[idx][0]);
+            int right = newInterval[1];
+            while(idx<n&&intervals[idx][0]<=newInterval[1]) {
+                right = Math.max(intervals[idx][1], newInterval[1]);
+                idx++;
+            }
+            list.add(new int[]{left, right});
+        }
+        while(idx<n) {
+            list.add(intervals[idx++]);
+        }
+        int[][] ans = new int[list.size()][2];
+        for(int i=0;i<ans.length;i++) {
+            ans[i] = list.get(i);
+        }
+        return ans;
     }
 
 }

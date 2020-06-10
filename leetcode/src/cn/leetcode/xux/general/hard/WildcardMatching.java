@@ -1,70 +1,99 @@
 package cn.leetcode.xux.general.hard;
 
+import java.util.Arrays;
+
 /**
- * Implement wildcard pattern matching with support for '?' and '*'.
- * '?' Matches any single character.
- * '*' Matches any sequence of characters (including the empty sequence).
- * The matching should cover the entire input string (not partial).
- * The function prototype should be:
- * bool isMatch(const char *s, const char *p)
- * Some examples:
- * isMatch("aa","a") → false
- * isMatch("aa","aa") → true
- * isMatch("aaa","aa") → false
- * isMatch("aa", "*") → true
- * isMatch("aa", "a*") → true
- * isMatch("ab", "?*") → true
- * isMatch("aab", "c*a*b") → false
+ * 44. 通配符匹配
+ * 给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
+ * '?' 可以匹配任何单个字符。
+ * '*' 可以匹配任意字符串（包括空字符串）。
+ * 两个字符串完全匹配才算匹配成功。
+ * 说明:
+ * s 可能为空，且只包含从 a-z 的小写字母。
+ * p 可能为空，且只包含从 a-z 的小写字母，以及字符 ? 和 *。
+ *
+ * 示例 1:
+ * 输入:
+ * s = "aa"
+ * p = "a"
+ * 输出: false
+ * 解释: "a" 无法匹配 "aa" 整个字符串。
+ *
+ * 示例 2:
+ * 输入:
+ * s = "aa"
+ * p = "*"
+ * 输出: true
+ * 解释: '*' 可以匹配任意字符串。
+ *
+ * 示例 3:
+ * 输入:
+ * s = "cb"
+ * p = "?a"
+ * 输出: false
+ * 解释: '?' 可以匹配 'c', 但第二个 'a' 无法匹配 'b'。
+ *
+ * 示例 4:
+ * 输入:
+ * s = "adceb"
+ * p = "*a*b"
+ * 输出: true
+ * 解释: 第一个 '*' 可以匹配空字符串, 第二个 '*' 可以匹配字符串 "dce".
+ *
+ * 示例 5:
+ * 输入:
+ * s = "acdcb"
+ * p = "a*c?b"
+ * 输出: false
  */
 public class WildcardMatching {
 
-    public static boolean solution(String s, String p) {
-        if(s.length()==0) {
-            if(p.length()==0) {
-                return true;
-            }else {
-                for(int i=0;i<p.length();i++) {
-                    if(p.charAt(i)!='*') {
-                        return false;
+    public boolean isMatch(String s, String p) {
+        int lenS = s.length();
+        int lenP = p.length();
+        boolean[] dp = new boolean[lenS+1];
+        dp[0] = true;
+        for(int i=0;i<lenP;i++) {
+            char c = p.charAt(i);
+            boolean[] newDp = new boolean[lenS+1];
+            if (c == '?') {
+                for(int j=0;j<lenS;j++) {
+                    newDp[j + 1] = dp[j];
+                }
+            } else if (c == '*') {
+                newDp[0] = dp[0];
+                for(int j=1;j<=lenS;j++) {
+                    newDp[j] = newDp[j-1]|dp[j];
+                }
+            } else {
+                for(int j=0;j<lenS;j++) {
+                    if (s.charAt(j) == c) {
+                        newDp[j + 1] = dp[j];
                     }
                 }
-                return true;
             }
-        }else {
-            if(p.length()==0) {
-                return false;
-            }
+            dp = newDp;
         }
-        if(p.charAt(0)>='a'&&p.charAt(0)<='z') {
-            if(p.charAt(0)==s.charAt(0)) {
-                return solution(s.substring(1), p.substring(1));
-            }else {
-                return false;
-            }
-        }
-        if(p.charAt(0)=='?') {
-            return solution(s.substring(1), p.substring(1));
-        }
-        if(p.charAt(0)=='*') {
-            return solution(s, p.substring(1))||solution(s.substring(1), p);
-        }
-        return false;
+        return dp[lenS];
     }
 
     public static void main(String[] args) {
-        System.out.println(solution("aa", "a"));
-        System.out.println(solution("aa", "aa"));
-        System.out.println(solution("aaa", "aa"));
-        System.out.println(solution("aa", "*"));
-        System.out.println(solution("aa", "a*"));
-        System.out.println(solution("ab", "?*"));
-        System.out.println(solution("aab", "c*a*b"));
-        System.out.println(solution("cb", "?a"));
-        System.out.println(solution("adceb", "a*b"));
-        System.out.println(solution("acdcb", "a*c?b"));
-        System.out.println(solution("acdcb", "*****"));
-        System.out.println(solution("acdcb", "???****"));
-        System.out.println(solution("acdcb", "a*c????****"));
+        WildcardMatching wm = new WildcardMatching();
+//        System.out.println(wm.isMatch("aa", "a"));
+//        System.out.println(wm.isMatch("aa", "aa"));
+//        System.out.println(wm.isMatch("aaa", "aa"));
+//        System.out.println(wm.isMatch("aa", "*"));
+        System.out.println(wm.isMatch("a", "a*"));
+//        System.out.println(wm.isMatch("ab", "?*"));
+//        System.out.println(wm.isMatch("aab", "c*a*b"));
+//        System.out.println(wm.isMatch("cb", "?a"));
+//        System.out.println(wm.isMatch("adceb", "a*b"));
+//        System.out.println(wm.isMatch("acdcb", "a*c?b"));
+//        System.out.println(wm.isMatch("acdcb", "*****"));
+//        System.out.println(wm.isMatch("acdcb", "???****"));
+//        System.out.println(wm.isMatch("acdcb", "a*c????****"));
+//        System.out.println(wm.isMatch("adceb", "*a*b"));
+//        System.out.println(wm.isMatch("mississippi", "m??*ss*?i*pi"));
     }
 
 }
