@@ -44,7 +44,7 @@ public class LongestPalindromicSubString {
             }else {
                 dp[i] = 1;
             }
-            //暴力扩展
+            //扩展
             while(i-dp[i]>=0&&i+dp[i]<len&&str.charAt(i-dp[i])==str.charAt(i+dp[i])) {
                 dp[i]++;
             }

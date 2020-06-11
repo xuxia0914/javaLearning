@@ -1,5 +1,6 @@
 package cn.leetcode.xux.general.hard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,7 +61,49 @@ import java.util.List;
 public class TextJustification {
 
     public List<String> fullJustify(String[] words, int maxWidth) {
+        helper(words, 0, new ArrayList<String>(), 0, maxWidth);
+        return ans;
+    }
 
+    List<String> ans = new ArrayList<>();
+
+    public void helper(String[] words, int idx, List<String> curr, int totalLen, int maxWidth) {
+        if(idx==words.length) {
+            StringBuilder sb = new StringBuilder();
+            if(curr.size()==1) {
+                sb.append(curr.get(0));
+            }else {
+                sb.append(curr.get(0));
+                for(int i=1;i<curr.size();i++) {
+                    sb.append(" "+curr.get(i));
+                }
+            }
+            while(sb.length()<maxWidth) {
+                sb.append(" ");
+            }
+            ans.add(sb.toString());
+        }else if(totalLen+words[idx].length()+curr.size()>maxWidth) {
+            StringBuilder sb = new StringBuilder();
+            if(curr.size()==1) {
+                sb.append(curr.get(0));
+            }else {
+                int spaceNum = (maxWidth-totalLen)/(curr.size()-1);
+                int left = (maxWidth-totalLen)%(curr.size()-1);
+                sb.append(curr.get(0));
+                for(int i=1;i<curr.size();i++) {
+                    int sn = spaceNum+(i<=left?1:0);
+                    while(sn-->0) {
+                        sb.append(" ");
+                    }
+                    sb.append(curr.get(i));
+                }
+            }
+            ans.add(sb.toString());
+            helper(words, idx, new ArrayList<String>(), 0, maxWidth);
+        }else {
+            curr.add(words[idx]);
+            helper(words, idx+1, curr, totalLen+words[idx].length(), maxWidth);
+        }
     }
 
 }
