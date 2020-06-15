@@ -1,49 +1,46 @@
 package cn.leetcode.xux.general.easy;
 
 /**
- *Write a function to find the longest common prefix string amongst an array of strings.
- * If there is no common prefix, return an empty string "".
- * Example 1:
- * Input: ["flower","flow","flight"]
- * Output: "fl"
- * Example 2:
- * Input: ["dog","racecar","car"]
- * Output: ""
- * Explanation: There is no common prefix among the input strings.
- * Note:
- * All given inputs are in lowercase letters a-z.
+ * 14. 最长公共前缀
+ * 编写一个函数来查找字符串数组中的最长公共前缀。
+ * 如果不存在公共前缀，返回空字符串 ""。
+ *
+ * 示例 1:
+ * 输入: ["flower","flow","flight"]
+ * 输出: "fl"
+ *
+ * 示例 2:
+ * 输入: ["dog","racecar","car"]
+ * 输出: ""
+ * 解释: 输入不存在公共前缀。
+ *
+ * 说明:
+ * 所有输入只包含小写字母 a-z 。
  */
 public class LongestCommonPrefix {
 
-    public static String solution(String[] ss) {
-        StringBuffer sb = new StringBuffer();
-        int minLength = ss[0].length();
-        for(int i=1;i<ss.length;i++) {
-            minLength = Math.min(minLength, ss[i].length());
-        }
-        if(minLength<1) {
+    public String longestCommonPrefix(String[] strs) {
+        if(strs==null||strs.length==0) {
             return "";
         }
-        for(int i=0;i<minLength;i++) {
+        int len = Integer.MAX_VALUE;
+        for(String str : strs) {
+            len = Math.min(len, str.length());
+        }
+        int end = 0;
+        for(;end<len;end++) {
             boolean flag = true;
-            for(int j=0;j<ss.length-1;j++) {
-                if(ss[j].charAt(i)!=ss[j+1].charAt(i)) {
+            for(int i=1;i<strs.length;i++) {
+                if(strs[i].charAt(end)!=strs[i-1].charAt(end)) {
                     flag = false;
                     break;
                 }
             }
-            if(flag) {
-                sb.append(ss[0].charAt(i));
-            }else {
+            if(!flag) {
                 break;
             }
         }
-        return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(solution(new String []{"flower","flow","flight"}));
-        System.out.println(solution(new String []{"dog","racecar","car"}));
+        return strs[0].substring(0, end);
     }
 
 }
