@@ -3,61 +3,49 @@ package cn.leetcode.xux.general.midium;
 import java.util.Arrays;
 
 /**
- *Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target.
- * Return the sum of the three integers. You may assume that each input would have exactly one solution.
- *For example, given array S = {-1 2 1 -4}, and target = 1.
- *The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+ * 16. 最接近的三数之和
+ * 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。
+ * 找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+ *
+ * 示例：
+ * 输入：nums = [-1,2,1,-4], target = 1
+ * 输出：2
+ * 解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+ *
+ * 提示：
+ * 3 <= nums.length <= 10^3
+ * -10^3 <= nums[i] <= 10^3
+ * -10^4 <= target <= 10^4
  */
 public class ThreeSumClosest {
 
-    /**
-     * O(n2)
-     * @param ia
-     * @return
-     */
-    public static int solution2(int[] ia, int target) {
-        if(ia==null||ia.length<3) {
-            return -1;
-        }
-        Arrays.sort(ia);
-        int closest = Integer.MAX_VALUE;
-        int result = -1;
-        for(int i=0;i<ia.length-2;i++) {
-            int left=i+1,right=ia.length-1;
-            if(i>0&&ia[i]==ia[i-1]) {
-                continue;
-            }
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int ans = nums[0]+nums[1]+nums[2];
+        int n = nums.length;
+        for(int i=0;i<n-2;i++) {
+            int left = i+1;
+            int right = n-1;
             while(left<right) {
-                int currSum = ia[i] + ia[left] + ia[right];
-                int currDis = currSum - target;
-                if (currDis > 0) {
-                    if (currDis < closest) {
-                        closest = currDis;
-                        result = currSum;
-                    }
-                    right--;
-                    while (right < ia.length - 1 && ia[right] == ia[right + 1]) {
-                        right--;
-                    }
-                } else if (currDis < 0) {
-                    if (-currDis < closest) {
-                        closest = -currDis;
-                        result = currSum;
-                    }
+                int sum = nums[i]+nums[left]+nums[right];
+                if(sum==target) {
+                    return target;
+                }
+                ans = (Math.abs(sum-target)<Math.abs(ans-target))?sum:ans;
+                if(sum<target) {
                     left++;
-                    while (ia[left] == ia[left - 1]) {
+                    while(left<right&&nums[left]==nums[left-1]) {
                         left++;
                     }
-                } else {
-                    return target;
+                }else {
+                    right--;
+                    while(left<right&&nums[right]==nums[right+1]) {
+                        right--;
+                    }
                 }
             }
         }
-        return result;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(solution2(new int[]{-1, 2, 1, 4}, 8));
+        return ans;
     }
 
 }
