@@ -56,7 +56,6 @@ public class CircularPermutationInBinaryRepresentation {
         List<Integer> result = circularPermutation(n-1);
         int size = result.size();
         for(int i=size-1;i>=0;i--) {
-            int curr = num+result.get(i);
             result.add(num+result.get(i));
         }
         return result;
