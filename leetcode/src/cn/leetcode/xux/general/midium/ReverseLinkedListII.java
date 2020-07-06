@@ -3,13 +3,40 @@ package cn.leetcode.xux.general.midium;
 import cn.leetcode.xux.common.ListNode;
 
 /**
- * Reverse a linked list from position m to n. Do it in one-pass.
- * Note: 1 ≤ m ≤ n ≤ length of list.
- * Example:
- * Input: 1->2->3->4->5->NULL, m = 2, n = 4
- * Output: 1->4->3->2->5->NULL
+ * 206. 反转链表
+ * 反转一个单链表。
+ *
+ * 示例:
+ * 输入: 1->2->3->4->5->NULL
+ * 输出: 5->4->3->2->1->NULL
+ *
+ * 进阶:
+ * 你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
  */
 public class ReverseLinkedListII {
+
+    //迭代
+    public ListNode reverseList(ListNode head) {
+        ListNode pre = null;
+        while(head!=null) {
+            ListNode tmp = head.next;
+            head.next = pre;
+            pre = head;
+            head = tmp;
+        }
+        return pre;
+    }
+
+    //递归
+    public ListNode reverseList1(ListNode head) {
+        if(head==null||head.next==null) {
+            return head;
+        }
+        ListNode pre = reverseList1(head.next);
+        head.next.next = head;
+        head.next = null;
+        return pre;
+    }
 
     public static ListNode solution(ListNode node, int m, int n) {
         ListNode result = new ListNode(0);

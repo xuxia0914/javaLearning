@@ -7,7 +7,8 @@ import java.util.List;
 /**
  * 935. 骑士拨号器
  * 国际象棋中的骑士可以按下图所示进行移动：
- * 这一次，我们将 “骑士” 放在电话拨号盘的任意数字键（如上图所示）上，接下来，骑士将会跳 N-1 步。每一步必须是从一个数字键跳到另一个数字键。
+ * 这一次，我们将 “骑士” 放在电话拨号盘的任意数字键（如上图所示）上，接下来，骑士将会跳 N-1 步。
+ * 每一步必须是从一个数字键跳到另一个数字键。
  * 每当它落在一个键上（包括骑士的初始位置），都会拨出键所对应的数字，总共按下 N 位数字。
  * 你能用这种方式拨出多少个不同的号码？
  *  1 2 3
@@ -33,50 +34,7 @@ import java.util.List;
  */
 public class KnightDialer {
 
-    static List<List<Integer>> list = new ArrayList<>();
-    static {
-        List<Integer> li0 = new ArrayList<>();
-        li0.add(4);
-        li0.add(6);
-        list.add(li0);
-        List<Integer> li1 = new ArrayList<>();
-        li1.add(6);
-        li1.add(8);
-        list.add(li1);
-        List<Integer> li2 = new ArrayList<>();
-        li2.add(7);
-        li2.add(9);
-        list.add(li2);
-        List<Integer> li3 = new ArrayList<>();
-        li3.add(4);
-        li3.add(8);
-        list.add(li3);
-        List<Integer> li4 = new ArrayList<>();
-        li4.add(3);
-        li4.add(9);
-        li4.add(0);
-        list.add(li4);
-        List<Integer> li5 = new ArrayList<>();
-        list.add(li5);
-        List<Integer> li6 = new ArrayList<>();
-        li6.add(1);
-        li6.add(7);
-        li6.add(0);
-        list.add(li6);
-        List<Integer> li7 = new ArrayList<>();
-        li7.add(2);
-        li7.add(6);
-        list.add(li7);
-        List<Integer> li8 = new ArrayList<>();
-        li8.add(1);
-        li8.add(3);
-        list.add(li8);
-        List<Integer> li9 = new ArrayList<>();
-        li9.add(2);
-        li9.add(4);
-        list.add(li9);
-
-    }
+    int[][] nexts = new int[][]{{4,6},{6,8},{7,9},{4,8},{0,3,9},{},{0,1,7},{2,6},{1,3},{2,4}};
 
     public int knightDialer(int N) {
         int[] cnts = new int[10];
@@ -86,7 +44,7 @@ public class KnightDialer {
             tmp = cnts;
             cnts = new int[10];
             for(int j=0;j<10;j++) {
-                for(int num : list.get(j)) {
+                for(int num : nexts[j]) {
                     cnts[num] = (cnts[num]+tmp[j])%1000000007;
                 }
             }

@@ -5,10 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Given a collection of numbers that might contain duplicates, return all possible unique permutations.
- * Example:
- * Input: [1,1,2]
- * Output:
+ * 47. 全排列 II
+ * 给定一个可包含重复数字的序列，返回所有不重复的全排列。
+ *
+ * 示例:
+ * 输入: [1,1,2]
+ * 输出:
  * [
  *   [1,1,2],
  *   [1,2,1],
@@ -18,27 +20,27 @@ import java.util.List;
 public class PermutationsII {
 
     public List<List<Integer>> permuteUnique(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
         if(nums==null||nums.length==0) {
-            return res;
+            return ans;
         }
         Arrays.sort(nums);
-        helper(res, new ArrayList<Integer>(), new boolean[nums.length], nums);
-        return res;
-
+        dfs(new ArrayList<Integer>(), new boolean[nums.length], nums);
+        return ans;
     }
 
-    public static void helper(List<List<Integer>> res, List<Integer> curr, boolean[] flags, int[] nums) {
+    List<List<Integer>> ans = new ArrayList<>();
+
+    public void dfs(List<Integer> curr, boolean[] visited, int[] nums) {
         if(curr.size()==nums.length) {
-            res.add(new ArrayList<>(curr));
+            ans.add(new ArrayList<>(curr));
         }
         for(int i=0;i<nums.length;i++) {
-            if(!flags[i]) {
+            if(!visited[i]) {
                 curr.add(nums[i]);
-                flags[i] = true;
-                helper(res, curr, flags, nums);
+                visited[i] = true;
+                dfs(curr, visited, nums);
                 curr.remove(curr.size()-1);
-                flags[i] = false;
+                visited[i] = false;
                 while(i<nums.length-1&&nums[i+1]==nums[i]) {
                     i++;
                 }
