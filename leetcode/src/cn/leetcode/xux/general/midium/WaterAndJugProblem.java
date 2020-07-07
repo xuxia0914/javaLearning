@@ -41,13 +41,14 @@ public class WaterAndJugProblem {
         if(y%x==0) {
             return z%x==0;
         }else {
-            for(int i=x/2;i>0;i--) {
-                if(x%i==0&&y%i==0) {
-                    return z%i==0;
-                }
+            int gcd = x;
+            while(y%gcd!=0) {
+                int tmp = gcd;
+                gcd = y%gcd;
+                y  =tmp;
             }
+            return z%gcd==0;
         }
-        return false;
     }
 
     Set<String> mem;
@@ -73,10 +74,10 @@ public class WaterAndJugProblem {
         mem.add(""+currX+","+currY);
         helper(res, x, y, x, currY);
         helper(res, x, y, 0, currY);
-        helper(res, x, y, Math.max(currX-currY, 0), Math.min(y, currY+currX));
+        helper(res, x, y, Math.max(currX-(y-currY), 0), Math.min(y, currY+currX));
         helper(res, x, y, currX, y);
         helper(res, x, y, currX, 0);
-        helper(res, x, y, Math.min(x, currX+currX), Math.max(currY-currX, 0));
+        helper(res, x, y, Math.min(x, currX+currY), Math.max(currY-(x-currX), 0));
     }
 
     public static void main(String[] args) {
