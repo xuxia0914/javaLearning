@@ -4,116 +4,70 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * There is a room with n lights which are turned on initially and 4 buttons on the wall. After performing exactly m unknown operations towards buttons, you need to return how many different kinds of status of the n lights could be.
- * Suppose n lights are labeled as number [1, 2, 3 ..., n], function of these 4 buttons are given below:
- * Flip all the lights.
- * Flip lights with even numbers.
- * Flip lights with odd numbers.
- * Flip lights with (3k + 1) numbers, k = 0, 1, 2, ...
- * Example 1:
- * Input: n = 1, m = 1.
- * Output: 2
- * Explanation: Status can be: [on], [off]
- * Example 2:
- * Input: n = 2, m = 1.
- * Output: 3
- * Explanation: Status can be: [on, off], [off, on], [off, off]
- * Example 3:
- * Input: n = 3, m = 1.
- * Output: 4
- * Explanation: Status can be: [off, on, off], [on, off, on], [off, off, off], [off, on, on].
- * Note: n and m both fit in range [0, 1000].
+ * 672. 灯泡开关 Ⅱ
+ * 现有一个房间，墙上挂有 n 只已经打开的灯泡和 4 个按钮。
+ * 在进行了 m 次未知操作后，你需要返回这 n 只灯泡可能有多少种不同的状态。
+ * 假设这 n 只灯泡被编号为 [1, 2, 3 ..., n]，这 4 个按钮的功能如下：
+ * 将所有灯泡的状态反转（即开变为关，关变为开）
+ * 将编号为偶数的灯泡的状态反转
+ * 将编号为奇数的灯泡的状态反转
+ * 将编号为 3k+1 的灯泡的状态反转（k = 0, 1, 2, ...)
+ *
+ * 示例 1:
+ * 输入: n = 1, m = 1.
+ * 输出: 2
+ * 说明: 状态为: [开], [关]
+ *
+ * 示例 2:
+ * 输入: n = 2, m = 1.
+ * 输出: 3
+ * 说明: 状态为: [开, 关], [关, 开], [关, 关]
+ *
+ * 示例 3:
+ * 输入: n = 3, m = 1.
+ * 输出: 4
+ * 说明: 状态为: [关, 开, 关], [开, 关, 开], [关, 关, 关], [关, 开, 开].
+ * 注意： n 和 m 都属于 [0, 1000].
  */
 public class BulbSwitcherII {
 
-    /**
-     * Runtime: 34 ms, faster than 5.08% of Java online submissions for Bulb Switcher II.
-     * Memory Usage: 36 MB, less than 5.38% of Java online submissions for Bulb Switcher II.
-     * @param n
-     * @param m
-     * @return
-     */
+    public static void main(String[] args) {
+        System.out.println(new BulbSwitcherII().flipLights(1,1));
+    }
+
     public int flipLights(int n, int m) {
         if(n==0||m==0) {
             return 1;
         }
-        if(n>6) {
-            n = n%6 + 6;
-        }
+        //每次反转第x个灯泡，第x+6个灯泡也必被反转，所以前6个灯泡可以决定一个状态
+        n = Math.min(n, 6);
+        //每种操作执行两次相当于没有执行，所以每种操作执行的次数可以简化为0或者1
+        m %= 16;
         int status = (int)Math.pow(2, n) - 1;
+        //灯泡数量小于6时，状态取二进制数的前n位
+        status <<= (6-n);
         Set<Integer> set = new HashSet<>();
         set.add(status);
         Set<Integer> tmp = new HashSet<>();
         for(int i=0;i<m;i++) {
             tmp.clear();
-            for(Integer j : set) {
-                tmp.add(flip1(j, n));
-                tmp.add(flip2(j, n));
-                tmp.add(flip3(j, n));
-                tmp.add(flip4(j, n));
+            for(int x : set) {
+                tmp.add(x^0b111111&status);
+                tmp.add(x^0b010101&status);
+                tmp.add(x^0b101010&status);
+                tmp.add(x^0b100100&status);
             }
             set = new HashSet<>(tmp);
         }
         return set.size();
     }
 
-    public int flip1(int status, int n) {
-        for(int i=0;i<n;i++) {
-            status = status^(1<<i);
-        }
-        return status;
-    }
-
-    public int flip2(int status, int n) {
-        for(int i=1;i<n;i+=2) {
-            status = status^(1<<i);
-        }
-        return status;
-    }
-
-    public int flip3(int status, int n) {
-        for(int i=0;i<n;i+=2) {
-            status = status^(1<<i);
-        }
-        return status;
-    }
-
-    public int flip4(int status, int n) {
-        for(int i=0;i<n;i+=3) {
-            status = status^(1<<i);
-        }
-        return status;
-    }
-
-    public int flipLights2(int n, int m) {
-        if(n==0||m==0) {
-            return 1;
-        }
-        if(n>6) {
-            n = n%6 + 6;
-        }
-        int status = (int)Math.pow(2, n) - 1;
-        Set<Integer> set = new HashSet<>();
-        set.add(status);
-        Set<Integer> tmp = new HashSet<>();
-        for(int i=0;i<m;i++) {
-            tmp.clear();
-            for(Integer j : set) {
-                tmp.add(flip1(j, n));
-                tmp.add(flip2(j, n));
-                tmp.add(flip3(j, n));
-                tmp.add(flip4(j, n));
-            }
-            set = new HashSet<>(tmp);
-        }
-        return set.size();
-    }
-
-    public static void main(String[] args) {
-        BulbSwitcherII bs2 = new BulbSwitcherII();
-//        System.out.println(bs2.flipLights(1, 1)); //2
-        System.out.println(bs2.flipLights(2, 1));   //3
-        System.out.println(bs2.flipLights(200, 100));   //3
+    public int flipLights1(int n, int m) {
+        n = Math.min(n, 3);
+        if (m == 0) return 1;
+        if (m == 1) return n == 1 ? 2 : n == 2 ? 3 : 4;
+        if (m == 2) return n == 1 ? 2 : n == 2 ? 4 : 7;
+        return n == 1 ? 2 : n == 2 ? 4 : 8;
     }
 
 }

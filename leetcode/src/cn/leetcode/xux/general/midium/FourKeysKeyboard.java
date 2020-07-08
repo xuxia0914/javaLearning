@@ -1,7 +1,7 @@
 package cn.leetcode.xux.general.midium;
 
 /**
- * 四键的键盘
+ * 651. 四键的键盘
  * Imagine you have a special keyboard with the following keys:
  * Key 1: (A): Print one 'A' on screen.
  * Key 2: (Ctrl-A): Select the whole screen.

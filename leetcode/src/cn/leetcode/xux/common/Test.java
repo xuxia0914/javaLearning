@@ -1055,28 +1055,27 @@ public class Test {
      * 输出: null
      */
     public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
-        Stack<TreeNode> stack = new Stack<>();
+        if(root==null) {
+            return null;
+        }
+        if(p.right!=null) {
+            TreeNode curr = p.right;
+            while(curr.left!=null) {
+                curr = curr.left;
+            }
+            return curr;
+        }
+        TreeNode pre = null;
         TreeNode curr = root;
-        while(curr!=null) {
-            stack.push(curr);
-            curr = curr.left;
-        }
-        boolean found = false;
-        while(!stack.isEmpty()) {
-            curr = stack.pop();
-            if(found) {
-                return curr;
-            }
-            if(curr==p) {
-                found = true;
-            }
-            TreeNode right = curr.right;
-            while(right!=null) {
-                stack.push(right);
-                right = right.left;
+        while(curr!=null&&curr!=p) {
+            if(curr.val>p.val) {
+                pre = curr;
+                curr = curr.left;
+            }else {
+                curr = curr.right;
             }
         }
-        return null;
+        return curr==p?pre:null;
     }
 
     /**
