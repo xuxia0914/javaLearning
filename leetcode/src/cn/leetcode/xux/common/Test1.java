@@ -9,55 +9,36 @@ import java.util.List;
 public class Test1 {
 
     public static void main(String[] args) {
-//        System.out.println(new Test1().numDecodings("19261001"));
+//        System.out.println(new Test1().getAns(new int[]{8,9,7,3,0,5,11}));
     }
 
     /**
-     * 374. 螺旋矩阵
+     * 1681. 切蛋糕
+     * cat-only-icon
+     * CAT 专属题目
      * 中文English
-     * 给定一个包含 m x n 个要素的矩阵，（m 行, n 列），按照螺旋顺序，返回该矩阵中的所有要素。
+     * 一块n*m的矩形蛋糕，有k个草莓，现在要将蛋糕切开使每块蛋糕上都恰有一个草莓（这意味着不能切出不含草莓的蛋糕块），要求只能水平切或竖直切，求最短的刀切长度。
      *
      * 样例
      * 样例 1:
      *
-     * 输入:[[ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ]]
-     * 输出: [1,2,3,6,9,8,7,4,5]
-     * 样例 2
+     * 输入: n = 3, m = 4, k = 3, mp = [[1, 2], [2, 3], [3, 2]]
+     * 输出: 5
+     * 解释:
+     * 先在中间竖切一刀，然后在把有2个草莓的一半切一刀。
+     * 样例 2:
      *
-     * 输入:[[ 6,4,1 ], [ 7,8,9 ]]
-     * 输出: [6,4,1,9,8,7]
+     * 输入: n = 2, m = 2, k = 2, mp = [[1, 1], [2, 2]]
+     * 输出: 2
+     * 解释:
+     * 在中间竖切一刀
+     * 注意事项
+     * n, m 不超过20
+     * 二维数组 mp 为 k 个草莓所在的坐标
      */
-    public List<Integer> spiralOrder(int[][] matrix) {
-        // write your code here
-        List<Integer> ans = new ArrayList<>();
-        if(matrix==null||matrix.length==0||matrix[0].length==0) {
-            return ans;
-        }
-        int up = 0;
-        int bottom = matrix.length-1;
-        int left = 0;
-        int right = matrix[0].length-1;
-        while(up<=bottom&&left<=right) {
-            for(int i=left;i<=right;i++) {
-                ans.add(matrix[up][i]);
-            }
-            for(int i=up+1;i<=bottom;i++) {
-                ans.add(matrix[i][right]);
-            }
-            if(left<right&&up<bottom) {
-                for(int i=right-1;i>=left;i--) {
-                    ans.add(matrix[bottom][i]);
-                }
-                for(int i=bottom-1;i>up;i--) {
-                    ans.add(matrix[i][left]);
-                }
-            }
-            up++;
-            bottom--;
-            left++;
-            right--;
-        }
-        return ans;
+    public int getTheShortestCutLength(int n, int m, int k, int[][] mp) {
+        // Write your code here.
+        return 0;
     }
 
 }
