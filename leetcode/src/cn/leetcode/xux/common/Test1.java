@@ -13,41 +13,48 @@ public class Test1 {
     }
 
     /**
-     * 193. 最长有效括号
-     * 中文English
-     * 给出一个只包含'(' 和')'的字符串，找出其中最长的左右括号正确匹配的合法子串。
+     * 95. 不同的二叉搜索树 II
+     * 给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树 。
      *
-     * 样例
-     * 样例 1:
+     * 示例：
+     * 输入：3
+     * 输出：
+     * [
+     *   [1,null,3,2],
+     *   [3,2,null,1],
+     *   [3,1,null,null,2],
+     *   [2,1,3],
+     *   [1,null,2,null,3]
+     * ]
+     * 解释：
+     * 以上的输出对应以下 5 种不同结构的二叉搜索树：
+     *    1         3     3      2      1
+     *     \       /     /      / \      \
+     *      3     2     1      1   3      2
+     *     /     /       \                 \
+     *    2     1         2                 3
      *
-     * 输入: "(()"
-     * 输出: 2
-     * 解释: 最长有效括号子串为 "()"
-     * 样例 2:
-     *
-     * 输入: ")()())"
-     * 输出: 4
-     * 解释: 最长有效括号子串为 "()()"
+     * 提示：0 <= n <= 8
      */
-    public int longestValidParentheses(String s) {
-        // write your code here
-        if(s==null||s.length()<2) {
-            return 0;
+    public List<TreeNode> generateTrees(int n) {
+        return dfs(1, n);
+    }
+
+    private List<TreeNode> dfs(int left, int right) {
+        List<TreeNode> ans = new ArrayList<>();
+        if(left>right) {
+            return ans;
         }
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(0, -1);
-        int cnt = 0;
-        int ans = 0;
-        for(int i=0;i<s.length();i++) {
-            cnt += s.charAt(i)=='('?1:-1;
-            if(cnt<0) {
-                map.clear();
-                cnt  =0;
-                map.put(0, i);
-            }else if(map.containsKey(cnt)) {
-                ans = Math.max(ans, i-map.get(cnt));
-            }else {
-                map.put(cnt, i);
+        for(int i=left;i<=right;i++) {
+            List<TreeNode> leftAns = dfs(left, i-1);
+            List<TreeNode> rightAns = dfs(i+1, right);
+            for(TreeNode l : leftAns) {
+                for(TreeNode r : rightAns) {
+                    TreeNode curr = new TreeNode(i);
+                    curr.left = l;
+                    curr.right = r;
+                    ans.add(curr);
+                }
             }
         }
         return ans;

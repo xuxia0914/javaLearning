@@ -31,6 +31,8 @@ import java.util.*;
  * 将连通分量内的元素升序排列。
  */
 public class Lintcode423 {
+
+    //bfs
     public List<List<Integer>> connectedSet(ArrayList<DirectedGraphNode> nodes) {
         // write your code here
         List<List<Integer>> ans = new ArrayList<>();
@@ -68,6 +70,36 @@ public class Lintcode423 {
                 }
                 ans.add(list);
             }
+        }
+        return ans;
+    }
+
+    //dsu
+    public List<List<Integer>> connectedSet1(ArrayList<DirectedGraphNode> nodes) {
+        // write your code here
+        List<List<Integer>> ans = new ArrayList<>();
+        if(nodes==null||nodes.size()==0) {
+            return  ans;
+        }
+        int n = nodes.size();
+        DSU dsu = new DSU(n);
+        for(DirectedGraphNode node : nodes) {
+            for(DirectedGraphNode nei : node.neighbors) {
+                dsu.union(node.label, nei.label);
+            }
+        }
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for(int i=1;i<=n;i++) {
+            int group = dsu.find(i);
+            if(!map.containsKey(group)) {
+                map.put(group, new ArrayList<>());
+            }
+            map.get(group).add(i);
+        }
+        for(Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
+            List<Integer> value = entry.getValue();
+            Collections.sort(value);
+            ans.add(value);
         }
         return ans;
     }
