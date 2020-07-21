@@ -38,7 +38,7 @@ public class Lintcode423 {
             return  ans;
         }
         int n = nodes.size();
-        DSU1 dsu = new DSU1(n+1);
+        DSU dsu = new DSU(n);
         for(DirectedGraphNode node : nodes) {
             for(DirectedGraphNode nei : node.neighbors) {
                 dsu.union(node.label, nei.label);
@@ -62,12 +62,15 @@ public class Lintcode423 {
 
 }
 
-class DSU1 {
+class DSU {
 
     int[] parent;
 
-    DSU1(int n) {
+    DSU(int n) {
         parent = new int[n];
+        for(int i=1;i<n;i++) {
+            parent[i] = i;
+        }
     }
 
     public int find(int x) {
