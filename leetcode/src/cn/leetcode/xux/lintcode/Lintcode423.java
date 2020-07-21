@@ -31,57 +31,45 @@ import java.util.*;
  * 将连通分量内的元素升序排列。
  */
 public class Lintcode423 {
-    public List<List<Integer>> connectedSet2(ArrayList<DirectedGraphNode> nodes) {
+    public List<List<Integer>> connectedSet(ArrayList<DirectedGraphNode> nodes) {
         // write your code here
         List<List<Integer>> ans = new ArrayList<>();
         if(nodes==null||nodes.size()==0) {
             return  ans;
         }
-        int n = nodes.size();
-        DSU dsu = new DSU(n);
+        Map<DirectedGraphNode, Set<DirectedGraphNode>> map = new HashMap<>();
         for(DirectedGraphNode node : nodes) {
+            if(!map.containsKey(node)) {
+                map.put(node, new HashSet<>());
+            }
             for(DirectedGraphNode nei : node.neighbors) {
-                dsu.union(node.label, nei.label);
+                map.get(node).add(nei);
+                if(!map.containsKey(nei)) {
+                    map.put(nei, new HashSet<>());
+                }
+                map.get(nei).add(node);
             }
         }
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        for(int i=1;i<=n;i++) {
-            int group = dsu.find(i);
-            if(!map.containsKey(group)) {
-                map.put(group, new ArrayList<>());
+
+        Set<DirectedGraphNode> visited = new HashSet<>();
+        for(DirectedGraphNode node : nodes) {
+            if(visited.add(node)) {
+                Queue<DirectedGraphNode> queue = new LinkedList<>();
+                queue.offer(node);
+                List<Integer> list = new ArrayList<>();
+                list.add(node.label);
+                while(!queue.isEmpty()) {
+                    DirectedGraphNode curr = queue.poll();
+                    for(DirectedGraphNode nei : map.get(curr)) {
+                        visited.add(nei);
+                        queue.offer(nei);
+                        list.add(nei.label);
+                    }
+                }
+                ans.add(list);
             }
-            map.get(group).add(i);
-        }
-        for(Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
-            List<Integer> value = entry.getValue();
-            Collections.sort(value);
-            ans.add(value);
         }
         return ans;
-    }
-
-}
-
-class DSU {
-
-    int[] parent;
-
-    DSU(int n) {
-        parent = new int[n];
-        for(int i=1;i<n;i++) {
-            parent[i] = i;
-        }
-    }
-
-    public int find(int x) {
-        if(parent[x] != x) {
-            parent[x] = find(parent[x]);
-        }
-        return parent[x];
-    }
-
-    public void union(int x, int y) {
-        parent[find(y)] = find(x);
     }
 
 }

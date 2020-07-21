@@ -3,32 +3,42 @@ package cn.leetcode.xux.lintcode;
 import java.util.*;
 
 /**
- * 432. 找出有向图中的弱连通分量
+ * 431. 找无向图的连通块
  * 中文English
- * 请找出有向图中弱连通分量。图中的每个节点包含 1 个标签和1 个相邻节点列表。（有向图的弱连通分量是任意两点均有有向边相连的极大子图）
+ * 找出无向图中所有的连通块。
+ *
+ * 图中的每个节点包含一个label属性和一个邻接点的列表。
+ *
+ * （一个无向图的连通块是一个子图，其中任意两个顶点通过路径相连，且不与整个图中的其它顶点相连。）
+ *
+ * 你需要返回 label 集合的列表.
  *
  * 样例
  * 样例 1:
  *
- * 输入: {1,2,4#2,4#3,5#4#5#6,5}
- * 输出: [[1,2,4],[3,5,6]]
+ * 输入: {1,2,4#2,1,4#3,5#4,1,2#5,3}
+ * 输出: [[1,2,4],[3,5]]
  * 解释:
- *   1----->2    3-->5
- *    \     |        ^
- *     \    |        |
- *      \   |        6
- *       \  v
- *        ->4
+ *
+ *   1------2  3
+ *    \     |  |
+ *     \    |  |
+ *      \   |  |
+ *       \  |  |
+ *         4   5
  * 样例 2:
  *
- * 输入: {1,2#2,3#3,1}
- * 输出: [[1,2,3]]
+ * 输入: {1,2#2,1}
+ * 输出: [[1,2]]
+ * 解释:
+ *
+ *   1--2
+ *
  * 说明
- * 图模型说明:
- * https://www.lintcode.com/help/graph
+ * 关于图的表示
  *
  * 注意事项
- * 将连通分量内的元素升序排列。
+ * 每个连通块内部应该按照label属性升序排序. 不同的连通块之间可以是任意顺序.
  */
 public class Lintcode431 {
 
@@ -40,43 +50,53 @@ public class Lintcode431 {
         // write your code here
         List<List<Integer>> ans = new ArrayList<>();
         if(nodes==null||nodes.size()==0) {
-            return ans;
+            return  ans;
         }
-        int n = nodes.size();
-        Map<Integer, Integer> mapping = new HashMap<>();
-        for(int i=0;i<n;i++) {
-            mapping.put(nodes.get(i).label, i);
-        }
-        DSU dsu = new DSU(n);
+        Map<UndirectedGraphNode, Set<UndirectedGraphNode>> map = new HashMap<>();
         for(UndirectedGraphNode node : nodes) {
+            if(!map.containsKey(node)) {
+                map.put(node, new HashSet<>());
+            }
             for(UndirectedGraphNode nei : node.neighbors) {
-                dsu.union(mapping.get(node.label), mapping.get(nei.label));
+                map.get(node).add(nei);
+                if(!map.containsKey(nei)) {
+                    map.put(nei, new HashSet<>());
+                }
+                map.get(nei).add(node);
             }
         }
-        Map<Integer, List<Integer>> map = new HashMap<>();
+
+        Set<UndirectedGraphNode> visited = new HashSet<>();
         for(UndirectedGraphNode node : nodes) {
-            int key = dsu.find(mapping.get(node.label));
-            if(!map.containsKey(key)) {
-                map.put(key, new ArrayList<>());
+            if(visited.add(node)) {
+                Queue<UndirectedGraphNode> queue = new LinkedList<>();
+                queue.offer(node);
+                List<Integer> list = new ArrayList<>();
+                list.add(node.label);
+                while(!queue.isEmpty()) {
+                    UndirectedGraphNode curr = queue.poll();
+                    for(UndirectedGraphNode nei : map.get(curr)) {
+                        visited.add(nei);
+                        queue.offer(nei);
+                        list.add(nei.label);
+                    }
+                }
+                ans.add(list);
             }
-            map.get(key).add(node.label);
-        }
-        for(Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
-            List<Integer> list = entry.getValue();
-            Collections.sort(list);
-            ans.add(list);
         }
         return ans;
     }
 
 }
 
-//  Definition for Undirected graph.
+//Definition for Undirected graph.
 class UndirectedGraphNode {
+
     int label;
     ArrayList<UndirectedGraphNode> neighbors;
+
     UndirectedGraphNode(int x) {
-        label = x;
-        neighbors = new ArrayList<UndirectedGraphNode>();
+        label = x; neighbors = new ArrayList<UndirectedGraphNode>();
     }
+
 }
