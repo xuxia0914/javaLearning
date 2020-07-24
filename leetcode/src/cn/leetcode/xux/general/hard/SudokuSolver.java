@@ -20,41 +20,38 @@ public class SudokuSolver {
     boolean isDone = false;
 
     public void solveSudoku(char[][] board) {
-        int x = 0;
-        int y = 0;
-        for(int i=0;i<81;i++) { //找出第一个'.'的索引
-            if(board[i/9][i%9]=='.') {
-                x = i/9;
-                y = i%9;
+        dfs(board);
+    }
+
+    public boolean dfs(char[][] board) {
+        int i = -1;
+        int j = -1;
+        for(int a=0;a<81;a++) {
+            if(board[a/9][a%9]=='.') {
+                i = a/9;
+                j = a%9;
                 break;
             }
-            if(i==80) { //数独完成
-                isDone = true;
-                return;
-            }
         }
-        boolean[] flags = new boolean[9];   //当前位置可以填的数字
-        for(int i=0;i<9;i++) {
-            if(board[x][i]!='.') {
-                flags[board[x][i]-'1'] = true;
-            }
-            if(board[i][y]!='.') {
-                flags[board[i][y]-'1'] = true;
-            }
-            if(board[x/3*3+i/3][y/3*3+i%3]!='.') {
-                flags[board[x/3*3+i/3][y/3*3+i%3]-'1'] = true;
-            }
+        if(i==-1) {
+            return true;
         }
-        for(int i=0;i<9;i++) {  //遍历-递归
-            if(!flags[i]) {
-                board[x][y] = (char)(i+'1');
-                solveSudoku(board);
-                if(isDone) {
-                    return;
+        boolean[] flags =  new boolean[10];
+        for(int x=0;x<9;x++) {
+            flags[board[x][j]-'0'] = true;
+            flags[board[i][x]-'0'] = true;
+            flags[board[i/3*3+x/3][j/3*3+x%3]-'0'] = true;
+        }
+        for(int next=1;next<10;next++) {
+            if(!flags[next]) {
+                board[i][j] = (char)(next+'0');
+                if(dfs(board)) {
+                    return true;
                 }
-                board[x][y] = '.';
+                board[i][j] = '.';
             }
         }
+        return false;
     }
 
     public static void main(String[] args) {

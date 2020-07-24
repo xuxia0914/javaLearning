@@ -1,5 +1,10 @@
 package cn.leetcode.xux.lintcode;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 /**
  * 635. 拼字游戏
  * 中文English
@@ -39,7 +44,79 @@ public class Lintcode635 {
      */
     public int boggleGame(char[][] board, String[] words) {
         // write your code here
-        return 0;
+        dfs(board, words, new boolean[board.length][board[0].length], 0, 0, 0);
+        return ans;
+    }
+
+    int ans = 0;
+
+    public void dfs(char[][] board, String[] words, boolean[][] visited, int i, int j, int cnt) {
+        ans = Math.max(ans, cnt);
+        int m = board.length;
+        int n = board[0].length;
+        if(i<0||i>=m||j<0||j>=n) {
+            return;
+        }
+        int ni = 0;
+        int nj = 0;
+        if(j<n-1) {
+            ni = i;
+            nj = j+1;
+        }else {
+            ni = i+1;
+        }
+        if(visited[i][j]) {
+            dfs(board, words, visited, ni, nj, cnt);
+            return;
+        }
+        for(String word : words) {
+            if(word.charAt(0)==board[i][j]) {
+                for(boolean[][] nei : bfs(board, visited, i, j, 0, word)) {
+                    dfs(board, words, nei, ni, nj, cnt+1);
+                }
+            }
+        }
+        dfs(board, words, visited, ni, nj, cnt);
+    }
+
+    public List<boolean[][]> bfs(char[][] board, boolean[][] visited,
+                                 int i, int j, int idx, String target) {
+        int m = board.length;
+        int n = board[0].length;
+        List<boolean[][]> ans = new ArrayList<>();
+        Queue<boolean[][]> queue1 = new LinkedList<>();
+        queue1.offer(visited);
+        Queue<int[]> queue2 = new LinkedList<>();
+        queue2.offer(new int[]{i, j, idx});
+        int[][] steps = new int[][]{{-1,0},{1,0},{0,-1},{0,1}};
+        while(!queue1.isEmpty()) {
+            boolean[][] cv = queue1.poll();
+            int[] ci = queue2.poll();
+            int x = ci[0];
+            int y = ci[1];
+            int k = ci[2];
+            for(int[] step : steps) {
+                int nx = x+step[0];
+                int ny = y+step[1];
+                if(nx>=0&&nx<m&&ny>=0&&ny<n&&!cv[nx][ny]
+                        &&board[nx][ny]==target.charAt(k)) {
+                    boolean[][] nv = new boolean[m][n];
+                    for(int a=0;a<m;a++) {
+                        for(int b=-0;b<n;b++) {
+                            nv[a][b] = cv[a][b];
+                        }
+                    }
+                    nv[nx][ny] = true;
+                    if(k+1==target.length()) {
+                        ans.add(nv);
+                    }else {
+                        queue1.offer(nv);
+                        queue2.offer(new int[]{nx, ny, k+1});
+                    }
+                }
+            }
+        }
+        return ans;
     }
 
 }

@@ -100,6 +100,16 @@ public class Lintcode804 {
     Set<String> set = new HashSet<>();
 
     private boolean addToSet(List<int[]> list) {
+        int offsetX = list.get(0)[0];
+        int offsetY = list.get(0)[1];
+        for(int[] pos : list) {
+            offsetX = Math.min(offsetX, pos[0]);
+            offsetY = Math.min(offsetY, pos[1]);
+        }
+        for(int[] pos : list) {
+            pos[0] -= offsetX;
+            pos[1] -= offsetY;
+        }
         Collections.sort(list, (o1,o2)->o1[0]!=o2[0]?o1[0]-o2[0]:o1[1]-o2[1]);
         if(!set.add(arrToString(list))) {
             return false;
@@ -111,17 +121,17 @@ public class Lintcode804 {
         for(int i=0;i<list.size();i++) {
             int x = list.get(i)[0];
             int y = list.get(i)[1];
-            lists[0].set(i, new int[]{x, -y});
-            lists[1].set(i, new int[]{-x, y});
-            lists[2].set(i, new int[]{-x, -y});
-            lists[3].set(i, new int[]{y, x});
-            lists[4].set(i, new int[]{y, -x});
-            lists[5].set(i, new int[]{-y, x});
-            lists[6].set(i, new int[]{-y, -x});
+            lists[0].add(new int[]{x, -y});
+            lists[1].add(new int[]{-x, y});
+            lists[2].add(new int[]{-x, -y});
+            lists[3].add(new int[]{y, x});
+            lists[4].add(new int[]{y, -x});
+            lists[5].add(new int[]{-y, x});
+            lists[6].add(new int[]{-y, -x});
         }
         for(int i=0;i<7;i++) {
-            int offsetX = lists[i].get(0)[0];
-            int offsetY = lists[i].get(0)[1];
+            offsetX = lists[i].get(0)[0];
+            offsetY = lists[i].get(0)[1];
             for(int[] pos : lists[i]) {
                 offsetX = Math.min(offsetX, pos[0]);
                 offsetY = Math.min(offsetY, pos[1]);
