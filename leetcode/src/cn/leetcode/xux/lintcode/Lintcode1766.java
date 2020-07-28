@@ -1,6 +1,6 @@
 package cn.leetcode.xux.lintcode;
 
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * 1766. 构造队列 II
@@ -39,35 +39,48 @@ import java.util.TreeSet;
 public class Lintcode1766 {
 
     /**
+     * TODO
      * @param arr1: The size
      * @param arr2: How many numbers bigger than itself
      * @return: The correct array
      */
     public int[] getQueue(int[] arr1, int[] arr2) {
         // Write your code here
-        TreeSet<int[]>
-    }
-
-    private SegmentTree init(int[] arr1) {
-
-    }
-
-    class SegmentTree {
-        int start;
-        int end;
-        int max;
-        int min;
-        SegmentTree left;
-        SegmentTree right;
-
-        SegmentTree(int start, int end, int max, int min) {
-            this.start = start;
-            this.end = end;
-            this.max = max;
-            this.min = min;
-            this.left = null;
-            this.right = null;
+        if(arr1==null||arr1.length==0) {
+            return new int[0];
         }
+        Map<Integer, PriorityQueue<Integer>> map = new HashMap<>();
+        for(int i=0;i<arr1.length;i++) {
+            if(!map.containsKey(arr2[i])) {
+                map.put(arr2[i], new PriorityQueue<Integer>());
+            }
+            map.get(arr2[i]).add(arr1[i]);
+        }
+        int idx = 0;
+        int[] ans = new int[arr1.length];
+        while(idx<ans.length) {
+            int curr = map.get(0).poll();
+            ans[idx++] = curr;
+            for(Map.Entry<Integer, PriorityQueue<Integer>> entry : map.entrySet()) {
+                int key = entry.getKey();
+                if(key!=0) {
+                    PriorityQueue<Integer> queue = entry.getValue();
+                    int size = queue.size();
+                    while(size-->0) {
+                        int num = queue.poll();
+                        if(num<curr) {
+                            if(!map.containsKey(key-1)) {
+                                map.put(key-1, new PriorityQueue<Integer>());
+                            }
+                            map.get(key-1).add(num);
+                        }else {
+                            queue.offer(key);
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
     }
 
 }
