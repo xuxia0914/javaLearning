@@ -21,7 +21,6 @@ import java.util.Map;
  */
 public class GuessNumberHigherOrLowerII {
 
-    //TODO
     public int getMoneyAmount(int n) {
         int[][] dp = new int[n+1][n+1];
         for(int i=1;i<n;i++) {

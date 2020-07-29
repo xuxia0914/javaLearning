@@ -23,7 +23,6 @@ package cn.leetcode.xux.general.hard;
  */
 public class IntegerToEnglishWords {
 
-    //TODO
     public String numberToWords(int num) {
         if(num==0) {
             return "Zero";

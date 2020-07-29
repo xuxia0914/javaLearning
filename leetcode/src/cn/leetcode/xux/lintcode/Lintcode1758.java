@@ -1,5 +1,10 @@
 package cn.leetcode.xux.lintcode;
 
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
+
 /**
  * 1758. 矩形覆盖面积
  * cat-only-icon
@@ -27,12 +32,38 @@ package cn.leetcode.xux.lintcode;
 public class Lintcode1758 {
 
     /**
+     * TODO
      * @param a: The coordinates of the lower left and upper right corners of the n rectangles.
      * @return: the total area of the last coverage of all rectangles
      */
     public double getArea(double[][] a) {
         // Write your code here
+        TreeSet<Double> set = new TreeSet<>((o1,o2)->(o1-o2<1E-10?0:(o1-o2<0?-1:1)));
+        for(double[] d : a) {
+            set.add(d[1]);
+            set.add(d[3]);
+        }
+        int n = set.size();
+        int idx = 0;
+        Map<Double, Integer> Mapping = new HashMap<>();
+       
         return 0;
+
+    }
+
+    class Node {
+        int start;
+        int end;
+        Double left;
+        Double right;
+
+        Node(int start, int end, Double left, Double right) {
+            this.start = start;
+            this.end = end;
+            this.left = left;
+            this.right = right;
+        }
+
     }
 
 }
