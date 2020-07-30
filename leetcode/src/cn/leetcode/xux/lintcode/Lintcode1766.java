@@ -38,6 +38,12 @@ import java.util.*;
  */
 public class Lintcode1766 {
 
+    public static void main(String[] args) {
+        //[1,2,3,4,5]
+        //[3,0,0,0,0]
+        new Lintcode1766().getQueue(new int[]{1,2,3,4,5}, new int[]{3,0,0,0,0});
+    }
+
     /**
      * 线段树
      * @param arr1: The size
@@ -46,86 +52,11 @@ public class Lintcode1766 {
      */
     public int[] getQueue(int[] arr1, int[] arr2) {
         // Write your code here
-        if(arr1==null||arr1.length==0) {
+        if (arr1 == null || arr1.length == 0) {
             return new int[0];
         }
-        SegmentTreeNode root = build(1, 10000);
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
-        for(int i=0;i<arr1.length;i++) {
-            if(arr2[i]==0) {
-                queue.offer(arr1[i]);
-            }else {
-                insert(root, arr1[i], arr2[i]);
-            }
-        }
-        int[]  ans = new int[arr1.length];
-        for(int i=0;i<ans.length;i++) {
-            int curr = queue.poll();
-            ans[i] = curr;
-            remove(root, queue, curr);
-        }
-        return ans;
-    }
 
-    private SegmentTreeNode build(int start, int end) {
-        if(start>end) {
-            return null;
-        }
-        if(start==end) {
-            return new SegmentTreeNode(start, end, 0, 0);
-        }
-        int mid = (start+end)/2;
-        SegmentTreeNode left = build(start, mid);
-        SegmentTreeNode right = build(mid+1, end);
-        SegmentTreeNode root = new SegmentTreeNode(start, end, 0, 0);
-        root.left = left;
-        root.right = right;
-        return root;
-    }
-
-    private void insert(SegmentTreeNode node, int num, int bigger) {
-        if(node.start>num||node.end<num) {
-            return;
-        }
-        if(node.start==node.end) {
-            node.count = 1;
-            node.biggerCnt = bigger;
-        }else {
-            insert(node.left, num, bigger);
-            insert(node.right, num, bigger);
-            node.count = node.left.count+node.right.count;
-        }
-    }
-
-    private void remove(SegmentTreeNode node, PriorityQueue<Integer> queue, int num) {
-        if(node.count==0||node.start>=num) {
-            return;
-        }
-        if(node.start==node.end&&--node.biggerCnt==0) {
-            queue.offer(num);
-            node.count = 0;
-        }else {
-            remove(node.left, queue, num);
-            remove(node.right, queue, num);
-            node.count = node.left.count+node.right.count;
-        }
-    }
-
-    //Definition of SegmentTreeNode:
-    class SegmentTreeNode {
-
-        public int start, end, count, biggerCnt;
-        public SegmentTreeNode left, right;
-
-        public SegmentTreeNode(int start, int end, int count, int biggerCnt) {
-            this.start = start;
-            this.end = end;
-            this.count = count;
-            this.biggerCnt = biggerCnt;
-            this.left = null;
-            this.right = null;
-        }
-
+        return null;
     }
 
     /**
@@ -133,39 +64,28 @@ public class Lintcode1766 {
      * @param arr2: How many numbers bigger than itself
      * @return: The correct array
      */
-    public int[] getQueue1(int[] arr1, int[] arr2) {
+    //MLE
+    public int[] getQueue2(int[] arr1, int[] arr2) {
         // Write your code here
         if(arr1==null||arr1.length==0) {
             return new int[0];
         }
-        Map<Integer, PriorityQueue<Integer>> map = new HashMap<>();
-        for(int i=0;i<arr1.length;i++) {
-            if(!map.containsKey(arr2[i])) {
-                map.put(arr2[i], new PriorityQueue<Integer>());
-            }
-            map.get(arr2[i]).add(arr1[i]);
+        int n = arr1.length;
+        PriorityQueue<Integer>[] queues = new PriorityQueue[n];
+        for(int i=0;i<n;i++) {
+            queues[i] = new PriorityQueue<>();
         }
-        int idx = 0;
-        int[] ans = new int[arr1.length];
-        while(idx<ans.length) {
-            int curr = map.get(0).poll();
-            ans[idx++] = curr;
-            for(Map.Entry<Integer, PriorityQueue<Integer>> entry : map.entrySet()) {
-                int key = entry.getKey();
-                if(key!=0) {
-                    PriorityQueue<Integer> queue = entry.getValue();
-                    int size = queue.size();
-                    while(size-->0) {
-                        int num = queue.poll();
-                        if(num<curr) {
-                            if(!map.containsKey(key-1)) {
-                                map.put(key-1, new PriorityQueue<Integer>());
-                            }
-                            map.get(key-1).add(num);
-                        }else {
-                            queue.offer(key);
-                        }
-                    }
+        for(int i=0;i<n;i++) {
+            queues[arr2[i]].add(arr1[i]);
+        }
+        int[] ans = new int[n];
+        for(int i=0;i<n;i++) {
+            int curr = queues[0].poll();
+            ans[i] = curr;
+            for(int j=1;j<n;j++) {
+                PriorityQueue<Integer> queue = queues[j];
+                while(!queue.isEmpty()&&queue.peek()<curr) {
+                    queues[j-1].add(queue.poll());
                 }
             }
         }

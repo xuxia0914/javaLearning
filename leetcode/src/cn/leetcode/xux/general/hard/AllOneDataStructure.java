@@ -17,7 +17,7 @@ import java.util.Set;
  * 挑战：
  * 你能够以 O(1) 的时间复杂度实现所有操作吗？
  */
-public class AllOoneDataStructure {
+public class AllOneDataStructure {
 
     //["AllOne","inc","inc","inc","inc","inc","inc","dec", "dec","getMinKey","dec","getMaxKey","getMinKey"]
     //[[],["a"],["b"],["b"],["c"],["c"],["c"],["b"],["b"],[],["a"],[],[]]
