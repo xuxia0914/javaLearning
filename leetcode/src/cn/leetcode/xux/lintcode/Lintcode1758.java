@@ -32,13 +32,18 @@ public class Lintcode1758 {
         System.out.println(new Lintcode1758().getArea(new double[][]{{10125.83,44558.92,40091.03,88168.23},{36573.90,90054.09,98174.92,94502.82},{29985.33,4375.42,75863.57,21183.09},{22667.52,2749.48,29152.45,28600.78},{15893.60,32198.77,62946.75,49236.85},{35492.76,8424.63,58701.99,45989.04},{25730.08,77741.74,54432.48,80344.28},{4229.75,36675.49,38255.92,74470.22},{1739.05,78098.15,76467.21,98026.59},{25585.41,26199.05,92511.72,56910.11}}));
     }
 
+    // heights[i]表示第i条水平线和第i+1条水平线之间的高度
+    double[] heights;
+    // 离散化每条水平线，以便使用线段树(即把每条水平线从小到大映射成0 - n-1)
+    Map<Double, Integer> mapping;
+
     /**
-     * TODO
      * @param a: The coordinates of the lower left and upper right corners of the n rectangles.
      * @return: the total area of the last coverage of all rectangles
      */
     public double getArea(double[][] a) {
         // Write your code here
+        // 保存所有水平方向上的线，从小到大排序
         TreeSet<Double> set = new TreeSet<>();
         for(double[] d : a) {
             set.add(d[1]);
@@ -55,16 +60,16 @@ public class Lintcode1758 {
             }
             mapping.put(curr, idx++);
         }
+        // 初始化线段树
         Node root = build(0, n-2);
+        // 把每个矩形插入线段树
         for(double[] d : a) {
             int start = mapping.get(d[1]);
             add(root, start, mapping.get(d[3])-1, d[0], d[2]);
         }
+        // 计算面积
         return calc(root);
     }
-
-    Map<Double, Integer> mapping;
-    double[] heights;
 
     private Node build(int start, int end) {
         if(start==end) {
@@ -89,7 +94,6 @@ public class Lintcode1758 {
                 node.intervals.offer(new double[]{min, max});
             }else {
                 node.intervals.offer(new double[]{min, max});
-                int size = node.intervals.size();
                 PriorityQueue<double[]> newQueue = new PriorityQueue<>((o1, o2)->(Math.abs(o1[0]-o2[0])<1E-10?0:(o1[0]-o2[0]<0?-1:1)));
                 double[] pre = node.intervals.poll();
                 newQueue.offer(pre);
@@ -102,6 +106,7 @@ public class Lintcode1758 {
                         pre = curr;
                     }
                 }
+                node.intervals = newQueue;
             }
         }else {
             add(node.left, start, end, min, max);
@@ -126,6 +131,8 @@ public class Lintcode1758 {
 
     class Node {
         int start, end;
+        // start==end时，intervals可能不为空
+        // 表示在第start - start+1条水平线之间，所有的覆盖区域的不重叠不连续的竖直线区间(从小到大排序)
         PriorityQueue<double[]> intervals;
         Node left = null, right = null;
 
