@@ -45,7 +45,7 @@ public class Lintcode1766 {
     }
 
     /**
-     * 线段树
+     * TODO
      * @param arr1: The size
      * @param arr2: How many numbers bigger than itself
      * @return: The correct array
@@ -65,7 +65,7 @@ public class Lintcode1766 {
      * @return: The correct array
      */
     //MLE
-    public int[] getQueue2(int[] arr1, int[] arr2) {
+    public int[] getQueue1(int[] arr1, int[] arr2) {
         // Write your code here
         if(arr1==null||arr1.length==0) {
             return new int[0];

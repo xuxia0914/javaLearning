@@ -39,26 +39,44 @@ public class Lintcode707 {
         if(edges==null||edges.length==0) {
             return 0;
         }
+        //计算每个节点的权重(出则减，进则加)
         Map<Integer, Integer> heavy = new HashMap<>();
         for(int[] e : edges) {
             heavy.put(e[0], heavy.getOrDefault(e[0], 0)-e[2]);
             heavy.put(e[1], heavy.getOrDefault(e[1], 0)+e[2]);
         }
-        List<Integer> pos = new ArrayList<>();
-        List<Integer> neg = new ArrayList<>();
-        for(Map.Entry<Integer, Integer> entry : heavy.entrySet()) {
-            int value = entry.getValue();
-            if(value>0) {
-                pos.add(value);
-            }else if(value<0) {
-                neg.add(-value);
+        //记录所有权重不为0的节点
+        int[] nums = new int[heavy.size()];
+        int len = 0;
+        for(int v : heavy.values()) {
+            if(v!=0) {
+                nums[len++] = v;
             }
         }
-        if(pos.size()==0) {
-            return 0;
+        //dp[i]表示第i个子集(i的二进制表示的第j位为1表示nums[j]在该子集中)达成平衡需要的增加的边数
+        int[] dp = new int[1<<len];
+        Arrays.fill(dp, -1);
+        for(int i=1;i<dp.length;i++) {
+            int sum = 0;
+            int cnt = 0;
+            //计算该子集的和，子集的节点数
+            for(int j=0;j<len;j++) {
+                if(((1<<j)&i)==1) {
+                    sum += nums[j];
+                    cnt++;
+                }
+            }
+            if(sum==0) {
+                dp[i] = cnt-1;
+                for(int j=1;j<i;j++) {
+                    // i子集包含j子集
+                    if((i&j)==j&&dp[j]!=-1&&dp[i-j]!=-1) {
+                        dp[i] = Math.min(dp[i], dp[j]+dp[i-j]);
+                    }
+                }
+            }
         }
-        
-
+        return dp[dp.length-1];
     }
 
 }
