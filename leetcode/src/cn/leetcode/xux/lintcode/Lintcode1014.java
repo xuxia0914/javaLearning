@@ -3,7 +3,6 @@ package cn.leetcode.xux.lintcode;
 import java.util.*;
 
 /**
- *
  * 1014. 打砖块
  * 中文English
  * 有一个由 1 和 0 组成的网格: 单元格中的 1 表示砖块. 当且仅当一个砖块直接连接到网格底部, 或者其四周相邻的砖块至少有一个不会掉落时, 这个砖块不会掉落.
