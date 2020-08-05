@@ -50,8 +50,8 @@ public class Lintcode739 {
         if(nums.size()==2) {
             double n0 = nums.get(0);
             double n1 = nums.get(1);
-            return equals24(n0+n1)||equals(Math.abs(n0-n1))
-                    ||equals(n0*n1)||equals(n0/n1)||equals(n1/n0);
+            return equals24(n0+n1)||equals24(Math.abs(n0-n1))
+                    ||equals24(n0*n1)||equals24(n0/n1)||equals24(n1/n0);
         }
         for(int i=0;i<nums.size()-1;i++) {
             for(int j=i+1;j<nums.size();j++) {

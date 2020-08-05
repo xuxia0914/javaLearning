@@ -53,7 +53,7 @@ public class Lintcode707 {
                 nums[len++] = v;
             }
         }
-        //dp[i]表示第i个子集(i的二进制表示的第j位为1表示nums[j]在该子集中)达成平衡需要的增加的边数
+        //dp[i]表示第i个子集(i的二进制表示的第j位为1,则nums[j]在该子集中)达成平衡需要的增加的边数
         int[] dp = new int[1<<len];
         Arrays.fill(dp, -1);
         for(int i=1;i<dp.length;i++) {

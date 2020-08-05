@@ -25,41 +25,38 @@ import java.util.Map;
  */
 public class Lintcode1748 {
 
+    public static void main(String[] args) {
+        Lintcode1748 a = new Lintcode1748();
+        System.out.println(a.longestCommonSubsequenceIII(new int[]{3,2,1,4,5}, new int[]{1,2,3,4,5}));
+        System.out.println(a.longestCommonSubsequenceIII(new int[]{6,9,4,2,8,1,3,5,7}, new int[]{8,1,2,4,5,3,7,9,6}));
+    }
+
     /**
      * @param A:
      * @param B:
      * @return: nothing
      */
     public int longestCommonSubsequenceIII(int[] A, int[] B) {
-        // Write your code here
         int n = A.length;
         Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < n; i++) map.put(A[i], i);
-        int[] nums = new int[n];
-        for (int i = 0; i < n; i++) nums[i] = map.get(B[i]);
-        return helper(nums);
-    }
-
-    private int helper(int[] nums) {
-        int n = nums.length;
-        int[] dp = new int[n];
-        Arrays.fill(dp, Integer.MAX_VALUE);
-        for (int num : nums) {
-            int idx = ub(dp, num);
-            dp[idx] = num;
+        for(int i=0;i<n;i++) {
+            map.put(A[i], i);
         }
-        return ub(dp, Integer.MAX_VALUE);
-    }
-
-    private int ub(int[] nums, int num) {
-        int l = -1;
-        int r = nums.length;
-        while (r - l > 1) {
-            int mid = l + (r - l) / 2;
-            if (nums[mid] >= num) r = mid;
-            else l = mid;
+        //把B[i]替换为B[i]在A数组中的索引
+        for(int i=0;i<n;i++) {
+            B[i] = map.get(B[i]);
         }
-        return r;
+        //求B[i]的最长递增子序列
+        int tail = 0;
+        for(int i=1;i<n;i++) {
+            int index = Arrays.binarySearch(B, 0, tail+1, B[i]);
+            index = -index-1;
+            B[index] = B[i];
+            if(index==tail+1) {
+                tail++;
+            }
+        }
+        return tail+1;
     }
 
 }

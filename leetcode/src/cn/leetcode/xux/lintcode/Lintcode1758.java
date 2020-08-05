@@ -132,7 +132,7 @@ public class Lintcode1758 {
     class Node {
         int start, end;
         // start==end时，intervals可能不为空
-        // 表示在第start - start+1条水平线之间，所有的覆盖区域的不重叠不连续的竖直线区间(从小到大排序)
+        // 表示在第start -> start+1条水平线之间，所有的覆盖区域的不重叠不连续的竖直线区间(从小到大排序)
         PriorityQueue<double[]> intervals;
         Node left = null, right = null;
 

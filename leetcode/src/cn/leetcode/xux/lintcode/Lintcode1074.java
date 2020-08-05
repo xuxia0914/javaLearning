@@ -1,8 +1,5 @@
 package cn.leetcode.xux.lintcode;
 
-import java.util.Comparator;
-import java.util.TreeSet;
-
 /**
  * 1074. 范围模块
  * 中文English

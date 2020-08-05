@@ -39,6 +39,7 @@ import java.util.*;
 public class Lintcode1014 {
 
     /**
+     * TODO
      * @param grid: a grid
      * @param hits: some erasures order
      * @return: an array representing the number of bricks that will drop after each erasure in sequence
@@ -62,7 +63,7 @@ public class Lintcode1014 {
                         outDegree.get((i-1)*n+j).add(i*n+j);
                         inDegree.put(i*n+j, inDegree.getOrDefault(i*n+j, 0)+1);
                     }
-                    if(grid[j][j+1]==1) {
+                    if(grid[i][j+1]==1) {
                         if(!outDegree.containsKey(i*n+j)) {
                             outDegree.put(i*n+j, new ArrayList<>());
                         }
