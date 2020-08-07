@@ -1,36 +1,39 @@
-package cn.xux.algorithm.leetcode.general.midium;
+package cn.xux.algorithm.leetcode.vip.midium;
 
 import java.util.*;
 
 /**
- * 254 Factor Combinations 因子组合
- * Numbers can be regarded as product of its factors. For example,
+ * 254. 因子的组合
+ * 整数可以被看作是其因子的乘积。
+ * 例如：
  * 8 = 2 x 2 x 2;
  *   = 2 x 4.
- * Write a function that takes an integer n and return all possible combinations of its factors.
+ * 请实现一个函数，该函数接收一个整数 n 并返回该整数所有的因子组合。
  *
- * Note:
- * Each combination's factors must be sorted ascending, for example: The factors of 2 and 6 is [2, 6], not [6, 2].
- * You may assume that n is always positive.
- * Factors should be greater than 1 and less than n.
+ * 注意：
+ * 你可以假定 n 为永远为正数。
+ * 因子必须大于 1 并且小于 n。
  *
- * Examples:
- * input: 1
- * output: []
+ * 示例 1：
+ * 输入: 1
+ * 输出: []
  *
- * input: 37
- * output:[]
+ * 示例 2：
+ * 输入: 37
+ * 输出: []
  *
- * input: 12
- * output:
+ * 示例 3：
+ * 输入: 12
+ * 输出:
  * [
  *   [2, 6],
  *   [2, 2, 3],
  *   [3, 4]
  * ]
  *
- * input: 32
- * output:
+ * 示例 4:
+ * 输入: 32
+ * 输出:
  * [
  *   [2, 16],
  *   [2, 2, 8],

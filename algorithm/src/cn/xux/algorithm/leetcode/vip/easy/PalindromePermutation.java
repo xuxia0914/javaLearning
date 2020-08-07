@@ -1,4 +1,4 @@
-package cn.xux.algorithm.leetcode.general.easy;
+package cn.xux.algorithm.leetcode.vip.easy;
 
 /**
  * 266. 回文排列

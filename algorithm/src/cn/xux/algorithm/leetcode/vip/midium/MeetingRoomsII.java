@@ -1,54 +1,38 @@
-package cn.xux.algorithm.leetcode.general.midium;
+package cn.xux.algorithm.leetcode.vip.midium;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * 253. Meeting Rooms II（会议室）
+ * 253. 会议室 II
  *
- * Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei),
- * find the minimum number of conference rooms required.
+ * 给定一个会议时间安排的数组，每个会议时间都会包括开始和结束的时间 [[s1,e1],[s2,e2],…] (si < ei)，
+ * 为避免会议冲突，同时要考虑充分利用会议室资源，请你计算至少需要多少间会议室，才能满足这些会议安排。
  *
- * example 1:
- * Given [[0, 30],[5, 10],[15, 20]],
- * return 2.
+ * 示例 1:
+ * 输入: [[0, 30],[5, 10],[15, 20]]
+ * 输出: 2
  *
- * Example 2:
- * Input: [[7,10],[2,4]]
- * Output: 1
- *
+ * 示例 2:
+ * 输入: [[7,10],[2,4]]
+ * 输出: 1
  */
 public class MeetingRoomsII {
 
-    /**
-     * 对intervals排序；
-     * 遍历并用小顶堆记录会议结束时间，判断每个会议开始时间是否大于堆顶时间，不是则会议室+1；是则移除堆顶
-     * O(nlogn)
-     */
     public int minMeetingRooms(Interval[] intervals) {
         if(intervals==null||intervals.length==0) {
             return 0;
         }
-        Arrays.sort(intervals, new Comparator<Interval>() {
-            @Override
-            public int compare(Interval o1, Interval o2) {
-                if(o1.start!=o2.start) {
-                    return o1.start-o2.start;
-                }else {
-                    return o1.end-o2.end;
-                }
-            }
-        });
+        Arrays.sort(intervals, (o1,o2)->o1.start==o2.start?o1.end-o2.end:o1.start-o2.start);
         PriorityQueue<Integer> queue = new PriorityQueue<>();
-        int res = 0;
+        int res = 1;
+        queue.offer(intervals[0].end);
         for(Interval interval : intervals) {
-            queue.offer(interval.end);
-            if(queue.peek()>=interval.start) {
-                res++;
-            }else {
+            while(!queue.isEmpty()&&queue.peek()<interval.start) {
                 queue.poll();
             }
+            queue.offer(interval.end);
+            res = Math.max(res, queue.size());
         }
         return res;
     }
@@ -77,11 +61,10 @@ public class MeetingRoomsII {
         while(idxStart<n) {
             if(starts[idxStart]<=ends[idxEnd]) {
                 res++;
-                idxStart++;
             }else {
-                idxStart++;
                 idxEnd++;
             }
+            idxStart++;
         }
         return res;
     }
