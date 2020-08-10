@@ -24,6 +24,25 @@ package cn.xux.algorithm.leetcode.general.easy;
 public class CountBinarySubstrings {
 
     public int countBinarySubstrings(String s) {
+        if (s == null || s.length() < 2) {
+            return 0;
+        }
+        int pre = 0;
+        int curr = 1;
+        int ans = 0;
+        for(int i=1;i<s.length();i++) {
+            if(s.charAt(i)!=s.charAt(i-1)) {
+                pre = curr;
+                curr = 0;
+            }
+            if(++curr<=pre) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    public int countBinarySubstrings1(String s) {
         if(s==null||s.length()<2) {
             return 0;
         }
