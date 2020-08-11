@@ -30,6 +30,10 @@ import java.util.*;
  */
 public class Lintcode707 {
 
+    public static void main(String[] args) {
+        System.out.println(new Lintcode707().balanceGraph(new int[][]{{0,1,10},{2,0,5}}));
+    }
+
     /*
      * @param edges: a directed graph where each edge is represented by a tuple
      * @return: the number of edges
@@ -53,6 +57,9 @@ public class Lintcode707 {
                 nums[len++] = v;
             }
         }
+        if(len==0) {
+            return 0;
+        }
         //dp[i]表示第i个子集(i的二进制表示的第j位为1,则nums[j]在该子集中)达成平衡需要的增加的边数
         int[] dp = new int[1<<len];
         Arrays.fill(dp, -1);
@@ -61,7 +68,7 @@ public class Lintcode707 {
             int cnt = 0;
             //计算该子集的和，子集的节点数
             for(int j=0;j<len;j++) {
-                if(((1<<j)&i)==1) {
+                if(((1<<j)&i)>0) {
                     sum += nums[j];
                     cnt++;
                 }

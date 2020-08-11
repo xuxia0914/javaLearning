@@ -55,7 +55,7 @@ public class SerializeAndDeserializeBinaryTree {
     }
 
     // Decodes your encoded data to tree.
-    public cn.xux.algorithm.common.TreeNode deserialize(String data) {
+    public TreeNode deserialize(String data) {
         if(data==null||data.length()<=2) {
             return null;
         }
@@ -79,22 +79,6 @@ public class SerializeAndDeserializeBinaryTree {
             i++;
         }
         return root;
-    }
-
-    public static void main(String[] args) {
-        cn.xux.algorithm.common.TreeNode node1 = new cn.xux.algorithm.common.TreeNode(1);
-        cn.xux.algorithm.common.TreeNode node2 = new cn.xux.algorithm.common.TreeNode(2);
-        cn.xux.algorithm.common.TreeNode node3 = new cn.xux.algorithm.common.TreeNode(3);
-        cn.xux.algorithm.common.TreeNode node4 = new cn.xux.algorithm.common.TreeNode(4);
-        cn.xux.algorithm.common.TreeNode node5 = new TreeNode(5);
-        node3.left = node4;
-        node3.right = node5;
-        node1.left = node2;
-        node1.right = node3;
-        SerializeAndDeserializeBinaryTree a = new SerializeAndDeserializeBinaryTree();
-        String s = a.serialize(node1);
-        System.out.println(s);
-        a.deserialize(s);
     }
 
 }

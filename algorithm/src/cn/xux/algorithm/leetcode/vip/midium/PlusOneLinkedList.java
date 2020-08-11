@@ -1,15 +1,16 @@
-package cn.xux.algorithm.leetcode.general.midium;
+package cn.xux.algorithm.leetcode.vip.midium;
 
 import cn.xux.algorithm.common.ListNode;
 
 /**
- * Given a non-negative number represented as a singly linked list of digits, plus one to the number.
- * The digits are stored such that the most significant digit is at the head of the list.
- * Example:
- * Input:
- * 1->2->3
- * Output:
- * 1->2->4
+ * 369. 给单链表加一（递归）
+ * 用一个 非空 单链表来表示一个非负整数，然后将这个整数加一。
+ * 你可以假设这个整数除了 0 本身，没有任何前导的 0。
+ * 这个整数的各个数位按照 高位在链表头部、低位在链表尾部 的顺序排列。
+ *
+ * 示例:
+ * 输入: [1,2,3]
+ * 输出: [1,2,4]
  */
 public class PlusOneLinkedList {
 
@@ -17,21 +18,24 @@ public class PlusOneLinkedList {
         if(head==null) {
             return null;
         }
-        head = ListNode.reverse1(head);
-        ListNode curr = head;
-        while(curr!=null&&curr.val==9) {
-            curr.val = 0;
-            curr = curr.next;
-        }
-        head = ListNode.reverse1(head);
-        if(curr==null) {
+        int carry = helper(head);
+        if(carry==1) {
             ListNode newHead = new ListNode(1);
             newHead.next = head;
             return newHead;
-        }else {
-            curr.val++;
         }
         return head;
+    }
+
+    private int helper(ListNode node) {
+        if(node.next==null) {
+            int val = node.val+1;
+            node.val = val%10;
+            return val/10;
+        }
+        int val = node.val+helper(node.next);
+        node.val = val%10;
+        return val/10;
     }
 
     public static void main(String[] args) {
@@ -46,7 +50,6 @@ public class PlusOneLinkedList {
             System.out.print(res.val + "->");
             res = res.next;
         }
-
     }
 
 }
