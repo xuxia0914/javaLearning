@@ -1,4 +1,4 @@
-package cn.xux.algorithm.leetcode.general.midium;
+package cn.xux.algorithm.leetcode.vip.midium;
 
 /**
  * 487. 最大连续1的个数 II
