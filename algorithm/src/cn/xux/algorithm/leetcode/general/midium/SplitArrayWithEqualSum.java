@@ -1,56 +1,64 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
- * Given an array with n integers, you need to find if there are triplets (i, j, k) which satisfies following conditions:
+ * 548. 将数组分割成和相等的子数组
+ * 给定一个有 n 个整数的数组，你需要找到满足以下条件的三元组 (i, j, k) ：
  * 0 < i, i + 1 < j, j + 1 < k < n - 1
- * Sum of subarrays (0, i - 1), (i + 1, j - 1), (j + 1, k - 1) and (k + 1, n - 1) should be equal.
- * where we define that subarray (L, R) represents a slice of the original array starting from the element indexed L to the element indexed R.
- * Example:
- * Input: [1,2,1,2,1,2,1]
- * Output: True
- * Explanation:
+ * 子数组 (0, i - 1)，(i + 1, j - 1)，(j + 1, k - 1)，(k + 1, n - 1) 的和应该相等。
+ * 这里我们定义子数组 (L, R) 表示原数组从索引为L的元素开始至索引为R的元素。
+ *
+ * 示例:
+ * 输入: [1,2,1,2,1,2,1]
+ * 输出: True
+ * 解释:
  * i = 1, j = 3, k = 5.
  * sum(0, i - 1) = sum(0, 0) = 1
  * sum(i + 1, j - 1) = sum(2, 2) = 1
- * sum(j + 1, k - 1) = sum(4, 4) = 1
+ * sum(j + 1, k - 1) = sum(4, 4) =
  * sum(k + 1, n - 1) = sum(6, 6) = 1
- * Note:
- * 1 <= n <= 2000.
- * Elements in the given array will be in range [-1,000,000, 1,000,000].
+ *
+ * 注意:
+ * 1 <= n <= 2000。
+ * 给定数组中的元素会在 [-1,000,000, 1,000,000] 范围内。
  */
 public class SplitArrayWithEqualSum {
 
-    public static boolean splitArray(int[] nums) {
-        if(nums==null||nums.length<7) {
+    public boolean splitArray(List<Integer> nums) {
+        if(nums==null||nums.size()<7) {
             return false;
         }
-        int len = nums.length;
-        int[] sums = new int[len];
-        sums[0] = nums[0];
-        for (int i=1; i<len;++i) {
-            sums[i] = sums[i-1]+nums[i];
+        int n = nums.size();
+        int[] preSum = new int[n];
+        preSum[0] = nums.get(0);
+        for(int i=1;i<n;i++) {
+            preSum[i] = preSum[i-1]+nums.get(i);
         }
-        int left1, left2, right1, right2;
-        for(int j=3;j<len-3;j++) {
-            for(int i=1;i<j-1;i++) {
-                left1 = sums[i-1];
-                left2 = sums[j-1]-sums[i];
-                if(left1==left2) {
-                    for(int k=j+2;k<len-1;k++) {
-                        right1 = sums[k-1]-sums[j];
-                        right2 = sums[len-1]-sums[k];
-                        if(right1==right2&&right1==left1) {
-                            return true;
-                        }
+        for(int mid=3;mid<n-3;mid++) {
+            Set<Integer> set = new HashSet<>();
+            int left;
+            int right;
+            for(int leftMid=1;leftMid<mid-1;leftMid++) {
+                left = preSum[leftMid-1];
+                right = preSum[mid-1]-preSum[leftMid];
+                if(left==right) {
+                    set.add(left);
+                }
+            }
+            if(set.size()>0) {
+                for(int rightMid=mid+2;rightMid<n;rightMid++) {
+                    left = preSum[rightMid-1]-preSum[mid];
+                    right = preSum[n-1]-preSum[rightMid];
+                    if(left==right&&set.contains(left)) {
+                        return true;
                     }
                 }
             }
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(splitArray(new int[]{1,2,1,2,1,2,2}));
     }
 
 }
