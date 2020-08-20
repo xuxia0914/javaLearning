@@ -1,27 +1,25 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
 /**
- * Given a positive integer a, find the smallest positive integer b
- * whose multiplication of each digit equals to a.
- * If there is no answer or the answer is not fit in 32-bit signed integer, then return 0.
- * Example 1
- * Input:
- * 48
- * Output:
- * 68
- * Example 2
- * Input:
- * 15
- * Output:
- * 35
+ * 625. 最小因式分解（贪心）
+ * 给定一个正整数 a，找出最小的正整数 b 使得 b 的所有数位相乘恰好等于 a。
+ * 如果不存在这样的结果或者结果不是 32 位有符号整数，返回 0。
+ *
+ * 样例 1
+ * 输入：48
+ * 输出：68
+ *
+ * 样例 2
+ * 输入：15
+ * 输出：35
  */
 public class MinimumFactorization {
 
-    public int solution(int a) {
+    public int smallestFactorization(int a) {
         if(a<10) {
             return a;
         }
-        long res = 0l;
+        long res = 0L;
         long bits = 1;
         for(int i=9;i>1;i--) {
             while(a%i==0) {
