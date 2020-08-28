@@ -7,7 +7,8 @@ package cn.xux.algorithm.leetcode.general.midium;
  * Key 2: (Ctrl-A): Select the whole screen.
  * Key 3: (Ctrl-C): Copy selection to buffer.
  * Key 4: (Ctrl-V): Print buffer on screen appending it after what has already been printed.
- * Now, you can only press the keyboard for N times (with the above four keys), find out the maximum numbers of 'A' you can print on screen.
+ * Now, you can only press the keyboard for N times (with the above four keys),
+ * find out the maximum numbers of 'A' you can print on screen.
  * Example 1:
  * Input: N = 3
  * Output: 3
@@ -26,28 +27,20 @@ package cn.xux.algorithm.leetcode.general.midium;
  */
 public class FourKeysKeyboard {
 
-    public static int maxLength1(int n) {
-        int res = n;
-        for(int i=1;i<n-2;i++) {
-            res = Math.max(res, maxLength1(i)*(n-i-1));
+    public int maxA(int N) {
+        // write your code
+        if(N<4) {
+            return N;
         }
-        return res;
-    }
-
-    public static int maxLength2(int n) {
-        int[] dp = new int[n+1];
-        for(int i=0;i<=n;i++) {
-            dp[i] = i;
-            for(int j=1;j<n-2;j++) {
+        int[] dp = new int[N+1];
+        dp[1] = 1;
+        for(int i=2;i<=N;i++) {
+            dp[i] = dp[i-1]+1;
+            for(int j=i-3;j>=1;j--) {
                 dp[i] = Math.max(dp[i], dp[j]*(i-j-1));
             }
         }
-        return dp[n];
-    }
-
-    public static void main(String[] args) {
-        System.out.println(maxLength1(3));
-        System.out.println(maxLength1(8));
+        return dp[N];
     }
 
 }
