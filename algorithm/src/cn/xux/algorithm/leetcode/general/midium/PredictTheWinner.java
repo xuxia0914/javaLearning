@@ -35,13 +35,11 @@ public class PredictTheWinner {
     public boolean PredictTheWinner(int[] nums) {
         int len = nums.length;
         int[][] dp = new int[len][len];
-        for(int i=0;i<len;i++) {
-            dp[i][i] = nums[i];
-        }
         int[] sums = new int[len+1];
         sums[0] = 0;
-        for(int i=1;i<=len;i++) {
-            sums[i] = sums[i-1]+nums[i-1];
+        for(int i=0;i<len;i++) {
+            dp[i][i] = nums[i];
+            sums[i+1] = sums[i]+nums[i];
         }
         for(int i=1;i<len;i++) {
             for(int j=0;j+i<len;j++) {
