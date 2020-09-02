@@ -1,27 +1,25 @@
-package cn.xux.algorithm.leetcode.general.easy;
+package cn.xux.algorithm.leetcode.vip.midium;
 
 /**
- * 字符串中的加粗单词
- * Given a set of keywords words and a string S,
- * make all appearances of all keywords in S bold.
- * Any letters between <b> and </b> tags become bold.
- * The returned string should use the least number of tags possible,
- * and of course the tags should form a valid combination.
- * For example, given that words = ["ab", "bc"] and S = "aabcd",
- * we should return "a<b>abc</b>d". Note that returning "a<b>a<b>b</b>c</b>d" would use more tags,
- * so it is incorrect.
- * Note:
- * words has length in range [0, 50].
- * words[i] has length in range [1, 10].
- * S has length in range [0, 500].
- * All characters in words[i] and S are lowercase letters.
+ * 758.字符串中的加粗单词
+ * 给定一个关键词集合 words 和一个字符串 S，将所有 S 中出现的关键词加粗。
+ * 所有在标签 <b> 和 </b> 中的字母都会加粗。
+ * 返回的字符串需要使用尽可能少的标签，当然标签应形成有效的组合。
+ * 例如，给定 words = ["ab", "bc"] 和 S = "aabcd"，需要返回 "a<b>abc</b>d"。
+ * 注意返回 "a<b>a<b>b</b>c</b>d" 会使用更多的标签，因此是错误的。
+ *
+ * 注：
+ * words 长度的范围为 [0, 50]。
+ * words[i] 长度的范围为 [1, 10]。
+ * S 长度的范围为 [0, 500]。
+ * 所有 words[i] 和 S 中的字符都为小写字母。
  */
 public class BoldWordsInString {
 
     public String boldWords(String[] words, String S) {
         boolean[] flags = new boolean[S.length()];
         for(String word : words) {
-            for(int i=0;i<S.length()-word.length();i++) {
+            for(int i=0;i<=S.length()-word.length();i++) {
                 if(word.equals(S.substring(i, i+word.length()))) {
                     for(int j=i;j<i+word.length();j++) {
                         flags[j] = true;

@@ -1,7 +1,9 @@
 package cn.xux.algorithm.leetcode.vip.easy;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * 252 会议室
@@ -37,6 +39,21 @@ public class MeetingRooms {
         }
         return true;
     }
+
+    public boolean canAttendMeetings(List<Interval> intervals) {
+        // Write your code here
+        if(intervals==null||intervals.size()<2) {
+            return true;
+        }
+        Collections.sort(intervals, Comparator.comparingInt(o -> o.start));
+        for(int i=1;i<intervals.size();i++) {
+            if(intervals.get(i).start<intervals.get(i-1).end) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 }
 

@@ -48,7 +48,7 @@ public class ValidNumber {
             return false;
         }
         s = s.trim();
-        String[] ss = s.split("e", -1);
+        String[] ss = s.split("e|E", -1);
         if(ss.length==0||ss.length>2) {
             return false;
         }
@@ -85,7 +85,7 @@ public class ValidNumber {
         }
         for(int i=0;i<s.length();i++) {
             char c = s.charAt(i);
-            if(c>'9'||c<'0') {
+            if((i==0&&(s.charAt(0)=='-'||s.charAt(0)=='+'))||c>'9'||c<'0') {
                 return false;
             }
         }
