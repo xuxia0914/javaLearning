@@ -1,4 +1,4 @@
-package cn.xux.algorithm.leetcode.general.midium;
+package cn.xux.algorithm.leetcode.vip.midium;
 
 import java.util.ArrayList;
 import java.util.List;
