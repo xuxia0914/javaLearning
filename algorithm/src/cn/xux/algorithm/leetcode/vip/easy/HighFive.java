@@ -3,7 +3,7 @@ package cn.xux.algorithm.leetcode.vip.easy;
 import java.util.*;
 
 /**
- * 1086. 前五科的均分（C++）
+ * 1086. 前五科的均分
  * 给你一个不同学生的分数列表，请按 学生的 id 顺序 返回每个学生 最高的五科 成绩的 平均分。
  * 对于每条 items[i] 记录， items[i][0] 为学生的 id，items[i][1] 为学生的分数。
  * 平均分请采用整数除法计算。
