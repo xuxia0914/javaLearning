@@ -3,7 +3,7 @@ package cn.xux.algorithm.leetcode.general.hard;
 import java.util.*;
 
 /**
- * 1168. 水资源分配优化  显示英文描述
+ * 1168. 水资源分配优化
  * 村里面一共有 n 栋房子。我们希望通过建造水井和铺设管道来为所有房子供水。
  * 对于每个房子 i，我们有两种可选的供水方案：
  * 一种是直接在房子内建造水井，成本为 wells[i]；
@@ -44,23 +44,24 @@ public class OptimizeWaterDistributionInAVillage {
             graph[i].add(new int[]{j, v});
             graph[j].add(new int[]{i, v});
         }
-        int[] costs = new int[n+1];
-        Arrays.fill(costs, Integer.MAX_VALUE);
-        costs[0] = 0;
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(0);
-        while(!queue.isEmpty()) {
-            int curr = queue.poll();
-            for(int[] nei : graph[curr]) {
-                if(costs[nei[0]]>nei[1]) {
-                    costs[nei[0]] = nei[1];
-                    queue.offer(nei[0]);
+        int ans = 0;
+        boolean[] visited = new boolean[n+1];
+        visited[0] = true;
+        PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o->o[2]));
+        for(int i=1;i<=n;i++) {
+            queue.offer(new int[]{0,i,wells[i-1]});
+        }
+        while(queue.size()>0) {
+            int[] curr = queue.poll();
+            if(!visited[curr[1]]) {
+                ans += curr[2];
+                visited[curr[1]] = true;
+                for(int[] nei : graph[curr[1]]) {
+                    if(!visited[nei[0]]) {
+                        queue.offer(new int[]{curr[1], nei[0], nei[1]});
+                    }
                 }
             }
-        }
-        int ans = 0;
-        for(int cost : costs) {
-            ans += cost;
         }
         return ans;
     }
