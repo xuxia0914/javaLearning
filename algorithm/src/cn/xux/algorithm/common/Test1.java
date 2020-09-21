@@ -6,55 +6,70 @@ import java.util.List;
 public class Test1 {
 
     public static void main(String[] args) {
-//        System.out.println(new Test1().getAns(new int[]{8,9,7,3,0,5,11}));
+        System.out.println(new Test1().paintingPlan(2,4));
     }
 
     /**
-     * 秋叶收藏集
-     * 小扣出去秋游，途中收集了一些红叶和黄叶，他利用这些叶子初步整理了一份秋叶收藏集 leaves，
-     * 字符串 leaves 仅包含小写字符 r 和 y， 其中字符 r 表示一片红叶，字符 y 表示一片黄叶。
-     * 出于美观整齐的考虑，小扣想要将收藏集中树叶的排列调整成「红、黄、红」三部分。
-     * 每部分树叶数量可以不相等，但均需大于等于 1。
-     * 每次调整操作，小扣可以将一片红叶替换成黄叶或者将一片黄叶替换成红叶。
-     * 请问小扣最少需要多少次调整操作才能将秋叶收藏集调整完毕。
+     * LCP 22. 黑白方格画
+     * 小扣注意到秋日市集上有一个创作黑白方格画的摊位。
+     * 摊主给每个顾客提供一个固定在墙上的白色画板，画板不能转动。
+     * 画板上有 n * n 的网格。绘画规则为，小扣可以选择任意多行以及任意多列的格子涂成黑色，所选行数、列数均可为 0。
+     * 小扣希望最终的成品上需要有 k 个黑色格子，请返回小扣共有多少种涂色方案。
+     * 注意：两个方案中任意一个相同位置的格子颜色不同，就视为不同的方案。
      *
      * 示例 1：
-     * 输入：leaves = "rrryyyrryyyrr"
-     * 输出：2
-     * 解释：调整两次，将中间的两片红叶替换成黄叶，得到 "rrryyyyyyyyrr"
+     * 输入：n = 2, k = 2
+     * 输出：4
+     * 解释：一共有四种不同的方案：
+     * 第一种方案：涂第一列；
+     * 第二种方案：涂第二列；
+     * 第三种方案：涂第一行；
+     * 第四种方案：涂第二行。
      *
      * 示例 2：
-     * 输入：leaves = "ryr"
+     * 输入：n = 2, k = 1
      * 输出：0
-     * 解释：已符合要求，不需要额外操作
+     * 解释：不可行，因为第一次涂色至少会涂两个黑格。
      *
-     * 提示：
-     * 3 <= leaves.length <= 10^5
-     * leaves 中只包含字符 'r' 和字符 'y'
+     * 示例 3：
+     * 输入：n = 2, k = 4
+     * 输出：1
+     * 解释：共有 2*2=4 个格子，仅有一种涂色方案。
+     *
+     * 限制：
+     * 1 <= n <= 6
+     * 0 <= k <= n * n
      */
-    public int minimumOperations(String leaves) {
-        // dp[0]表示使树叶排列处于全红的状态 需要修改的次数
-        // dp[1]表示树叶排列处于「红、黄」的状态 需要修改的次数
-        // dp[2]表示树叶排列处于「红、黄、红」的状态 需要修改的次数
-        int[] dp = new int[3];
-        // 截止到第一个树叶
-        dp[0] = (leaves.charAt(0)=='r'?0:1);
-
-        // 截止到第二个树叶
-        dp[1] = dp[0]+(leaves.charAt(1)=='y'?0:1);
-        dp[0] += (leaves.charAt(1)=='r'?0:1);
-
-        //截止到第三个树叶
-        dp[2] = dp[1]+(leaves.charAt(2)=='r'?0:1);
-        dp[1] = Math.min(dp[1], dp[0])+(leaves.charAt(2)=='y'?0:1);
-        dp[0] += (leaves.charAt(2)=='r'?0:1);
-
-        for(int i=3;i<leaves.length();i++) {
-            dp[2] = Math.min(dp[2], dp[1])+(leaves.charAt(i)=='r'?0:1);
-            dp[1] = Math.min(dp[1], dp[0])+(leaves.charAt(i)=='y'?0:1);
-            dp[0] += (leaves.charAt(i)=='r'?0:1);
+    public int paintingPlan(int n, int k) {
+        if(k==0||k==n*n) {
+            return 1;
         }
-        return dp[2];
+        if(k<n||k>n*n) {
+            return 0;
+        }
+        int ans = 0;
+        for(int i=0;i<=n;i++) {
+            for(int j=0;j<=n;j++) {
+                if((i+j)*n-i*j==k) {
+                    int tmpI = i;
+                    int tmpJ = j;
+                    int currUp = 1;
+                    int currBoot = 1;
+                    while(tmpI>0) {
+                        currUp *= n-tmpI+1;
+                        currBoot *= tmpI;
+                        tmpI--;
+                    }
+                    while(tmpJ>0) {
+                        currUp *= n-tmpJ+1;
+                        currBoot *= tmpJ;
+                        tmpJ--;
+                    }
+                    ans += currUp/currBoot;
+                }
+            }
+        }
+        return ans;
     }
 
 }
