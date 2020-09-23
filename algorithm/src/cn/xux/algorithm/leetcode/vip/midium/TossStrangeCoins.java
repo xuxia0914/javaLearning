@@ -24,7 +24,28 @@ import java.util.Map;
  */
 public class TossStrangeCoins {
 
+    public static void main(String[] args) {
+        TossStrangeCoins ts = new TossStrangeCoins();
+        System.out.println(ts.probabilityOfHeads(new double[]{0.4},1));
+        System.out.println(ts.probabilityOfHeads(new double[]{0.5,0.5,0.5,0.5,0.5},0));
+    }
+
+    // dp
     public double probabilityOfHeads(double[] prod, int target) {
+        int n = prod.length;
+        double[] dp = new double[target+1];
+        dp[0] = 1.0;
+        for(int i=0;i<n;i++) {
+            for(int j=Math.min(i+1, target);j>0;j--) {
+                dp[j] = dp[j-1]*prod[i]+dp[j]*(1.0-prod[i]);
+            }
+            dp[0] = dp[0]*(1.0-prod[i]);
+        }
+        return dp[target];
+    }
+
+    // 递归
+    public double probabilityOfHeads1(double[] prod, int target) {
         return dfs(prod, 0, target);
     }
 

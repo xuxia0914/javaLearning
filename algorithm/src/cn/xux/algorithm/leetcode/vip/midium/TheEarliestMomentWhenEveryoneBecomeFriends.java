@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * 1101：彼此熟识的最早时间（超详细的解法！！！）
+ * 1101：彼此熟识的最早时间
  * 在一个社交圈子当中，有N个人。每个人都有一个从0到N-1唯一的id编号。
  * 我们有一份日志列表logs，其中每条记录都包含一个非负整数的时间戳，
  * 以及分属两个人的不同id，logs[i] = [timestamp, id_A, id_B]。

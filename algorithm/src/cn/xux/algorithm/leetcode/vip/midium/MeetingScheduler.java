@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * 1229：安排会议日程（超详细的解法！！！）
+ * 1229：安排会议日程
  * 你是一名行政助理，手里有两位客户的空闲时间表：slots1 和 slots2，
  * 以及会议的预计持续时间 duration，请你为他们安排合适的会议时间。
  * 「会议时间」是两位客户都有空参加，并且持续时间能够满足预计时间 duration 的 最早的时间间隔。
