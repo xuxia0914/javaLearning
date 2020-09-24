@@ -18,14 +18,12 @@ import cn.xux.algorithm.common.TreeNode;
  */
 public class DiameterOfBinaryTree {
 
-    int result = 0;
+    int result;
 
     public int diameterOfBinaryTree(TreeNode root) {
-        if(root==null) {
-            return 0;
-        }
+        result = 1;
         depth(root);
-        return depth(root.left)+depth(root.right)+1;
+        return result-1;
     }
 
     public int depth(TreeNode node) {
@@ -34,7 +32,7 @@ public class DiameterOfBinaryTree {
         }
         int left = depth(node.left);
         int right = depth(node.right);
-        result = Math.max(result, left+right);
+        result = Math.max(result, left+right+1);
         return Math.max(left, right)+1;
     }
 

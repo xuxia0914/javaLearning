@@ -1,5 +1,7 @@
 package cn.xux.algorithm.leetcode.general.hard;
 
+import java.util.Arrays;
+
 /**
  * 1439. 有序矩阵中的第 k 个最小数组和
  * 给你一个 m * n 的矩阵 mat，以及一个整数 k ，矩阵中的每一行都以非递减的顺序排列。
@@ -35,9 +37,50 @@ package cn.xux.algorithm.leetcode.general.hard;
  */
 public class FindTheKthSmallestSumOfAMatrixWithSortedRows {
 
+    public static void main(String[] args) {
+        FindTheKthSmallestSumOfAMatrixWithSortedRows ft = new FindTheKthSmallestSumOfAMatrixWithSortedRows();
+        System.out.println(ft.kthSmallest(new int[][]{{1,3,11},{2,4,6}}, 5));
+        System.out.println(ft.kthSmallest(new int[][]{{1,3,11},{2,4,6}}, 9));
+    }
+
     public int kthSmallest(int[][] mat, int k) {
-        // TODO
-        return 0;
+        int left = 0;
+        int right = 0;
+        for (int[] arr : mat) {
+            left += arr[0];
+            right += arr[arr.length - 1];
+        }
+        int min = left;
+        while(left<right) {
+            int mid = (left+right)/2;
+            cnt = 1;
+            dfs(mat, mid, 0, min, k);
+            if(cnt>=k) {
+                right = mid;
+            }else {
+                left = mid+1;
+            }
+        }
+        return left;
+    }
+
+    int cnt;
+
+    // 计算数组和小于tar的数组个数(大于k是计算终止)
+    // js[i]表示目前数组的第i行选中的数是mat[i]的第j个数
+    private void dfs(int[][] mat,int mid, int i, int sum, int k) {
+        if(sum>mid||i==mat.length||cnt>=k) {
+            return;
+        }
+        dfs(mat, mid, i+1, sum, k);
+        for(int j=1;j<mat[0].length;j++) {
+            if(sum+mat[i][j]-mat[i][0]<=mid) {
+                cnt++;
+                dfs(mat, mid, i+1, sum+mat[i][j]-mat[i][0], k);
+            }else {
+                break;
+            }
+        }
     }
 
 }
