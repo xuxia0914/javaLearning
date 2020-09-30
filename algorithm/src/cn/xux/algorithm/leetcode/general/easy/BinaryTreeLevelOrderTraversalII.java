@@ -5,15 +5,18 @@ import cn.xux.algorithm.common.TreeNode;
 import java.util.*;
 
 /**
- * Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
- * For example:
- * Given binary tree {3,9,20,#,#,15,7},
+ * 107. 二叉树的层次遍历 II
+ * 给定一个二叉树，返回其节点值自底向上的层次遍历。
+ * （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+ *
+ * 例如：
+ * 给定二叉树 [3,9,20,null,null,15,7],
  *     3
  *    / \
  *   9  20
  *     /  \
  *    15   7
- * return its bottom-up level order traversal as:
+ * 返回其自底向上的层次遍历为：
  * [
  *   [15,7],
  *   [9,20],
@@ -22,54 +25,29 @@ import java.util.*;
  */
 public class BinaryTreeLevelOrderTraversalII {
 
-    public static List<List<Integer>> solution(TreeNode tree) {
-        List<List<Integer>> result = new LinkedList<List<Integer>>();
-        if(tree==null) {
-            return result;
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> ans = new LinkedList<>();
+        if(root==null) {
+            return ans;
         }
-        Queue<Map<Integer, TreeNode>> q = new LinkedList<Map<Integer, TreeNode>>();
-        Map<Integer, TreeNode> map = new HashMap<Integer, TreeNode>();
-        map.put(1, tree);
-        q.offer(map);
-        while(!q.isEmpty()) {
-            Map<Integer, TreeNode> tmp = q.poll();
-            for(Integer i : tmp.keySet()) {
-                TreeNode node = tmp.get(i);
-                if(result.size()<i) {
-                    List<Integer> list = new ArrayList<Integer>();
-                    list.add(node.val);
-                    result.add(0, list);
-                }else {
-                    result.get(0).add(node.val);
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            List<Integer> list = new ArrayList<>();
+            while(size-->0) {
+                TreeNode curr = queue.poll();
+                list.add(curr.val);
+                if(curr.left!=null) {
+                    queue.offer(curr.left);
                 }
-                if(node.left!=null) {
-                    Map<Integer, TreeNode> left = new HashMap<Integer, TreeNode>();
-                    left.put(i+1, node.left);
-                    q.offer(left);
-                }
-                if(node.left!=null) {
-                    Map<Integer, TreeNode> right = new HashMap<Integer, TreeNode>();
-                    right.put(i+1, node.right);
-                    q.offer(right);
+                if(curr.right!=null) {
+                    queue.offer(curr.right);
                 }
             }
+            ans.add(0,list);
         }
-        return result;
-    }
-
-    public static void main(String[] args) {
-        TreeNode node1 = new TreeNode(3);
-        TreeNode node2 = new TreeNode(9);
-        TreeNode node3 = new TreeNode(20);
-        TreeNode node4 = new TreeNode(15);
-        TreeNode node5 = new TreeNode(17);
-
-        node3.left = node4;
-        node3.right = node5;
-        node1.left = node2;
-        node1.right = node3;
-
-        System.out.println(solution(node1));
+        return ans;
     }
 
 }

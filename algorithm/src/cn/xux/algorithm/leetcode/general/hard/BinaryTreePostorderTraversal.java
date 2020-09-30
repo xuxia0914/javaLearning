@@ -35,14 +35,14 @@ public class BinaryTreePostorderTraversal {
     }
 
     /**迭代*/
-    public List<Integer> postorderTraversal1(cn.xux.algorithm.common.TreeNode root) {
+    public List<Integer> postorderTraversal1(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         if(root==null) {
             return res;
         }
-        Stack<cn.xux.algorithm.common.TreeNode> stack = new Stack<>();
-        Set<cn.xux.algorithm.common.TreeNode> set = new HashSet<>();
-        cn.xux.algorithm.common.TreeNode node = root;
+        Stack<TreeNode> stack = new Stack<>();
+        Set<TreeNode> set = new HashSet<>();
+        TreeNode node = root;
         while(node!=null) {
             stack.push(node);
             node = node.left;

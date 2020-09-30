@@ -6,38 +6,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Given a binary tree, return all root-to-leaf paths.
- * Note: A leaf is a node with no children.
- * Example:
- * Input:
+ * 257. 二叉树的所有路径
+ * 给定一个二叉树，返回所有从根节点到叶子节点的路径。
+ * 说明: 叶子节点是指没有子节点的节点。
+ *
+ * 示例:
+ * 输入:
  *    1
  *  /   \
  * 2     3
  *  \
  *   5
- * Output: ["1->2->5", "1->3"]
- * Explanation: All root-to-leaf paths are: 1->2->5, 1->3
+ * 输出: ["1->2->5", "1->3"]
+ * 解释: 所有根节点到叶子节点的路径为: 1->2->5, 1->3
  */
 public class BinaryTreePaths {
 
     public List<String> binaryTreePaths(TreeNode root) {
-        List<String> res = new ArrayList<>();
+        ans = new ArrayList<>();
         if(root==null) {
-            return res;
+            return ans;
         }
-        helper(res, root, "");
-        return res;
+        dfs(root, "");
+        return ans;
     }
 
-    public void helper(List<String> res, TreeNode node, String curr) {
+    List<String> ans;
+
+    public void dfs(TreeNode node, String curr) {
         if(node.left==null&&node.right==null) {
-            res.add(curr+node.val);
+            ans.add(curr+node.val);
         }
         if(node.left!=null) {
-            helper(res, node.left, curr+node.val+"->");
+            dfs(node.left, curr+node.val+"->");
         }
         if(node.right!=null) {
-            helper(res, node.right, curr+node.val+"->");
+            dfs(node.right, curr+node.val+"->");
         }
     }
 
