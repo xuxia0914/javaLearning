@@ -3,42 +3,31 @@ package cn.xux.algorithm.leetcode.general.midium;
 import cn.xux.algorithm.common.ListNode;
 
 /**
+ * 24. 两两交换链表中的节点
  * 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+ * 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+ *
  * 示例:
  * 给定 1->2->3->4, 你应该返回 2->1->4->3.
  */
 
 public class SwapNodesInPairs {
 
-    public static ListNode solution1(ListNode node) {
-        if(node==null||node.next==null) {
-            return node;
+    public ListNode swapPairs(ListNode head) {
+        if(head==null||head.next==null) {
+            return head;
         }
-
-        ListNode header = new ListNode(0);
-        header.next = node;
-        ListNode first = header;
-        while(first.next.next!=null) {
-            ListNode second = first.next;
-            ListNode third = first.next.next;
-            second.next = second.next.next;
-            third.next = second;
-            first.next = third;
-            first = second;
+        ListNode newHead = new ListNode(0);
+        newHead.next = head;
+        ListNode first = newHead;
+        while(first!=null&&first.next!=null&&first.next.next!=null) {
+            ListNode tmp = first.next;
+            first.next = first.next.next;
+            tmp.next = first.next.next;
+            first.next.next = tmp;
+            first = first.next.next;
         }
-        return header.next;
-    }
-
-    public static ListNode solution2(ListNode node) {
-        if(node==null||node.next==null) {
-            return node;
-        }
-
-        ListNode second = node.next;
-        node.next = solution2(node.next.next);
-        second.next = node;
-
-        return second;
+        return newHead.next;
     }
 
     public static void main(String[] args) {
@@ -58,7 +47,7 @@ public class SwapNodesInPairs {
         }
         System.out.println("");
 //        ListNode node = solution1(node1);
-        ListNode node = solution2(node1);
+        ListNode node = new SwapNodesInPairs().swapPairs(node1);
         while (node!=null) {
             System.out.print(node.val + "->");
             node = node.next;
