@@ -1,7 +1,5 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
-import cn.xux.algorithm.common.BinaryTreeNodeWithRightPointer;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -28,6 +26,26 @@ import java.util.Queue;
  */
 public class PopulatingNextRightPointersInEachNode {
 
+    // O(1)空间
+    public Node connect(Node root) {
+        Node start = root;
+        while(start!=null&&start.left!=null) {
+            Node newStart = start.left;
+            Node curr = start;
+            Node pre = null;
+            while(curr!=null) {
+                if(pre!=null) {
+                    pre.next = curr.left;
+                }
+                curr.left.next = curr.right;
+                pre = curr.right;
+                curr = curr.next;
+            }
+            start = newStart;
+        }
+        return root;
+    }
+
     /**
      * 迭代
      * 执行用时 :1 ms, 在所有 Java 提交中击败了76.19%的用户
@@ -35,16 +53,16 @@ public class PopulatingNextRightPointersInEachNode {
      * @param root
      * @return
      */
-    public BinaryTreeNodeWithRightPointer connect(BinaryTreeNodeWithRightPointer root) {
+    public Node connect2(Node root) {
         if(root==null) {
             return root;
         }
-        Queue<BinaryTreeNodeWithRightPointer> queue = new LinkedList<>();
+        Queue<Node> queue = new LinkedList<>();
         queue.offer(root);
         while(!queue.isEmpty()) {
             int n = queue.size();
             for(int i=0;i<n;i++) {
-                BinaryTreeNodeWithRightPointer curr = queue.poll();
+                Node curr = queue.poll();
                 if(i!=n-1) {
                     curr.next = queue.peek();
                 }
@@ -64,7 +82,7 @@ public class PopulatingNextRightPointersInEachNode {
      * @param root
      * @return
      */
-    public BinaryTreeNodeWithRightPointer connect1(BinaryTreeNodeWithRightPointer root) {
+    public Node connect1(Node root) {
         if(root==null||root.left==null) {
             return root;
         }
@@ -75,6 +93,27 @@ public class PopulatingNextRightPointersInEachNode {
         connect1(root.left);
         connect1(root.right);
         return root;
+    }
+
+    // Definition for a Node.
+    class Node {
+        public int val;
+        public Node left;
+        public Node right;
+        public Node next;
+
+        public Node() {}
+
+        public Node(int _val) {
+            val = _val;
+        }
+
+        public Node(int _val, Node _left, Node _right, Node _next) {
+            val = _val;
+            left = _left;
+            right = _right;
+            next = _next;
+        }
     }
 
 }
