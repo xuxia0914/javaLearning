@@ -70,4 +70,27 @@ public class LongPressedName {
         return idx1==len1&&idx2==len2;
     }
 
+    public boolean isLongPressedName1(String name, String typed) {
+        return helper(name, typed, 0, 0);
+    }
+
+    private boolean helper(String name, String typed, int idx1, int idx2) {
+        int len1 = name.length();
+        int len2 = typed.length();
+        if(idx1==len1&&idx2==len2) {
+            return true;
+        }
+        if(idx1==len1||idx2==len2) {
+            return false;
+        }
+        char c1 = name.charAt(idx1);
+        char c2 = typed.charAt(idx2);
+        if(c1!=c2) {
+            return false;
+        }else {
+            return helper(name, typed, idx1+1, idx2+1)
+                    ||helper(name, typed, idx1, idx2+1);
+        }
+    }
+
 }
