@@ -6,6 +6,8 @@ server:
 logging:
   file: /log/javaLearning/springbootDemo.log
   level:
+    org:
+      mongodb: info
     root: info
   pattern:
     console: '%d{yyyy/MM/dd-HH:mm:ss} [%thread] %-5level %logger- %msg%n'
@@ -32,3 +34,11 @@ spring:
     port: 6379
     password: 123456
     timeout: 5000
+
+#mongo配置项
+chunksFileDir: D:/workdoc/tmp/fs.chunks/
+mongoHost: 134.83.2.151
+mongoPort: 38200
+mongoDbName: admin
+mongoCollectionName: fs.files
+mongofilePath: D:/workdoc/tmp/fs.files.txt
