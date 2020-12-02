@@ -149,7 +149,6 @@ public class MongodbUtils {
                 ObjectId objectId = new ObjectId(fileId);
                 GridFSDBFile gridFSDBFile = gridFs.findOne(objectId);
                 String name = (String) gridFSDBFile.get("filename");
-                //todo name解析到linux有乱码
                 name = new String(name.getBytes("UTF-8"));
                 name="("+num2+")"+fileId+"."+name;
                 File file = new File(chunksFilePath);
