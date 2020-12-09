@@ -46,7 +46,7 @@ public class MinimumIncompatibility {
         System.out.println(new MinimumIncompatibility().minimumIncompatibility(new int[]{4,10,4,7,9,10,4,6,9,10}, 5));
     }
 
-    // O(4^n) TLE
+    // O(4^n)
     public int minimumIncompatibility(int[] nums, int k) {
         // 特殊情况 nums.length==k
         if(nums.length==k) {

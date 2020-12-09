@@ -3,12 +3,9 @@ package cn.xux.algorithm.leetcode.general.midium;
 /**
  * 62. 不同路径
  * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
- * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+ * 机器人每次只能向下或者向右移动一步。
+ * 机器人试图达到网格的右下角（在下图中标记为“Finish”）。
  * 问总共有多少条不同的路径？
- *
- * 例如，上图是一个7 x 3 的网格。有多少可能的路径？
- *
- * 说明：m 和 n 的值均不超过 100。
  *
  * 示例 1:
  * 输入: m = 3, n = 2
@@ -22,15 +19,15 @@ package cn.xux.algorithm.leetcode.general.midium;
  * 示例 2:
  * 输入: m = 7, n = 3
  * 输出: 28
+ *
+ * 提示：
+ * 1 <= m, n <= 100
+ * 题目数据保证答案小于等于 2 * 10 ^ 9
  */
 public class UniquePaths {
 
     /**
-     * Runtime: 0 ms, faster than 100.00% of Java online submissions for Unique Paths.
-     * Memory Usage: 32.9 MB, less than 5.10% of Java online submissions for Unique Paths.
-     * @param m
-     * @param n
-     * @return
+     * 动态规划
      */
     public int uniquePaths(int m, int n) {
         if(m<1||n<1) {
@@ -52,34 +49,14 @@ public class UniquePaths {
     }
 
     /**
-     * Runtime: 0 ms, faster than 100.00% of Java online submissions for Unique Paths.
-     * Memory Usage: 33 MB, less than 5.10% of Java online submissions for Unique Paths.
-     * @param m
-     * @param n
-     * @return
+     * 排列组合
      */
     public int uniquePaths1(int m, int n) {
-        if(m<1||n<1) {
-            return 0;
+        long ans = 1;
+        for (int x = n, y = 1; y < m; ++x, ++y) {
+            ans = ans * x / y;
         }
-        if(m==1||n==1) {
-            return 1;
-        }
-        if(n>m) {
-            int tmp = m;
-            m = n;
-            n = tmp;
-        }
-        return (int)(helper(m+n-2, m)/helper(n-1, 2));
-    }
-
-    public long helper(int m, int n) {
-        long res = 1;
-        while(m>=n) {
-            res *=m;
-            m--;
-        }
-        return res;
+        return (int) ans;
     }
 
     public static void main(String[] args) {
