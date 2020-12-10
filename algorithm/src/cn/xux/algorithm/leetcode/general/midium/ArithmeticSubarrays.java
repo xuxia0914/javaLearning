@@ -65,7 +65,8 @@ public class ArithmeticSubarrays {
             }if(sign==0){
                 lt.add(true);
             }
-        }return lt;
+        }
+        return lt;
     }
 
 }
