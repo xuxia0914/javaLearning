@@ -4,18 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 字符串第一个唯一字符
- * Given a string, find the first non-repeating character in it and return it's index. If it doesn't exist, return -1.
- * Examples:
+ * 387. 字符串中的第一个唯一字符
+ * 给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。
+ * 如果不存在，则返回 -1。
+ *
+ * 示例：
  * s = "leetcode"
- * return 0.
- * s = "loveleetcode",
- * return 2.
- * Note: You may assume the string contain only lowercase letters.
+ * 返回 0
+ * s = "loveleetcode"
+ * 返回 2
+ *
+ * 提示：你可以假定该字符串只包含小写字母。
  */
 public class FirstUniqueCharacterInAString {
 
-    public static int solution1(String s) {
+    public int firstUniqChar(String s) {
         if(s==null||s.length()==0) {
             return -1;
         }
@@ -31,7 +34,7 @@ public class FirstUniqueCharacterInAString {
         return -1;
     }
 
-    public static int solution2(String s) {
+    public int firstUniqChar1(String s) {
         if(s==null||s.length()==0) {
             return -1;
         }
@@ -45,11 +48,6 @@ public class FirstUniqueCharacterInAString {
             }
         }
         return -1;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(solution2("leetcode"));
-        System.out.println(solution2("loveleetcode"));
     }
 
 }
