@@ -24,6 +24,9 @@ package cn.xux.algorithm.leetcode.general.midium;
  */
 public class LastStoneWeightII {
 
+    // 背包问题
+    // 相当于用加号和减号把石头的重量连起来，并使结果最小
+    // 目标是求带减号的那拨石头，使其和<=sum/2,并接近于sum/2
     public int lastStoneWeightII(int[] stones) {
         if(stones==null||stones.length==0) {
             return 0;
