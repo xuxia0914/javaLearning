@@ -32,21 +32,17 @@ public class NonOverlappingIntervals {
             return 0;
         }
         Arrays.sort(intervals, (o1, o2)->o1[0]!=o2[0]?o1[0]-o2[0]:o1[1]-o2[1]);
-        int len = intervals.length;
-        int left = 0;
-        int right;
-        int result = 0;
-        while(left<len-1) {
-            right = left+1;
-            int max = intervals[left][1];
-            while(right<len&&intervals[right][0]<max) {
-                max = Math.min(max, intervals[right][1]);
-                right++;
-                result++;
+        int left = intervals[0][1];
+        int ans = 0;
+        for(int i=1;i<intervals.length;i++) {
+            if(intervals[i][0]<left) {
+                ans++;
+                left = Math.min(left, intervals[i][1]);
+            }else {
+                left = intervals[i][1];
             }
-            left = right;
         }
-        return result;
+        return ans;
     }
 
 }
