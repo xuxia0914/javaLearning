@@ -1,4 +1,4 @@
-package cn.xux.algorithm.leetcode.general.easy;
+package cn.xux.algorithm.leetcode.general.midium;
 
 /**
  * 189. 旋转数组
