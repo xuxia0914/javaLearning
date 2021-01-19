@@ -88,7 +88,7 @@ public class MinCostToConnectAllPoints {
         parent[find(y, parent)] = find(x, parent);
     }
 
-    // prim(普里姆)算法 适合于边比较秘密集的图
+    // prim(普里姆)算法 适合于边比较密集的图
     public int minCostConnectPoints1(int[][] points) {
         int n = points.length;
         int ans = 0;
