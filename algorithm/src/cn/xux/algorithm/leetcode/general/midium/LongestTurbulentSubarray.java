@@ -60,4 +60,29 @@ public class LongestTurbulentSubarray {
         return Math.max(cnt, ans);
     }
 
+    public int maxTurbulenceSize1(int[] A) {
+        if(A==null||A.length==0) {
+            return 0;
+        }
+        int n = A.length;
+        boolean asc = true;
+        int cnt = 1;
+        int ans = 1;
+        for(int i=1;i<n;i++) {
+            if(A[i]==A[i-1]) {
+                ans = Math.max(ans, cnt);
+                cnt = 1;
+                continue;
+            }
+            if(A[i]>A[i-1]==asc) {
+                ans = Math.max(ans, cnt);
+                cnt = 2;
+            }else {
+                cnt++;
+                asc = !asc;
+            }
+        }
+        return Math.max(cnt, ans);
+    }
+
 }
