@@ -33,6 +33,30 @@ import java.util.Stack;
 public class VerifyPreorderSerializationOfABinaryTree {
 
     public boolean isValidSerialization(String preorder) {
+        int i = 0;
+        int slots = 1;
+        int n = preorder.length();
+        while(i<n) {
+            if(slots==0) {
+                return false;
+            }
+            if(preorder.charAt(i)==',') {
+                i++;
+            }else if(preorder.charAt(i)=='#') {
+                slots--;
+                i++;
+            }else {
+                while(i<n&&preorder.charAt(i)!=',') {
+                    i++;
+                }
+                // slots-1+2
+                slots++;
+            }
+        }
+        return slots==0;
+    }
+
+    public boolean isValidSerialization1(String preorder) {
         if(preorder==null||"".equals(preorder)) {
             return true;
         }
