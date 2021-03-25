@@ -44,9 +44,10 @@ public class FlattenNestedListIterator {
  */
 class NestedIterator implements Iterator<Integer> {
 
-    Queue<Integer> queue = new LinkedList<>();
+    Queue<Integer> queue;
 
     public NestedIterator(List<NestedInteger> nestedList) {
+        queue = new LinkedList<>();
         for(NestedInteger ni : nestedList) {
             DFS(ni);
         }
@@ -59,15 +60,16 @@ class NestedIterator implements Iterator<Integer> {
 
     @Override
     public boolean hasNext() {
-        return queue.isEmpty();
+        return !queue.isEmpty();
     }
 
     private void DFS(NestedInteger ni) {
         if(ni.isInteger()) {
             queue.offer(ni.getInteger());
-        }
-        for(NestedInteger nestInteger : ni.getList()) {
-            DFS(nestInteger);
+        }else {
+            for(NestedInteger nestInteger : ni.getList()) {
+                DFS(nestInteger);
+            }
         }
     }
 

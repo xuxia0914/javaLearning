@@ -36,7 +36,7 @@ public class OneThreeTwoPattern {
             mins[i] = Math.min(mins[i-1], nums[i]);
         }
         Stack<Integer> stack = new Stack<>();
-        for(int i=len-1;i>0;i++) {
+        for(int i=len-1;i>0;i--) {
             if(nums[i]>mins[i]) {
                 while(!stack.isEmpty()&&stack.peek()<=mins[i]) {
                     stack.pop();
