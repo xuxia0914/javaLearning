@@ -54,4 +54,38 @@ public class SuperEggDrop {
         return ans;
     }
 
+    public int superEggDrop1(int K, int N) {
+        int[][] dp = new int[N+1][K+1];
+        for(int i=1;i<=N;i++) {
+            for(int j=1;j<=K;j++) {
+                dp[i][j] = i;
+            }
+        }
+        for(int i=1;i<=N;i++) {
+            for(int j=1;j<=K;j++) {
+                for(int k=1;k<i;k++) {
+                    dp[i][j] = Math.min(dp[i][j], 1+Math.max(dp[k][j-1], dp[i-k][j]));
+                }
+                /*int left = 1;
+                int right = i;
+                while(left<right) {
+                    int mid = (left+right)/2;
+                    int leftVal = dp[mid][j-1];
+                    int rightVal = dp[i-mid][j];
+                    if(rightVal>leftVal) {
+                        left = mid+1;
+                    }else if(rightVal<leftVal) {
+                        right = mid-1;
+                    }else {
+                        left = mid;
+                        break;
+                    }
+                }
+                dp[i][j] = dp[left][j-1];*/
+            }
+        }
+        return dp[N][K];
+    }
+
+
 }

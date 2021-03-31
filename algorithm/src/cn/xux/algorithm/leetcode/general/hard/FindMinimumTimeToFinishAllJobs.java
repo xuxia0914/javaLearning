@@ -31,73 +31,13 @@ public class FindMinimumTimeToFinishAllJobs {
 
     public static void main(String[] args) {
         System.out.println(new FindMinimumTimeToFinishAllJobs().minimumTimeRequired(
-                new int[]{1,2,4,7,8}, 2
+                new int[]{23,34,56,78,11}, 2
         ));
     }
 
     public int minimumTimeRequired(int[] jobs, int k) {
-        int sum = 0;
-        for(int job : jobs) {
-            sum += job;
-        }
-        int left = sum/k;
-        int right = sum;
-        while(left<right) {
-            int mid = (left+right)/2;
-            if(check(jobs, k, mid)) {
-                right = mid;
-            }else {
-                left = mid+1;
-            }
-        }
-        return left;
-    }
-
-    private boolean check(int[] jobs,int k, int max) {
-        int n = jobs.length;
-        Set<Workers> set = new HashSet<>();
-        set.add(new Workers(new int[k]));
-        int idx = 0;
-        while(set.size()>0&&idx<n) {
-            Set<Workers> newSet = new HashSet<>();
-            for(Workers w : set) {
-                for(int i=0;i<k;i++) {
-                    if(w.assign[i]+jobs[idx]<=max) {
-                        int[] assign = w.assign.clone();
-                        assign[i] += jobs[idx];
-                        Arrays.sort(assign);
-                        newSet.add(new Workers(assign));
-                    }else {
-                        break;
-                    }
-                }
-            }
-            idx++;
-            set = newSet;
-        }
-        return set.size()>0;
-    }
-
-    class Workers {
-        int[] assign;
-        Workers(int[] assign) {
-            this.assign = assign;
-        }
-        @Override
-        public boolean equals(Object o) {
-            Workers ow = (Workers)o;
-            int[] arr = ow.assign;
-            for(int i=0;i<arr.length;i++) {
-                if(this.assign[i]!=arr[i]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        @Override
-        public int hashCode() {
-            return this.assign[0];
-        }
+        // TODO
+        return 0;
     }
 
 }
