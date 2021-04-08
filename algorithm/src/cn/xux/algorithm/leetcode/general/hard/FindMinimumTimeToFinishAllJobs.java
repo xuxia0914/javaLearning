@@ -31,13 +31,43 @@ public class FindMinimumTimeToFinishAllJobs {
 
     public static void main(String[] args) {
         System.out.println(new FindMinimumTimeToFinishAllJobs().minimumTimeRequired(
-                new int[]{23,34,56,78,11}, 2
+                new int[]{3,2,3}, 2
         ));
     }
 
+    int ans;
+
     public int minimumTimeRequired(int[] jobs, int k) {
-        // TODO
-        return 0;
+        ans = Integer.MAX_VALUE;
+        dfs(jobs, 0, new int[k], k);
+        return ans;
+    }
+
+    /**
+     * dfs+剪枝
+     * @param jobs  jobs[i]表示第i项工作需要花费的时间
+     * @param idx   当前需要分配的job
+     * @param curr  已经分配好的每个工人的工作量(已经按升序排列好)
+     * @param cnt   有cnt个工人没有分配到工作，即curr中值为0的元素个数
+     */
+    private void dfs(int[] jobs, int idx, int[] curr, int cnt) {
+        int n = jobs.length;
+        int k = curr.length;
+        if(n-idx<cnt||curr[k-1]>=ans) {
+            return;
+        }
+        if(idx==n) {
+            ans = curr[k-1];
+            return;
+        }
+        for(int i=0;i<k;i++) {
+            if(i==0||(i>0&&curr[i]!=curr[i-1])) {
+                int[] next = curr.clone();
+                next[i] += jobs[idx];
+                Arrays.sort(next);
+                dfs(jobs, idx+1, next, cnt-(curr[i]==0?1:0));
+            }
+        }
     }
 
 }

@@ -30,60 +30,88 @@ import java.util.Arrays;
  * 0 <= nums[j], xi, mi <= 109
  */
 public class MaximumXorWithAnElementFromArray {
-    //输入：nums = [5,2,4,6,6,3], queries = [[12,4],[8,1],[6,3]]
-    //输出：[15,-1,5]
+
+    //输入：
+    //[536870912,0,534710168,330218644,142254206]
+    //[[558240772,1000000000],[307628050,1000000000],[3319300,1000000000],[2751604,683297522],[214004,404207941]]
+    //输出：
+    //[1050219420,844498962,540190212,539622516,534529132]
+    //预期结果：
+    //[1050219420,844498962,540190212,539622516,330170208]
+
+    //[5,2,4,6,6,3]
+    //[[12,4],[8,1],[6,3]]
+    //[15,-1,4]
+    //[15,-1,5]
     public static void main(String[] args) {
-        new MaximumXorWithAnElementFromArray().maximizeXor(
+        int[] ans = new MaximumXorWithAnElementFromArray().maximizeXor(
                 new int[]{5,2,4,6,6,3},
                 new int[][]{{12,4},{8,1},{6,3}});
+        for(int a : ans) {
+            System.out.print(a+", ");
+        }
     }
 
-    // TLE TODO
     public int[] maximizeXor(int[] nums, int[][] queries) {
-        int n = queries.length;
-        int[] ans = new int[n];
-        Arrays.fill(ans, -1);
-        Arrays.sort(nums);
-        for(int i=0;i<n;i++) {
-            int[] tmp = nums.clone();
-            int idx = Arrays.binarySearch(tmp, queries[i][1]);
-            if(idx<0) {
-                idx = -idx-2;
-            }
-            if(idx>=0) {
-                ans[i] = quickQuery(tmp, 0, idx, queries[i][0])^queries[i][0];
-            }
+        Tree root = new Tree();
+        for(int num : nums) {
+            insert(root, num);
+        }
+        int[] ans = new int[queries.length];
+        for(int i=0;i<ans.length;i++) {
+            ans[i] = search(root, queries[i][0], 1<<30, queries[i][1], 0);
         }
         return ans;
     }
 
-    private int quickQuery(int[] nums, int start, int end, int q) {
-        if(start==end) {
-            return nums[start];
+    private int search(Tree curr, int x, int n, int m, int min) {
+        if(n==0) {
+            return x^curr.val;
         }
-        int l = start;
-        int r = end;
-        int key = nums[l];
-        while(l<r) {
-            while(l<r&&(nums[r]^q)>=(key^q)) {
-                r--;
+        if(min+n<=m&&(curr.left==null||((n&x)==0&&curr.right!=null))) {
+            int rightAns = search(curr.right, x, n>>1, m, min+n);
+            if(rightAns!=-1) {
+                return rightAns;
+            }else if(curr.left==null) {
+                return -1;
+            }else {
+                return search(curr.left, x, n>>1, m, min);
             }
-            while(l<r&&(nums[l]^q)<=(key^q)) {
-                l++;
-            }
-            if(l<r) {
-                int tmp = nums[l];
-                nums[l] = nums[r];
-                nums[r] = tmp;
-            }
-        }
-        nums[start] = nums[l];
-        nums[l] = key;
-        if(l==end) {
-            return key;
+        }else if(curr.left==null) {
+            return -1;
         }else {
-            return quickQuery(nums, r+1, end, q);
+            return search(curr.left, x, n>>1, m, min);
         }
+    }
+
+    private void insert(Tree root, int num) {
+        int n = 1<<30;
+        Tree curr = root;
+        while(n>0) {
+            if((num&n)==0) {
+                if(curr.left==null) {
+                    curr.left = new Tree();
+                }
+                curr = curr.left;
+            }else {
+                if(curr.right==null) {
+                    curr.right=  new Tree();
+                }
+                curr = curr.right;
+            }
+            n >>= 1;
+        }
+        curr.val = num;
+    }
+
+    class Tree {
+
+        int val = -1;
+        // 下一位0
+        Tree left;
+        // 下一位1
+        Tree right;
+
     }
 
     // 暴力解法 TLE
