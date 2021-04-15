@@ -36,7 +36,7 @@ package cn.xux.algorithm.leetcode.lcp.easy;
  * 1 <= scores.length <= 10^5
  * 0 <= scores[i] <= 10^6
  */
-public class QiWangGeShuTongJi {
+public class Lcp011 {
 
     public int expectNumber(int[] scores) {
         int ans = 1;

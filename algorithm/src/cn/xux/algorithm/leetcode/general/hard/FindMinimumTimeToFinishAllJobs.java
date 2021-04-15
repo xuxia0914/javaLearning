@@ -61,7 +61,7 @@ public class FindMinimumTimeToFinishAllJobs {
             return;
         }
         for(int i=0;i<k;i++) {
-            if(i==0||(i>0&&curr[i]!=curr[i-1])) {
+            if(i==0||curr[i]!=curr[i-1]) {
                 int[] next = curr.clone();
                 next[i] += jobs[idx];
                 Arrays.sort(next);

@@ -18,7 +18,7 @@ package cn.xux.algorithm.leetcode.lcp.easy;
  * 1 <= n <= 4
  * 1 <= coins[i] <= 10
  */
-public class NaYingBi {
+public class Lcp006 {
 
     public int minCount(int[] coins) {
         int ans = 0;

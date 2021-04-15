@@ -32,7 +32,7 @@ import java.util.Queue;
  * 1 <= relation.length <= 90, 且 relation[i].length == 2
  * 0 <= relation[i][0],relation[i][1] < n 且 relation[i][0] != relation[i][1]
  */
-public class ChuanDiXinXi {
+public class Lcp007 {
 
     public int numWays(int n, int[][] relation, int k) {
         List<Integer>[] graph = new List[n];

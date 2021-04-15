@@ -27,7 +27,7 @@ package cn.xux.algorithm.leetcode.lcp.midium;
  * 1 <= time[i] <= 10000
  * 1 <= m <= 1000
  */
-public class XiaoZhangShuaTiJiHua {
+public class Lcp012 {
 
     public int minTime(int[] time, int m) {
         int n = time.length;

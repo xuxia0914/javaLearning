@@ -2,6 +2,8 @@ package cn.xux.algorithm.leetcode.general.easy;
 
 import cn.xux.algorithm.common.TreeNode;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
@@ -29,31 +31,56 @@ import java.util.Stack;
 public class MinimumDistanceBetweenBstNodes {
 
     public int minDiffInBST(TreeNode root) {
-        Stack<TreeNode> stack = new Stack<>();
+        Deque<TreeNode> deque = new LinkedList<>();
         TreeNode curr = root;
         while(curr!=null) {
-            stack.push(curr);
+            deque.offerLast(curr);
             curr = curr.left;
         }
-        curr = stack.pop();
+        curr = deque.pollLast();
         int pre = curr.val;
         curr = curr.right;
         while(curr!=null) {
-            stack.push(curr);
+            deque.offerLast(curr);
             curr = curr.left;
         }
         int result = Integer.MAX_VALUE;
-        while(!stack.isEmpty()) {
-            curr = stack.pop();
+        while(!deque.isEmpty()) {
+            curr = deque.pollLast();
             result = Math.min(result, curr.val-pre);
+            if(result==1) {
+                return result;
+            }
             pre = curr.val;
             curr = curr.right;
             while(curr!=null) {
-                stack.push(curr);
+                deque.offerLast(curr);
                 curr = curr.left;
             }
         }
         return result;
+    }
+
+    int pre;
+    int ans;
+
+    public int minDiffInBST1(TreeNode root) {
+        ans = Integer.MAX_VALUE;
+        pre = -1;
+        dfs(root);
+        return ans;
+    }
+
+    public void dfs(TreeNode root) {
+        if (root == null|| ans==1) {
+            return;
+        }
+        dfs(root.left);
+        if (pre != -1) {
+            ans = Math.min(ans, root.val - pre);
+        }
+        pre = root.val;
+        dfs(root.right);
     }
 
 }

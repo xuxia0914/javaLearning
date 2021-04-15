@@ -44,7 +44,7 @@ import java.util.Arrays;
  * 0 <= increase[i] <= 10
  * 0 <= requirements[i] <= 100000
  */
-public class JuQingHongFaShiJian {
+public class Lcp008 {
 
     public int[] getTriggerTime(int[][] increase, int[][] requirements) {
         int ni = increase.length;
