@@ -42,16 +42,51 @@ import java.util.Map;
  * 示例 2:
  * 输入: s1 = "abcde", s2 = "caebd"
  * 输出: false
+ *
+ * 提示：
+ * s1.length == s2.length
+ * 1 <= s1.length <= 30
+ * s1 和 s2 由小写英文字母组成
  */
 public class ScrambleString {
 
     public static void main(String[] args) {
-        System.out.println(new ScrambleString().isScramble("abb", "bab"));
+        System.out.println(new ScrambleString().isScramble("abba", "abab"));
+    }
+
+    public boolean isScramble(String s1, String s2) {
+        int n = s1.length();
+        // dp[l1][l2][n] 表示s1(l1起始)和s2(l2起始)的长度为n的子串是不是扰乱字符串
+        boolean[][][] dp = new boolean[n][n][n+1];
+        // len==1时
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<n;j++) {
+                dp[i][j][1] = s1.charAt(i)==s2.charAt(j);
+            }
+        }
+        // 长度
+        for(int l=2;l<=n;l++) {
+            // s1起点
+            for(int i=0;i+l-1<n;i++) {
+                // s2起点
+                for(int j=0;j+l-1<n;j++) {
+                    // s1左边子串的长度
+                    for(int ll=1;ll<l;ll++) {
+                        if((dp[i][j][ll]&&dp[i+ll][j+ll][l-ll])
+                                ||(dp[i][j+l-ll][ll]&&dp[i+ll][j][l-ll])) {
+                            dp[i][j][l] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return dp[0][0][n];
     }
 
     Map<String, Boolean> mem = new HashMap<>();
 
-    public boolean isScramble(String s1, String s2) {
+    public boolean isScramble1(String s1, String s2) {
         if(s1.length()!=s2.length()) {
             return false;
         }
