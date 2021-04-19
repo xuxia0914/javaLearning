@@ -66,6 +66,9 @@ public class FindMinimumTimeToFinishAllJobs {
                 next[i] += jobs[idx];
                 Arrays.sort(next);
                 dfs(jobs, idx+1, next, cnt-(curr[i]==0?1:0));
+                if(curr[i]==0) {
+                    break;
+                }
             }
         }
     }
