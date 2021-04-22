@@ -38,7 +38,6 @@ public class ImplementRand10UsingRand7 {
             idx = col+(row-1)*7;
         }
         return (idx-1)%10+1;
-
     }
 
     public int rand7() {

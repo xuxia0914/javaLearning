@@ -1,4 +1,4 @@
-package cn.xux.algorithm.leetcode.general.hard;
+package cn.xux.algorithm.leetcode.general.midium;
 
 import java.util.HashMap;
 import java.util.Map;

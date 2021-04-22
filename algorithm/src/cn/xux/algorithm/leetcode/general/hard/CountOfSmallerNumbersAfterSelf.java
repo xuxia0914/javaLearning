@@ -78,19 +78,19 @@ public class CountOfSmallerNumbersAfterSelf {
         return ans;
     }
 
-}
+    class TreeNode {
 
-class TreeNode {
+        int val;
+        //左子树的节点数
+        int count;
+        TreeNode left;
+        TreeNode right;
 
-    int val;
-    //左子树的节点数
-    int count;
-    TreeNode left;
-    TreeNode right;
+        public TreeNode(int val, int count) {
+            this.val = val;
+            this.count = count;
+        }
 
-    public TreeNode(int val, int count) {
-        this.val = val;
-        this.count = count;
     }
 
 }

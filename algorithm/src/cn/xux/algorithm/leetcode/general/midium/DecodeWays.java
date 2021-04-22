@@ -36,7 +36,7 @@ public class DecodeWays {
             if(s.charAt(i-1)=='0') {
                 res = 0;
             }
-            int val = Integer.valueOf(s.substring(i-2, i));
+            int val = Integer.parseInt(s.substring(i-2, i));
             if(val>=10&&val<=26) {
                 res += pre;
             }

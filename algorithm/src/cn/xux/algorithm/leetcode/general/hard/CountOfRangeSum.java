@@ -30,17 +30,17 @@ public class CountOfRangeSum {
         for(int i=1;i<=n;i++) {
             preSums[i] = preSums[i-1]+nums[i-1];
         }
-        TreeNode1 root = new TreeNode1(0, 1, 0, 0);
+        TreeNode root = new TreeNode(0, 1, 0, 0);
         int ans = 0;
         for(int i=1;i<=n;i++) {
             ans += i-countSmaller(root, preSums[i]-upper)
                     -countBigger(root, preSums[i]-lower);
-            insert(root, new TreeNode1(preSums[i], 1, 0, 0));
+            insert(root, new TreeNode(preSums[i], 1, 0, 0));
         }
         return ans;
     }
 
-    private void insert(TreeNode1 root, TreeNode1 node) {
+    private void insert(TreeNode root, TreeNode node) {
         if(node.val<root.val) {
             root.leftCount++;
             if(root.left==null) {
@@ -60,7 +60,7 @@ public class CountOfRangeSum {
         }
     }
 
-    private int countSmaller(TreeNode1 node, long target) {
+    private int countSmaller(TreeNode node, long target) {
         if(node==null) {
             return 0;
         }
@@ -73,7 +73,7 @@ public class CountOfRangeSum {
         }
     }
 
-    private int countBigger(TreeNode1 node, long target) {
+    private int countBigger(TreeNode node, long target) {
         if(node==null) {
             return 0;
         }
@@ -86,22 +86,22 @@ public class CountOfRangeSum {
         }
     }
 
-}
+    class TreeNode {
 
-class TreeNode1 {
+        long val;
+        int count;
+        int leftCount;
+        int rightCount;
+        TreeNode left;
+        TreeNode right;
 
-    long val;
-    int count;
-    int leftCount;
-    int rightCount;
-    TreeNode1 left;
-    TreeNode1 right;
+        TreeNode(long val, int count, int leftCount, int rightCount) {
+            this.val = val;
+            this.count = count;
+            this.leftCount = leftCount;
+            this.rightCount = rightCount;
+        }
 
-    TreeNode1(long val, int count, int leftCount, int rightCount) {
-        this.val = val;
-        this.count = count;
-        this.leftCount = leftCount;
-        this.rightCount = rightCount;
     }
 
 }

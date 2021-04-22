@@ -83,7 +83,7 @@ public class DistributeRepeatingIntegers {
         int m = cnts.length;
         int i = m-1;
         while(i>=0&&cnts[i]>=quantity[idx]) {
-            if(i==m-1||(i<m-1&&cnts[i]!=cnts[i+1])) {
+            if(i==m-1||cnts[i]!=cnts[i+1]) {
                 int[] nextCnts = cnts.clone();
                 nextCnts[i] -= quantity[idx];
                 Arrays.sort(nextCnts);

@@ -67,28 +67,28 @@ public class ConcatenatedWords {
         return node.isWord && start != 0;
     }
 
-}
+    class TrieNode {
 
-class TrieNode {
+        public boolean isWord;
+        public TrieNode[] children;
 
-    public boolean isWord;
-    public TrieNode[] children;
-
-    public TrieNode() {
-        isWord = false;
-        children = new TrieNode[26];
-    }
-
-    public void add(String str) {
-        TrieNode node = this;
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (node.children[c-'a']==null) {
-                node.children[c-'a'] = new TrieNode();
-            }
-            node = node.children[c-'a'];
+        public TrieNode() {
+            isWord = false;
+            children = new TrieNode[26];
         }
-        node.isWord = true;
+
+        public void add(String str) {
+            TrieNode node = this;
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (node.children[c-'a']==null) {
+                    node.children[c-'a'] = new TrieNode();
+                }
+                node = node.children[c-'a'];
+            }
+            node.isWord = true;
+        }
+
     }
 
 }
