@@ -17,8 +17,6 @@ package cn.xux.algorithm.leetcode.general.hard;
  */
 public class SudokuSolver {
 
-    boolean isDone = false;
-
     public void solveSudoku(char[][] board) {
         dfs(board);
     }
@@ -38,9 +36,15 @@ public class SudokuSolver {
         }
         boolean[] flags =  new boolean[10];
         for(int x=0;x<9;x++) {
-            flags[board[x][j]-'0'] = true;
-            flags[board[i][x]-'0'] = true;
-            flags[board[i/3*3+x/3][j/3*3+x%3]-'0'] = true;
+            if(board[x][j]!='.') {
+                flags[board[x][j]-'0'] = true;
+            }
+            if(board[i][x]!='.') {
+                flags[board[i][x]-'0'] = true;
+            }
+            if(board[i/3*3+x/3][j/3*3+x%3]!='.') {
+                flags[board[i/3*3+x/3][j/3*3+x%3]-'0'] = true;
+            }
         }
         for(int next=1;next<10;next++) {
             if(!flags[next]) {
@@ -68,7 +72,12 @@ public class SudokuSolver {
         };
         SudokuSolver ss = new SudokuSolver();
         ss.solveSudoku(sodu);
-        System.out.println("");
+        for(char[] so : sodu) {
+            for(char c : so) {
+                System.out.print(c+", ");
+            }
+            System.out.println();
+        }
     }
 
 }

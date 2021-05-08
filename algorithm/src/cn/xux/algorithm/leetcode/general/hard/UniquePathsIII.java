@@ -39,19 +39,22 @@ public class UniquePathsIII {
 
     int res = 0;
 
+    int[][] dir = new int[][]{{-1,0},{1,0},{0,-1},{0,1}};
+
     public int uniquePathsIII(int[][] grid) {
         if(grid==null||grid.length==0||grid[0].length==0) {
             return 0;
         }
         int m = grid.length;
         int n = grid[0].length;
-        int[] start = new int[2];
+        int si = 0;
+        int sj = 0;
         int emptyCnt = 0;
         for(int i=0;i<m;i++) {
             for(int j=0;j<n;j++) {
                 if(grid[i][j]==1) {
-                    start[0] = i;
-                    start[1] = j;
+                    si = i;
+                    sj = j;
                     emptyCnt++;
                 }
                 if(grid[i][j]==0){
@@ -59,41 +62,27 @@ public class UniquePathsIII {
                 }
             }
         }
-        helper(grid, start[0], start[1], emptyCnt, 0);
+        dfs(grid, si, sj, emptyCnt, 0);
         return res;
-
     }
 
-    public void helper(int[][] grid, int i, int j, int emptyCnt, int currCnt) {
+    public void dfs(int[][] grid, int i, int j, int emptyCnt, int currCnt) {
+        int m = grid.length;
+        int n = grid[0].length;
+        if(i<0||i>=m||j<0||j>=n||grid[i][j]==-1) {
+            return;
+        }
         if(grid[i][j]==2) {
             if(currCnt==emptyCnt) {
                 res++;
             }
             return;
         }
-        if(grid[i][j]==-1) {
-            return;
+        grid[i][j] = -1;
+        for(int[] d : dir) {
+            dfs(grid, i+d[0], j+d[1], emptyCnt, currCnt+1);
         }
-        if(i>0) {
-            grid[i][j] = -1;
-            helper(grid, i-1, j, emptyCnt, currCnt+1);
-            grid[i][j] = 0;
-        }
-        if(i<grid.length-1) {
-            grid[i][j] = -1;
-            helper(grid, i+1, j, emptyCnt, currCnt+1);
-            grid[i][j] = 0;
-        }
-        if(j>0) {
-            grid[i][j] = -1;
-            helper(grid, i, j-1, emptyCnt, currCnt+1);
-            grid[i][j] = 0;
-        }
-        if(j<grid[0].length-1) {
-            grid[i][j] = -1;
-            helper(grid, i, j+1, emptyCnt, currCnt+1);
-            grid[i][j] = 0;
-        }
+        grid[i][j] = 0;
     }
 
     public static void main(String[] args) {

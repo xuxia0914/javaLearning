@@ -45,18 +45,18 @@ import java.util.Deque;
 public class RecoverBinarySearchTree {
 
     public static void main(String[] args) {
-        new RecoverBinarySearchTree().recoverTree(new cn.xux.algorithm.common.TreeNode(new Integer[]{1,3,null,null,2}));
+        new RecoverBinarySearchTree().recoverTree(new TreeNode(new Integer[]{1,3,null,null,2}));
     }
 
-    public void recoverTree(cn.xux.algorithm.common.TreeNode root) {
-        Deque<cn.xux.algorithm.common.TreeNode> deque = new ArrayDeque<>();
-        cn.xux.algorithm.common.TreeNode curr = root;
+    public void recoverTree(TreeNode root) {
+        Deque<TreeNode> deque = new ArrayDeque<>();
+        TreeNode curr = root;
         while(curr!=null) {
             deque.offer(curr);
             curr = curr.left;
         }
-        cn.xux.algorithm.common.TreeNode left = null;
-        cn.xux.algorithm.common.TreeNode right = null;
+        TreeNode left = null;
+        TreeNode right = null;
         TreeNode pre = null;
         while(!deque.isEmpty()) {
             curr = deque.pollLast();

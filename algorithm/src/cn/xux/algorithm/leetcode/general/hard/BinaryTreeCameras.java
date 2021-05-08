@@ -1,5 +1,7 @@
 package cn.xux.algorithm.leetcode.general.hard;
 
+import cn.xux.algorithm.common.TreeNode;
+
 /**
  * 968. 监控二叉树
  * 给定一个二叉树，我们在树的节点上安装摄像头。
