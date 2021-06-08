@@ -5,7 +5,9 @@ import java.util.Map;
 
 /**
  * 523. 连续的子数组和
- * 给定一个包含非负数的数组和一个目标整数 k，编写一个函数来判断该数组是否含有连续的子数组，其大小至少为 2，总和为 k 的倍数，即总和为 n*k，其中 n 也是一个整数。
+ * 给定一个包含非负数的数组和一个目标整数 k，
+ * 编写一个函数来判断该数组是否含有连续的子数组，
+ * 其大小至少为 2，总和为 k 的倍数，即总和为 n*k，其中 n 也是一个整数。
  *
  * 示例 1:
  * 输入: [23,2,4,6,7], k = 6
@@ -65,23 +67,12 @@ public class ContinuousSubarraySum {
         int sum = 0;
         for(int i=0;i<nums.length;i++) {
             sum += nums[i];
-            if(k==0) {
-                if(map.containsKey(sum)) {
-                    if(map.get(sum)+2<=i) {
-                        return true;
-                    }
-                }else {
-                    map.put(sum, i);
-                }
-            }else {
-                int target = sum%k;
-                if(map.containsKey(target)) {
-                    if(map.get(target)+2<=i) {
-                        return true;
-                    }
-                }else {
-                    map.put(target, i);
-                }
+            int target = k==0?sum:sum%k;
+            if(map.containsKey(target)&&map.get(target)+2<=i) {
+                return true;
+            }
+            if(!map.containsKey(target)) {
+                map.put(target, i);
             }
         }
         return false;

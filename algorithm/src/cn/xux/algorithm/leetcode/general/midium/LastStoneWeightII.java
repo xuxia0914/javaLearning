@@ -37,12 +37,36 @@ public class LastStoneWeightII {
         }
         int cap = sum/2+1;
         int[] dp = new int[cap];
-        for(int i=0;i<stones.length;i++) {
-            for(int j=cap-1;j>=stones[i];j--) {
-                dp[j] = Math.max(dp[j], dp[j-stones[i]]+stones[i]);
+        for (int stone : stones) {
+            for (int j = cap - 1; j >= stone; j--) {
+                dp[j] = Math.max(dp[j], dp[j - stone] + stone);
             }
         }
         return sum-2*dp[cap-1];
+    }
+
+    public int lastStoneWeightII1(int[] stones) {
+        if(stones==null||stones.length==0) {
+            return 0;
+        }
+        int sum = 0;
+        for(int stone : stones) {
+            sum += stone;
+        }
+        int cap = sum/2+1;
+        boolean[] dp = new boolean[cap];
+        dp[0] = true;
+        for(int stone : stones) {
+            for(int i=cap-1;i-stone>=0;i--) {
+                dp[i] = dp[i]||dp[i-stone];
+            }
+        }
+        for(int i=cap-1;i>=0;i++) {
+            if(dp[i]) {
+                return sum-2*i;
+            }
+        }
+        return 0;
     }
 
 }
