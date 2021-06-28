@@ -33,4 +33,39 @@ public class PerfectSquares {
         return dp[n];
     }
 
+    // 四平方和定理
+    public int numSquares1(int n) {
+        if(isFourSquare(n)) {
+            return 4;
+        }
+        if(isOneSquare(n)) {
+            return 1;
+        }
+        if(isTwoSquare(n)) {
+            return 2;
+        }
+        return 3;
+    }
+
+    private boolean isOneSquare(int n) {
+        return n==(int)Math.pow((int)Math.sqrt(n), 2);
+    }
+
+    private boolean isTwoSquare(int n) {
+        for(int i=0;i<=Math.sqrt(n);i++) {
+            int otherPow = n-i*i;
+            if(otherPow==(int)Math.pow((int)Math.sqrt(otherPow), 2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isFourSquare(int n) {
+        while(n%4==0) {
+            n /= 4;
+        }
+        return n%8==7;
+    }
+
 }
