@@ -29,13 +29,9 @@ package cn.xux.algorithm.leetcode.general.easy;
 public class ExcelSheetColumnTitle {
 
     public String convertToTitle(int n) {
-        if(n<0) {
-            return "";
-        }
         StringBuilder sb = new StringBuilder();
         while(n>0) {
-            int tmp = (n-1)%26;
-            sb.append((char)(tmp+'A'));
+            sb.append((char)((n-1)%26+'A'));
             n = (n-1)/26;
         }
         return sb.reverse().toString();
