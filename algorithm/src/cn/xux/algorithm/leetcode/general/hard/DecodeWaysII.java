@@ -1,7 +1,5 @@
 package cn.xux.algorithm.leetcode.general.hard;
 
-import java.util.Arrays;
-
 /**
  * 639. 解码方法 2
  * 一条包含字母 A-Z 的消息通过以下的方式进行了编码：
@@ -32,31 +30,47 @@ public class DecodeWaysII {
         System.out.println(System.currentTimeMillis());
     }
 
+    static final int MOD = 1000000007;
+
     public int numDecodings(String s) {
-        int M = 1000000007;
-        long first = 1, second = s.charAt(0) == '*' ? 9 : s.charAt(0) == '0' ? 0 : 1;
-        for (int i = 1; i < s.length(); i++) {
-            long temp = second;
-            if (s.charAt(i) == '*') {
-                second = 9 * second;
-                if (s.charAt(i - 1) == '1')
-                    second = (second + 9 * first) % M;
-                else if (s.charAt(i - 1) == '2')
-                    second = (second + 6 * first) % M;
-                else if (s.charAt(i - 1) == '*')
-                    second = (second + 15 * first) % M;
-            } else {
-                second = s.charAt(i) != '0' ? second : 0;
-                if (s.charAt(i - 1) == '1')
-                    second = (second + first) % M;
-                else if (s.charAt(i - 1) == '2' && s.charAt(i) <= '6')
-                    second = (second + first) % M;
-                else if (s.charAt(i - 1) == '*')
-                    second = (second + (s.charAt(i) <= '6' ? 2 : 1) * first) % M;
+        int n = s.length();
+        // a = f[i-2], b = f[i-1], c = f[i]
+        long a = 0, b = 1, c = 0;
+        for (int i = 1; i <= n; ++i) {
+            c = b * check1digit(s.charAt(i - 1)) % MOD;
+            if (i > 1) {
+                c = (c + a * check2digits(s.charAt(i - 2), s.charAt(i - 1))) % MOD;
             }
-            first = temp;
+            a = b;
+            b = c;
         }
-        return (int) second;
+        return (int) c;
+    }
+
+    public int check1digit(char ch) {
+        if (ch == '0') {
+            return 0;
+        }
+        return ch == '*' ? 9 : 1;
+    }
+
+    public int check2digits(char c0, char c1) {
+        if (c0 == '*' && c1 == '*') {
+            return 15;
+        }
+        if (c0 == '*') {
+            return c1 <= '6' ? 2 : 1;
+        }
+        if (c1 == '*') {
+            if (c0 == '1') {
+                return 9;
+            }
+            if (c0 == '2') {
+                return 6;
+            }
+            return 0;
+        }
+        return (c0 != '0' && (c0 - '0') * 10 + (c1 - '0') <= 26) ? 1 : 0;
     }
 
 }

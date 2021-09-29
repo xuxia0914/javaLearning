@@ -2,6 +2,7 @@ package cn.xux.algorithm.leetcode.general.easy;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  * 1122. 数组的相对排序
@@ -24,6 +25,22 @@ import java.util.Comparator;
 public class RelativeSortArray {
 
     public int[] relativeSortArray(int[] arr1, int[] arr2) {
+        int[] map = new int[1001];
+        Arrays.fill(map, 1001);
+        for(int i=0;i<arr2.length;i++) {
+            map[arr2[i]] = i;
+        }
+        PriorityQueue<Integer> queue = new PriorityQueue<>((o1,o2)->map[o1]==map[o2]?o1-o2:map[o1]-map[o2]);
+        for(int num : arr1) {
+            queue.offer(num);
+        }
+        for(int i=0;i<arr1.length;i++) {
+            arr1[i] = queue.poll();
+        }
+        return arr1;
+    }
+
+    public int[] relativeSortArray1(int[] arr1, int[] arr2) {
         if(arr1==null||arr1.length<2) {
             return arr1;
         }

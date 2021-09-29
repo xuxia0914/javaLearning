@@ -36,18 +36,18 @@ public class Ipo {
         System.out.println(new Ipo().findMaximizedCapital(1, 0, new int[]{1,2,3}, new int[]{0,1,2}));
     }
 
-    public int findMaximizedCapital(int k, int W, int[] Profits, int[] Capital) {
-        if(k==0||Profits==null||Profits.length==0) {
-            return W;
+    public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        if(k==0||profits==null||profits.length==0) {
+            return w;
         }
-        int n = Profits.length;
+        int n = profits.length;
         int[][] capAnsPro = new int[n][2];
         for(int i=0;i<n;i++) {
-            capAnsPro[i][0] = Capital[i];
-            capAnsPro[i][1] = Profits[i];
+            capAnsPro[i][0] = capital[i];
+            capAnsPro[i][1] = profits[i];
         }
         Arrays.sort(capAnsPro, (o1,o2)->o1[0]==o2[0]?o1[1]-o2[1]:o1[0]-o2[0]);
-        int ans = W;
+        int ans = w;
         PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.comparingInt(o->-o));
         int idx = 0;
         while(idx<n&&k>0) {

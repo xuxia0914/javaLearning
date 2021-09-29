@@ -2,6 +2,8 @@ package cn.xux.algorithm.leetcode.general.easy;
 
 import cn.xux.algorithm.common.TreeNode;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
@@ -17,27 +19,61 @@ import java.util.Stack;
  *              18
  *             /   \
  *           20     13
+ *
+ * 示例 1：
+ * 输入：[4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+ * 输出：[30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+ *
+ * 示例 2：
+ * 输入：root = [0,null,1]
+ * 输出：[1,null,1]
+ *
+ * 示例 3：
+ * 输入：root = [1,0,2]
+ * 输出：[3,3,2]
+ *
+ * 示例 4：
+ * 输入：root = [3,2,4,1]
+ * 输出：[7,9,4,10]
+ *  
+ * 提示：
+ * 树中的节点数介于 0 和 104 之间。
+ * 每个节点的值介于 -104 和 104 之间。
+ * 树中的所有值 互不相同 。
+ * 给定的树为二叉搜索树。
  */
 public class ConvertBstToGreaterTree {
 
+    int sum = 0;
+
     public TreeNode convertBST(TreeNode root) {
+        if (root != null) {
+            convertBST(root.right);
+            sum += root.val;
+            root.val = sum;
+            convertBST(root.left);
+        }
+        return root;
+    }
+
+    public TreeNode convertBST1(TreeNode root) {
         if(root==null) {
             return null;
         }
         int pre = 0;
-        Stack<TreeNode> stack = new Stack<>();
+        Deque<TreeNode> stack = new LinkedList<>();
         TreeNode node = root;
         while(node!=null) {
-            stack.push(node);
+            stack.offerLast(node);
             node = node.right;
         }
         while(!stack.isEmpty()) {
-            TreeNode curr = stack.pop();
+            TreeNode curr = stack.pollLast();
             curr.val += pre;
             pre = curr.val;
             TreeNode left = curr.left;
             while(left!=null) {
-                stack.push(left);
+                stack.offerLast(left);
                 left = left.right;
             }
         }

@@ -52,7 +52,7 @@ public class FindTheStudentThatWillReplaceTheChalk {
         for(int c : chalk) {
             sum += c;
         }
-        k = (int)(k%sum);
+        k %= sum;
         for(int i=0;i<chalk.length;i++) {
             if(k<chalk[i]) {
                 return i;

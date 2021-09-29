@@ -35,10 +35,9 @@ public class FindMinimumTimeToFinishAllJobs {
         ));
     }
 
-    int ans;
+    int ans = Integer.MAX_VALUE;
 
     public int minimumTimeRequired(int[] jobs, int k) {
-        ans = Integer.MAX_VALUE;
         dfs(jobs, 0, new int[k], k);
         return ans;
     }

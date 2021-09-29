@@ -27,6 +27,20 @@ public class CorporateFlightBookings {
     }
 
     public int[] corpFlightBookings(int[][] bookings, int n) {
+        int[] ans = new int[n];
+        for(int[] booking : bookings) {
+            ans[booking[0]-1] += booking[2];
+            if(booking[1]<n) {
+                ans[booking[1]] -= booking[2];
+            }
+        }
+        for(int i=1;i<n;i++) {
+            ans[i] += ans[i-1];
+        }
+        return ans;
+    }
+
+    public int[] corpFlightBookings1(int[][] bookings, int n) {
         int len = bookings.length;
         Arrays.sort(bookings, Comparator.comparingInt(o->o[0]));
         PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o->o[1]));
@@ -48,7 +62,7 @@ public class CorporateFlightBookings {
         return result;
     }
 
-    public int[] corpFlightBookings1(int[][] bookings, int n) {
+    public int[] corpFlightBookings2(int[][] bookings, int n) {
         int[] result = new int[n];
         for(int[] booking : bookings) {
             for(int i=booking[0]-1;i<=booking[1]-1;i++) {

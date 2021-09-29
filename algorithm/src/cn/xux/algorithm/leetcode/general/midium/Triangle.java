@@ -65,20 +65,18 @@ public class Triangle {
         int n = triangle.size();
         int[] dp = new int[n];
         dp[0] = triangle.get(0).get(0);
-        int tmp = 0;
         for(int i=1;i<n;i++) {
+            int[] newDp = new int[n];
             for(int j=0;j<=i;j++) {
                 if(j==0) {
-                    tmp = dp[j];
-                    dp[j] = dp[j]+triangle.get(i).get(j);
+                    newDp[j] = dp[j]+triangle.get(i).get(j);
                 }else if(j==i) {
-                    dp[j] = tmp + triangle.get(i).get(j);
+                    newDp[j] = dp[j-1]+triangle.get(i).get(j);
                 }else {
-                    int tmp1 = dp[j];
-                    dp[j] = Math.min(tmp1, dp[j])+triangle.get(i).get(j);
-                    tmp = tmp1;
+                    newDp[j] = Math.min(dp[j-1], dp[j])+triangle.get(i).get(j);
                 }
             }
+            dp = newDp;
         }
         int res = dp[0];
         for(int i : dp) {

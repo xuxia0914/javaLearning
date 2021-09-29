@@ -1,9 +1,6 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 347. 前 K 个高频元素
@@ -24,56 +21,22 @@ import java.util.Map;
 public class TopKFrequentElements {
 
     public int[] topKFrequent(int[] nums, int k) {
-        Map<Integer, Integer> frequencyMap = new HashMap<Integer, Integer>();
-        for (int n : nums) {
-            frequencyMap.put(n, frequencyMap.getOrDefault(n, 0) + 1);
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int num : nums) {
+            map.put(num, map.getOrDefault(num, 0)+1);
         }
-        List<Integer>[] bucket = new List[nums.length + 1];
-        for (int key : frequencyMap.keySet()) {
-            int frequency = frequencyMap.get(key);
-            if (bucket[frequency] == null) {
-                bucket[frequency] = new ArrayList<>();
-            }
-            bucket[frequency].add(key);
-        }
-        int[] res = new int[k];
-        int pos = bucket.length-1;
-        int idx = 0;
-        while(idx<k) {
-            if(bucket[pos] != null) {
-                for(int num : bucket[pos]) {
-                    res[idx++] = num;
-                }
-            }
-            pos--;
-        }
-        return res;
-    }
-
-    public List<Integer> topKFrequent1(int[] nums, int k) {
-        Map<Integer, Integer> frequencyMap = new HashMap<Integer, Integer>();
-        for (int n : nums) {
-            frequencyMap.put(n, frequencyMap.getOrDefault(n, 0) + 1);
-        }
-        List<Integer>[] bucket = new List[nums.length + 1];
-        for (int key : frequencyMap.keySet()) {
-            int frequency = frequencyMap.get(key);
-            if (bucket[frequency] == null) {
-                bucket[frequency] = new ArrayList<>();
-            }
-            bucket[frequency].add(key);
-        }
-        List<Integer> res = new ArrayList<>();
-        for (int pos = bucket.length - 1; pos >= 0 && res.size() < k; pos--) {
-            if (bucket[pos] != null) {
-                res.addAll(bucket[pos]);
+        PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o->o[1]));
+        for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            queue.offer(new int[]{entry.getKey(), entry.getValue()});
+            if(queue.size()>k) {
+                queue.poll();
             }
         }
-        return res;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new TopKFrequentElements().topKFrequent(new int[]{1,1,1,2,2,3}, 2));
+        int[] ans = new int[k];
+        for(int i=0;i<k;i++) {
+            ans[k-1-i] = queue.poll()[0];
+        }
+        return ans;
     }
 
 }

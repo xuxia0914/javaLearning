@@ -1,5 +1,6 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
@@ -20,8 +21,17 @@ import java.util.PriorityQueue;
  */
 public class KthLargestElementInAnArray {
 
-    //nlogk
+    // nlogn
     public int findKthLargest(int[] nums, int k) {
+        if(nums==null||nums.length==0||k>nums.length||k<1) {
+            return -1;
+        }
+        Arrays.sort(nums);
+        return nums[nums.length-k];
+    }
+
+    //nlogk
+    public int findKthLargest1(int[] nums, int k) {
         if(nums==null||nums.length==0||k>nums.length||k<1) {
             return -1;
         }
@@ -36,7 +46,7 @@ public class KthLargestElementInAnArray {
     }
 
     //n
-    public int findKthLargest1(int[] nums, int k) {
+    public int findKthLargest2(int[] nums, int k) {
         if(nums==null||nums.length==0||k>nums.length||k<1) {
             return -1;
         }

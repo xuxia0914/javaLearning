@@ -70,32 +70,30 @@ public class TextJustification {
     public void helper(String[] words, int idx, List<String> curr, int totalLen, int maxWidth) {
         if(idx==words.length) {
             StringBuilder sb = new StringBuilder();
-            if(curr.size()==1) {
-                sb.append(curr.get(0));
-            }else {
-                sb.append(curr.get(0));
-                for(int i=1;i<curr.size();i++) {
-                    sb.append(" "+curr.get(i));
-                }
+            sb.append(curr.get(0));
+            for(int i=1;i<curr.size();i++) {
+                sb.append(' ').append(curr.get(i));
             }
             while(sb.length()<maxWidth) {
-                sb.append(" ");
+                sb.append(' ');
             }
             ans.add(sb.toString());
         }else if(totalLen+words[idx].length()+curr.size()>maxWidth) {
             StringBuilder sb = new StringBuilder();
-            if(curr.size()==1) {
-                sb.append(curr.get(0));
-            }else {
+            sb.append(curr.get(0));
+            if(curr.size()>1) {
                 int spaceNum = (maxWidth-totalLen)/(curr.size()-1);
                 int left = (maxWidth-totalLen)%(curr.size()-1);
-                sb.append(curr.get(0));
                 for(int i=1;i<curr.size();i++) {
                     int sn = spaceNum+(i<=left?1:0);
                     while(sn-->0) {
                         sb.append(" ");
                     }
                     sb.append(curr.get(i));
+                }
+            }else {
+                while(sb.length()<maxWidth) {
+                    sb.append(' ');
                 }
             }
             ans.add(sb.toString());

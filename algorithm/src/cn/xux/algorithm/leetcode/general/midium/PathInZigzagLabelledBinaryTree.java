@@ -25,22 +25,15 @@ public class PathInZigzagLabelledBinaryTree {
 
     public List<Integer> pathInZigZagTree(int label) {
         List<Integer> result = new LinkedList<>();
-        while(label>0) {
-            result.add(0, label);
-            label /= 2;
-        }
-        int i;
-        int levelMin;
-        if(result.size()%2==0) {
-            i = 0;
-            levelMin = 1;
-        }else {
-            i = 1;
-            levelMin = 2;
-        }
-        for(;i<result.size();i+=2) {
-            result.set(i, levelMin+levelMin*2-1-result.get(i));
-            levelMin *= 2;
+        result.add(0, label);
+        while(label>1) {
+            int pre = label/2;
+            int level = (int)(Math.log10(pre)/Math.log10(2));
+            int left = (int)Math.pow(2, level);
+            int right = (int)Math.pow(2, level+1)-1;
+            int tar = left+right-pre;
+            result.add(0, tar);
+            label = tar;
         }
         return result;
     }

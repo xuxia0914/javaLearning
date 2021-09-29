@@ -19,6 +19,49 @@ public class Test {
     }
 
     /**
+     * 剑指 Offer II 119. 最长连续序列
+     * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+     *
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：nums = [100,4,200,1,3,2]
+     * 输出：4
+     * 解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
+     * 示例 2：
+     *
+     * 输入：nums = [0,3,7,2,5,8,4,6,0,1]
+     * 输出：9
+     *
+     *
+     * 提示：
+     *
+     * 0 <= nums.length <= 104
+     * -109 <= nums[i] <= 109
+     */
+    public int longestConsecutive(int[] nums) {
+        // 以key为结尾的序列对应的开始数字
+        if(nums==null||nums.length==0) {
+            return 0;
+        }
+        int ans = 0;
+        int currLen = 1;
+        Arrays.sort(nums);
+        for(int i=1;i<nums.length;i++) {
+            if(nums[i]==nums[i-1]+1) {
+                currLen++;
+            }else if(nums[i]==nums[i-1]) {
+                continue;
+            }else {
+                ans = Math.max(ans, currLen);
+                currLen = 1;
+            }
+        }
+        return Math.max(ans, currLen);
+    }
+
+    /**
      * 面试题67. 把字符串转换成整数
      * 写一个函数 StrToInt，实现把字符串转换成整数这个功能。不能使用 atoi 或者其他类似的库函数。
      * 首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。

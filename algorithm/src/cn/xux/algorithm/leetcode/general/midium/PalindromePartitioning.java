@@ -20,6 +20,7 @@ public class PalindromePartitioning {
 
     public List<List<String>> partition(String s) {
         List<List<String>> res = new ArrayList<>();
+        List<List<String>> xxx = new ArrayList<>(res);
         if(s==null||s.length()==0) {
             return res;
         }

@@ -49,56 +49,110 @@ public class OpenTheLock {
     }
 
     public int openLock(String[] deadends, String target) {
-        if(contains(deadends, target)||contains(deadends, "0000")) {
+        int tar = Integer.parseInt(target);
+        if(tar==0) {
+            return 0;
+        }
+        Set<Integer> set = new HashSet<>();
+        for(String deadend : deadends) {
+            set.add(Integer.parseInt(deadend));
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        if(set.add(0)) {
+            queue.add(0);
+        }else {
             return -1;
         }
-        Queue<String> queue = new LinkedList<>();
-        queue.offer("0000");
-        Set<String> set = new HashSet<>();
-        set.add("0000");
-        int step = 0;
-        while(!queue.isEmpty()) {
+        int level = 0;
+        while(queue.size()>0) {
+            level++;
             int size = queue.size();
-            step++;
             while(size-->0) {
-                String curr = queue.poll();
-                String[] nexts = getNexts(curr);
-                for(String next : nexts) {
-                    if(next.equals(target)) {
-                        return step;
-                    }
-                    if(set.add(next)&&!contains(deadends, next)) {
-                        queue.offer(next);
-                    }
+                int curr = queue.poll();
+                int next;
+                if(curr%10==9) {
+                    next = curr-9;
+                }else {
+                    next = curr+1;
+                }
+                if(next==tar) {
+                    return level;
+                }else if(set.add(next)) {
+                    queue.add(next);
+                }
+                if(curr%10==0) {
+                    next = curr+9;
+                }else {
+                    next = curr-1;
+                }
+                if(next==tar) {
+                    return level;
+                }else if(set.add(next)) {
+                    queue.add(next);
+                }
+                if(curr%100/10==9) {
+                    next = curr-90;
+                }else {
+                    next = curr+10;
+                }
+                if(next==tar) {
+                    return level;
+                }else if(set.add(next)) {
+                    queue.add(next);
+                }
+                if(curr%100/10==0) {
+                    next = curr+90;
+                }else {
+                    next = curr-10;
+                }
+                if(next==tar) {
+                    return level;
+                }else if(set.add(next)) {
+                    queue.add(next);
+                }
+                if(curr%1000/100==9) {
+                    next = curr-900;
+                }else {
+                    next = curr+100;
+                }
+                if(next==tar) {
+                    return level;
+                }else if(set.add(next)) {
+                    queue.add(next);
+                }
+                if(curr%1000/100==0) {
+                    next = curr+900;
+                }else {
+                    next = curr-100;
+                }
+                if(next==tar) {
+                    return level;
+                }else if(set.add(next)) {
+                    queue.add(next);
+                }
+                if(curr%10000/1000==9) {
+                    next = curr-9000;
+                }else {
+                    next = curr+1000;
+                }
+                if(next==tar) {
+                    return level;
+                }else if(set.add(next)) {
+                    queue.add(next);
+                }
+                if(curr%10000/1000==0) {
+                    next = curr+9000;
+                }else {
+                    next = curr-1000;
+                }
+                if(next==tar) {
+                    return level;
+                }else if(set.add(next)) {
+                    queue.add(next);
                 }
             }
         }
         return -1;
-    }
-
-    public String[] getNexts(String s) {
-        String[] result = new String[8];
-        for(int i=0;i<8;i++) {
-            StringBuilder sb = new StringBuilder();
-            for(int j=0;j<i/2;j++) {
-                sb.append(s.charAt(j));
-            }
-            sb.append(((s.charAt(i/2)-'0'+10)+(i%2==0?1:-1))%10);
-            for(int j=i/2+1;j<4;j++) {
-                sb.append(s.charAt(j));
-            }
-            result[i] = sb.toString();
-        }
-        return result;
-    }
-
-    public boolean contains(String[] arr, String s) {
-        for(String curr : arr) {
-            if(curr.equals(s)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

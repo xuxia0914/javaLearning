@@ -31,11 +31,11 @@ public class PathSumII {
         if(root==null) {
             return res;
         }
-        helper(res, root, new ArrayList<Integer>(), sum);
+        dfs(res, root, new ArrayList<Integer>(), sum);
         return res;
     }
 
-    public void helper(List<List<Integer>> res, TreeNode node, List<Integer> list, int sum) {
+    public void dfs(List<List<Integer>> res, TreeNode node, List<Integer> list, int sum) {
         List<Integer> tmp = new ArrayList<>(list);
         if(node.left==null&&node.right==null) {
             tmp.add(node.val);
@@ -49,10 +49,10 @@ public class PathSumII {
         }
         tmp.add(node.val);
         if(node.left!=null) {
-            helper(res, node.left, tmp, sum);
+            dfs(res, node.left, tmp, sum);
         }
         if(node.right!=null) {
-            helper(res, node.right, tmp, sum);
+            dfs(res, node.right, tmp, sum);
         }
     }
 

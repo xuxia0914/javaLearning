@@ -5,15 +5,39 @@ import java.util.Set;
 
 /**
  * 421. 数组中两个数的最大异或值
- * 给定一个非空数组，数组中元素为 a0, a1, a2, … , an-1，其中 0 ≤ ai < 231 。
- * 找到 ai 和aj 最大的异或 (XOR) 运算结果，其中0 ≤ i,  j < n 。
+ * 给你一个整数数组 nums ，返回 nums[i] XOR nums[j] 的最大运算结果，其中 0 ≤ i ≤ j < n 。
  *
- * 你能在O(n)的时间解决这个问题吗？
+ * 进阶：你可以在 O(n) 的时间解决这个问题吗？
  *
- * 示例:
- * 输入: [3, 10, 5, 25, 2, 8]
- * 输出: 28
- * 解释: 最大的结果是 5 ^ 25 = 28.
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：nums = [3,10,5,25,2,8]
+ * 输出：28
+ * 解释：最大运算结果是 5 XOR 25 = 28.
+ * 示例 2：
+ *
+ * 输入：nums = [0]
+ * 输出：0
+ * 示例 3：
+ *
+ * 输入：nums = [2,4]
+ * 输出：6
+ * 示例 4：
+ *
+ * 输入：nums = [8,10,2]
+ * 输出：10
+ * 示例 5：
+ *
+ * 输入：nums = [14,70,53,83,49,91,36,80,92,51,66,70]
+ * 输出：127
+ *
+ *
+ * 提示：
+ *
+ * 1 <= nums.length <= 2 * 104
+ * 0 <= nums[i] <= 231 - 1
  */
 public class MaximumXorOfTwoNumbersInAnArray {
 
@@ -22,28 +46,28 @@ public class MaximumXorOfTwoNumbersInAnArray {
         if(nums==null||nums.length<2) {
             return 0;
         }
-        TreeNode1 root = new TreeNode1();
-        TreeNode1 curr;
+        TreeNode root = new TreeNode();
+        TreeNode curr;
         for(int num : nums) {
             curr = root;
             for(int i=30;i>=0;i--) {
                 if((num>>i)%2==0) {
                     if(curr.left==null) {
-                        curr.left = new TreeNode1();
+                        curr.left = new TreeNode();
                     }
                     curr = curr.left;
                 }else {
                     if(curr.right==null) {
-                        curr.right = new TreeNode1();
+                        curr.right = new TreeNode();
                     }
                     curr = curr.right;
                 }
             }
         }
-        return helper(root, root, 30);
+        return dfs(root, root, 30);
     }
 
-    public int helper(TreeNode1 node1, TreeNode1 node2, int n) {
+    public int dfs(TreeNode node1, TreeNode node2, int n) {
         if(n<0) {
             return 0;
         }
@@ -51,13 +75,17 @@ public class MaximumXorOfTwoNumbersInAnArray {
             return 0;
         }
         int res = 0;
-        int next = 0;
         if((node1.left!=null&&node2.right!=null)
                 ||(node1.right!=null&&node2.left!=null)) {
             res += 1<<n;
-            return res+Math.max(helper(node1.left, node2.right, n-1), helper(node1.right, node2.left, n-1));
+            return res+Math.max(dfs(node1.left, node2.right, n-1), dfs(node1.right, node2.left, n-1));
         }
-        return Math.max(helper(node1.left, node2.left, n-1), helper(node1.right, node2.right, n-1));
+        return Math.max(dfs(node1.left, node2.left, n-1), dfs(node1.right, node2.right, n-1));
+    }
+
+    class TreeNode {
+        TreeNode left; //左子树不为空表示下一位有0
+        TreeNode right; //右子树不为空表示下一位有1
     }
 
     // a^b = c ->a^c=b,b^c=a
@@ -88,9 +116,4 @@ public class MaximumXorOfTwoNumbersInAnArray {
         System.out.println(mx.findMaximumXOR1(new int[]{3, 10, 5, 25, 2, 8}));
     }
 
-}
-
-class TreeNode1 {
-    TreeNode1 left; //左子树不为空表示下一位有0
-    TreeNode1 right; //右子树不为空表示下一位有1
 }

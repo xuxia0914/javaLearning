@@ -26,36 +26,26 @@ package cn.xux.algorithm.leetcode.general.easy;
 public class MaxAreaOfIsland {
 
     public int maxAreaOfIsland(int[][] grid) {
-        int res = 0;
+        int ans = 0;
         if(grid==null||grid.length==0||grid[0].length==0) {
             return 0;
         }
         for(int i=0;i<grid.length;i++) {
             for(int j=0;j<grid[0].length;j++) {
                 if(grid[i][j]==1) {
-                    res = Math.max(res, helper(grid, i, j));
+                    ans = Math.max(ans, dfs(grid, i, j));
                 }
             }
         }
-        return res;
+        return ans;
     }
 
-    public int helper(int[][] grid, int i, int j) {
-        int area = 1;
+    private int dfs(int[][] grid, int i, int j) {
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]==0) {
+            return 0;
+        }
         grid[i][j] = 0;
-        if(i>0&&grid[i-1][j]==1) {
-            area += helper(grid, i-1, j);
-        }
-        if(i<grid.length-1&&grid[i+1][j]==1) {
-            area += helper(grid, i+1, j);
-        }
-        if(j>0&&grid[i][j-1]==1) {
-            area += helper(grid, i, j-1);
-        }
-        if(j<grid[0].length-1&&grid[i][j+1]==1) {
-            area += helper(grid, i, j+1);
-        }
-        return area;
+        return 1+dfs(grid, i-1, j)+dfs(grid, i+1, j)+dfs(grid, i, j-1)+dfs(grid, i, j+1);
     }
 
     public static void main(String[] args) {

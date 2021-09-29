@@ -1,9 +1,6 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 399. 除法求值
@@ -124,15 +121,73 @@ public class EvaluateDivision {
         return -1.0;
     }
 
-}
+    class Graph {
+        String val ;
+        List<Graph> neighbors = new ArrayList<>();
+        List<Double> ks = new ArrayList<>();
 
-class Graph {
-    String val ;
-    List<Graph> neighbors = new ArrayList<>();
-    List<Double> ks = new ArrayList<>();
+        Graph(String val) {
+            this.val = val;
+        }
 
-    Graph(String val) {
-        this.val = val;
+    }
+
+    public double[] calcEquation2(List<List<String>> equations, double[] values, List<List<String>> queries)
+    {
+        int n = equations.size();
+
+        //----给word编号
+        int ID = 0;
+        Map<String, Integer> word_ID = new HashMap<>();
+        for (List<String> e : equations)
+        {
+            String w1 = e.get(0),    w2 = e.get(1);
+            if (word_ID.containsKey(w1) == false)
+                word_ID.put(w1, ID ++);
+            if (word_ID.containsKey(w2) == false)
+                word_ID.put(w2, ID ++);
+        }
+
+        //----邻接矩阵
+        double [][] edge = new double [ID][ID];
+        for (int i = 0; i < ID; i ++)
+            Arrays.fill(edge[i], -1.0);
+        for (int i = 0; i < n; i ++)
+        {
+            String w1 = equations.get(i).get(0),    w2 = equations.get(i).get(1);
+            int xID = word_ID.get(w1),    yID = word_ID.get(w2);
+            double val = values[i];
+            edge[xID][yID] = val;
+            edge[yID][xID] = 1.0 / val;
+        }
+
+        //----floyd
+        for (int mid = 0; mid < ID; mid ++)
+        {
+            for (int x = 0; x < ID; x ++)
+            {
+                for (int y = 0; y < ID; y ++)
+                {
+                    if (edge[x][mid] > 0 && edge[mid][y] > 0)
+                        edge[x][y] = edge[x][mid] * edge[mid][y];
+                }
+            }
+        }
+
+        int qn = queries.size();
+        double [] res = new double [qn];
+        for (int i = 0; i < qn; i ++)
+        {
+            String w1 = queries.get(i).get(0),    w2 = queries.get(i).get(1);
+            if (word_ID.containsKey(w1) == true && word_ID.containsKey(w2) == true)
+            {
+                int xID = word_ID.get(w1),    yID = word_ID.get(w2);
+                res[i] = edge[xID][yID];
+            }
+            else
+                res[i] = -1.0;
+        }
+        return res;
     }
 
 }

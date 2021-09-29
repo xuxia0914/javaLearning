@@ -20,6 +20,12 @@ package cn.xux.algorithm.leetcode.general.midium;
  *
  * 说明:
  * 你的解法应该是 O(logN) 时间复杂度的。
+ *
+ * 提示：
+ *
+ * 1 <= nums.length <= 1000
+ * -231 <= nums[i] <= 231 - 1
+ * 对于所有有效的 i 都有 nums[i] != nums[i + 1]
  */
 public class FindPeakElement {
 

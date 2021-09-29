@@ -1,6 +1,8 @@
 package cn.xux.algorithm.leetcode.general.easy;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 447. 回旋镖的数量
@@ -17,6 +19,22 @@ import java.util.Arrays;
 public class NumberOfBoomerangs {
 
     public int numberOfBoomerangs(int[][] points) {
+        int ans = 0;
+        for (int[] point : points) {
+            Map<Integer, Integer> map = new HashMap<>();
+            for (int[] ints : points) {
+                int dis = (point[0] - ints[0]) * (point[0] - ints[0])
+                        + (point[1] - ints[1]) * (point[1] - ints[1]);
+                map.put(dis, map.getOrDefault(dis, 0) + 1);
+            }
+            for (int value : map.values()) {
+                ans += value * (value - 1);
+            }
+        }
+        return ans;
+    }
+
+    public int numberOfBoomerangs1(int[][] points) {
         if(points==null||points.length<3) {
             return 0;
         }

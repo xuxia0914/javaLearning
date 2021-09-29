@@ -31,7 +31,7 @@ import java.util.*;
  */
 public class MinimumOperationsToMakeASubsequence {
 
-    // 由于target的元素各不相同，可以吧target的元素映射为索引
+    // 由于target的元素各不相同，可以把target的元素映射为索引
     // 问题转换为求arr中存在于target中的元素的索引的最长子序列
     // O(nlogn)
     public int minOperations(int[] target, int[] arr) {

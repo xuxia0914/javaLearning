@@ -20,30 +20,30 @@ import java.util.List;
 public class PermutationsII {
 
     public List<List<Integer>> permuteUnique(int[] nums) {
-        if(nums==null||nums.length==0) {
-            return ans;
+        n = nums.length;
+        int[] cnts = new int[21];
+        for(int num : nums) {
+            cnts[num+10]++;
         }
-        Arrays.sort(nums);
-        dfs(new ArrayList<Integer>(), new boolean[nums.length], nums);
+        dfs(cnts, new ArrayList<>());
         return ans;
     }
 
+    int n;
     List<List<Integer>> ans = new ArrayList<>();
 
-    public void dfs(List<Integer> curr, boolean[] visited, int[] nums) {
-        if(curr.size()==nums.length) {
-            ans.add(new ArrayList<>(curr));
+    private void dfs(int[] nums, List<Integer> curr) {
+        if(curr.size()==n) {
+            ans.add(curr);
+            return;
         }
-        for(int i=0;i<nums.length;i++) {
-            if(!visited[i]) {
-                curr.add(nums[i]);
-                visited[i] = true;
-                dfs(curr, visited, nums);
-                curr.remove(curr.size()-1);
-                visited[i] = false;
-                while(i<nums.length-1&&nums[i+1]==nums[i]) {
-                    i++;
-                }
+        for(int i=0;i<21;i++) {
+            if(nums[i]>0) {
+                List<Integer> next = new ArrayList<>(curr);
+                next.add(i-10);
+                nums[i]--;
+                dfs(nums, next);
+                nums[i]++;
             }
         }
     }

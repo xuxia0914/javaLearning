@@ -40,7 +40,37 @@ import java.util.Queue;
  */
 public class IsGraphBipartite {
 
-    public static boolean solution(int[][] graph) {
+    int[] color;
+
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        color = new int[n];
+        for(int i=0;i<n;i++) {
+            if(color[i]==0) {
+                color[i] = 1;
+                if(!dfs(graph, i)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean dfs(int[][] graph, int curr) {
+        for(int nei : graph[curr]) {
+            if(color[nei]==color[curr]) {
+                return false;
+            }else if(color[nei]==0) {
+                color[nei] = -color[curr];
+                if(!dfs(graph, nei)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isBipartite1(int[][] graph) {
         int length = graph.length;
         int[] colors = new int[length];
         Queue<Integer> queue = new LinkedList<Integer>();
@@ -82,11 +112,6 @@ public class IsGraphBipartite {
             }
         }
         return true;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(solution(new int[][]{{1,3}, {0,2}, {1,3}, {0,2}}));
-        System.out.println(solution(new int[][]{{1,2,3}, {0,2}, {0,1,3}, {0,2}}));
     }
 
 }

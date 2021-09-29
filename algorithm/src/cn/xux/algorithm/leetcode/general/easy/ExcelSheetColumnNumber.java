@@ -28,16 +28,12 @@ package cn.xux.algorithm.leetcode.general.easy;
  */
 public class ExcelSheetColumnNumber {
 
-    public int titleToNumber(String s) {
-        int column = 0;
-        int tmp = 1;
-        for(int i=s.length()-1;i>=0;i--) {
-            char c = s.charAt(i);
-            int value = c-'A'+1;
-            column += value*tmp;
-            tmp *= 26;
+    public int titleToNumber(String columnTitle) {
+        int ans = 0;
+        for(char c : columnTitle.toCharArray()) {
+            ans = ans*26+c-'A'+1;
         }
-        return column;
+        return ans;
     }
 
 }
