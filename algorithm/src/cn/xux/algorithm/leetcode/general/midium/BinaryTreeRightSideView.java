@@ -20,34 +20,46 @@ import java.util.Queue;
  * 2     3         <---
  *  \     \
  *   5     4       <---
+ *
+ * 示例 2:
+ *
+ * 输入: [1,null,3]
+ * 输出: [1,3]
+ * 示例 3:
+ *
+ * 输入: []
+ * 输出: []
+ *  
+ *
+ * 提示:
+ *
+ * 二叉树的节点个数的范围是 [0,100]
+ * -100 <= Node.val <= 100 
  */
 public class BinaryTreeRightSideView {
 
     public List<Integer> rightSideView(TreeNode root) {
-        List<Integer> list = new ArrayList<>();
+        List<Integer> ans = new ArrayList<>();
         if(root==null) {
-            return list;
+            return ans;
         }
         Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
-        TreeNode curr;
-        int size;
-        while(!queue.isEmpty()) {
-            size = queue.size();
-            for(int i=0;i<size;i++) {
+        while(queue.size()>0) {
+            int size = queue.size();
+            TreeNode curr = null;
+            while(size-->0) {
                 curr = queue.poll();
-                if(null!=curr.left) {
+                if(curr.left!=null) {
                     queue.offer(curr.left);
                 }
-                if(null!=curr.right) {
+                if(curr.right!=null) {
                     queue.offer(curr.right);
                 }
-                if(i==size-1) {
-                    list.add(curr.val);
-                }
             }
+            ans.add(curr.val);
         }
-        return list;
+        return ans;
     }
 
 }

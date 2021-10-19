@@ -23,50 +23,43 @@ package cn.xux.algorithm.leetcode.general.hard;
  */
 public class IntegerToEnglishWords {
 
+    String[] singles = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+    String[] teens = {"Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+    String[] tens = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    String[] thousands = {"", "Thousand", "Million", "Billion"};
+
     public String numberToWords(int num) {
-        if(num==0) {
+        if (num == 0) {
             return "Zero";
         }
-        String[] digits = {"One", "Two", "Three", "Four", "Five", "Six", "Seven",
-                "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen",
-                "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
-        String[] tens = {"Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy",
-                "Eighty", "Ninety"};
-        String[] ss = {"", "Thousand", "Million", "Billion"};
         StringBuffer sb = new StringBuffer();
-        for(int i=ss.length-1;i>=0;i--) {
-            int tmp1 = num;
-            for(int j=0;j<i;j++) {
-                tmp1 = tmp1/1000;
-            }
-            if(tmp1>0) {
-                tmp1 = tmp1%1000;
-                if(!"".equals(sb.toString())&&!sb.toString().endsWith(" ")) {
-                    sb.append(" ");
-                }
-                if(tmp1>100) {
-                    if(tmp1%100>20) {
-                        sb.append(digits[tmp1/100-1]).append(" Hundred ").append(tens[tmp1%100/10-2]);
-                        if(tmp1%10>0) {
-                            sb.append(" ").append(digits[tmp1%10-1]);
-                        }
-                    }else if(tmp1%100>0) {
-                        sb.append(digits[tmp1/100-1]).append(" Hundred ").append(digits[tmp1%20-1]);
-                    }
-                    sb.append(" ").append(ss[i]);
-                }else if(tmp1%100>20) {
-                    sb.append(tens[tmp1/10-2]);
-                    if(tmp1%10>0) {
-                        sb.append(" ").append(digits[tmp1%10-1]);
-                    }
-                    sb.append(" ").append(ss[i]);
-                }else if(tmp1%100>0) {
-                    sb.append(digits[tmp1-1]);
-                    sb.append(" ").append(ss[i]);
-                }
+        for (int i = 3, unit = 1000000000; i >= 0; i--, unit /= 1000) {
+            int curNum = num / unit;
+            if (curNum != 0) {
+                num -= curNum * unit;
+                StringBuffer curr = new StringBuffer();
+                recursion(curr, curNum);
+                curr.append(thousands[i]).append(" ");
+                sb.append(curr);
             }
         }
         return sb.toString().trim();
+    }
+
+    public void recursion(StringBuffer curr, int num) {
+        if (num == 0) {
+            return;
+        } else if (num < 10) {
+            curr.append(singles[num]).append(" ");
+        } else if (num < 20) {
+            curr.append(teens[num - 10]).append(" ");
+        } else if (num < 100) {
+            curr.append(tens[num / 10]).append(" ");
+            recursion(curr, num % 10);
+        } else {
+            curr.append(singles[num / 100]).append(" Hundred ");
+            recursion(curr, num % 100);
+        }
     }
 
 }

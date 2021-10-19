@@ -22,16 +22,11 @@ package cn.xux.algorithm.leetcode.general.easy;
 public class NumberComplement {
 
     public int findComplement(int num) {
-        int a = 1;
-        int res = 0;
-        while(num!=0) {
-            if(num%2==0) {
-                res += a;
-            }
-            num >>= 1;
-            a *= 2;
+        int sum = Integer.MAX_VALUE;
+        while((sum^num)>num) {
+            sum >>= 1;
         }
-        return res;
+        return sum^num;
     }
 
 }

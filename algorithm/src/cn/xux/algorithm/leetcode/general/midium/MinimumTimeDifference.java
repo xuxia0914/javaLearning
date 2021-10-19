@@ -1,16 +1,30 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Given a list of 24-hour clock time points in "Hour:Minutes" format, find the minimum minutes difference between any two time points in the list.
- * Example 1:
- * Input: ["23:59","00:00"]
- * Output: 1
- * Note:
- * The number of time points in the given list is at least 2 and won't exceed 20000.
- * The input time is legal and ranges from 00:00 to 23:59.
+ * 539. 最小时间差
+ * 给定一个 24 小时制（小时:分钟 "HH:MM"）的时间列表，
+ * 找出列表中任意两个时间的最小时间差并以分钟数表示。
+ *
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：timePoints = ["23:59","00:00"]
+ * 输出：1
+ * 示例 2：
+ *
+ * 输入：timePoints = ["00:00","23:59","00:00"]
+ * 输出：0
+ *
+ *
+ * 提示：
+ *
+ * 2 <= timePoints <= 2 * 104
+ * timePoints[i] 格式为 "HH:MM"
  */
 public class MinimumTimeDifference {
 
@@ -23,13 +37,12 @@ public class MinimumTimeDifference {
         String[] tmp;
         for(int i=0;i<size;i++) {
             tmp = timePoints.get(i).split(":");
-            minutes[i] = Integer.valueOf(tmp[0])*60+Integer.valueOf(tmp[1]);
+            minutes[i] = Integer.parseInt(tmp[0])*60+Integer.parseInt(tmp[1]);
         }
-        int res = Integer.MAX_VALUE;
-        for(int i=0;i<size;i++) {
-            for(int j=i+1;j<size;j++) {
-                res = Math.min(res, Math.min(Math.abs(minutes[i]-minutes[j]), 1440-Math.abs(minutes[i]-minutes[j])));
-            }
+        Arrays.sort(minutes);
+        int res = 1440+minutes[0]-minutes[size-1];
+        for(int i=0;i<size-1;i++) {
+            res = Math.min(res, minutes[i+1]-minutes[i]);
         }
         return res;
     }

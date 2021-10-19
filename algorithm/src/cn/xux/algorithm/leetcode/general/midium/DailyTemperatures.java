@@ -1,35 +1,47 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
-import java.util.Stack;
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * 739. 每日温度
- * 根据每日 气温 列表，请重新生成一个列表，
- * 对应位置的输入是你需要再等待多久温度才会升高超过该日的天数。
- * 如果之后都不会升高，请在该位置用 0 来代替。
+ * 请根据每日 气温 列表 temperatures ，
+ * 请计算在每一天需要等几天才会有更高的温度。
+ * 如果气温在这之后都不会升高，请在该位置用 0 来代替。
  *
- * 例如，给定一个列表 temperatures = [73, 74, 75, 71, 69, 72, 76, 73]，
- * 你的输出应该是 [1, 1, 4, 2, 1, 1, 0, 0]。
+ * 示例 1:
  *
- * 提示：气温 列表长度的范围是 [1, 30000]。每个气温的值的均为华氏度，都是在 [30, 100] 范围内的整数。
+ * 输入: temperatures = [73,74,75,71,69,72,76,73]
+ * 输出: [1,1,4,2,1,1,0,0]
+ * 示例 2:
+ *
+ * 输入: temperatures = [30,40,50,60]
+ * 输出: [1,1,1,0]
+ * 示例 3:
+ *
+ * 输入: temperatures = [30,60,90]
+ * 输出: [1,1,0]
+ *
+ *
+ * 提示：
+ *
+ * 1 <= temperatures.length <= 105
+ * 30 <= temperatures[i] <= 100
  */
 public class DailyTemperatures {
 
     public int[] dailyTemperatures(int[] T) {
-        if(T==null) {
-            return null;
-        }
-        int len = T.length;
-        int[] result = new int[len];
-        Stack<Integer> stack = new Stack<>();
-        for(int i=0;i<len;i++) {
-            while(!stack.isEmpty()&&T[stack.peek()]<T[i]) {
-                int pre = stack.pop();
-                result[pre] = i-pre;
+        int n = T.length;
+        Deque<Integer> deque = new LinkedList<>();
+        int[] ans = new int[n];
+        for(int i=0;i<n;i++) {
+            while(deque.size()>0&&T[deque.peekLast()]<T[i]) {
+                int pre = deque.pollLast();
+                ans[pre] = i-pre;
             }
-            stack.push(i);
+            deque.offerLast(i);
         }
-        return result;
+        return ans;
     }
 
 }

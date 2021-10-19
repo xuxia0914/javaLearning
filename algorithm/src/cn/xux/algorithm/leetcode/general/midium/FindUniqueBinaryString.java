@@ -35,7 +35,7 @@ public class FindUniqueBinaryString {
     public String findDifferentBinaryString(String[] nums) {
         StringBuilder ans = new StringBuilder();
         for(int i=0;i<nums.length;i++) {
-            ans.append(1-(nums[i].charAt(i)-'0'));
+            ans.append(1-nums[i].charAt(i)+'0');
         }
         return ans.toString();
     }

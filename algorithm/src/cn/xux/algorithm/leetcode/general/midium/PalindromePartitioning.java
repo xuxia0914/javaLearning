@@ -57,6 +57,19 @@ public class PalindromePartitioning {
         return true;
     }
 
+    public String[][] partition1(String s) {
+        List<List<String>> list = partition(s);
+        String[][] ans = new String[list.size()][];
+        for(int i=0;i<list.size();i++) {
+            ans[i] = new String[list.get(i).size()];
+            for(int j=0;j<list.get(i).size();j++) {
+                ans[i][j] = list.get(i).get(j);
+            }
+        }
+        return ans;
+    }
+
+
     public static void main(String[] args) {
         PalindromePartitioning pp = new PalindromePartitioning();
         System.out.println(pp.partition("aab"));

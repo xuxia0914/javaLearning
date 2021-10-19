@@ -23,24 +23,22 @@ public class InsertIntoASortedCircularLinkedList {
             Node node = new Node();
             node.val = insertVal;
             node.next = node;
+            return node;
         }
         if(head.next==head) {
-            Node node = new Node(insertVal, head);
-            head.next = node;
+            head.next = new Node(insertVal, head);
             return head;
         }
         Node curr = head;
         while(curr.next!=head) {
-            if((curr.val<=curr.next.val&&insertVal>=curr.val&&insertVal<=curr.next.val)
-                ||(curr.val>curr.next.val&&insertVal>curr.val)) {
-                Node node = new Node(insertVal, curr.next);
-                curr.next = node;
+            if((insertVal >= curr.val && insertVal <= curr.next.val)
+                ||(curr.val>curr.next.val&&(insertVal>curr.val||insertVal<curr.next.val))) {
+                curr.next = new Node(insertVal, curr.next);
                 return head;
             }
             curr = curr.next;
         }
-        Node node = new Node(insertVal, curr.next);
-        curr.next = node;
+        curr.next = new Node(insertVal, curr.next);
         return head;
     }
 

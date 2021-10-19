@@ -28,6 +28,32 @@ import java.util.*;
 public class BinaryTreePruning {
 
     public TreeNode pruneTree(TreeNode root) {
+        TreeNode newRoot = new TreeNode(1);
+        newRoot.left = root;
+        dfs(newRoot, root, true);
+        return newRoot.left;
+    }
+
+    private void dfs(TreeNode curr, TreeNode parent, boolean isLeft) {
+        if(curr.left!=null) {
+            dfs(curr.left, curr, true);
+        }
+        if(curr.right!=null) {
+            dfs(curr.right, curr, false);
+        }
+        if(curr.val==1) {
+            return;
+        }
+        if(curr.left==null&&curr.right==null) {
+            if(isLeft) {
+                parent.left=null;
+            }else {
+                parent.right=null;
+            }
+        }
+    }
+
+    public TreeNode pruneTree1(TreeNode root) {
         if(root==null||(root.left==null&&root.right==null)) {
             return root;
         }

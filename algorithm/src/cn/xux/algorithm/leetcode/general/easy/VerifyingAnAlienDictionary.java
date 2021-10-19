@@ -30,29 +30,36 @@ package cn.xux.algorithm.leetcode.general.easy;
  */
 public class VerifyingAnAlienDictionary {
 
+    int[] prio;
+
     public boolean isAlienSorted(String[] words, String order) {
-        int len = words.length;
-        if(len<2) {
-            return true;
-        }
-        char[] mapping = new char[26];
+        prio = new int[26];
         for(int i=0;i<26;i++) {
-            mapping[order.charAt(i)-'a'] = (char)(i+'a');
+            prio[order.charAt(i)-'a'] = i;
         }
-        String[] newWords = new String[len];
-        for(int i=0;i<len;i++) {
-            StringBuilder sb = new StringBuilder();
-            for(char c : words[i].toCharArray()) {
-                sb.append(mapping[c-'a']);
-            }
-            newWords[i] = sb.toString();
-        }
-        for(int i=1;i<len;i++) {
-            if(newWords[i].compareTo(newWords[i-1])<0) {
+        for(int i=0;i<words.length-1;i++) {
+            if(!isAlienSorted(words[i], words[i+1])) {
                 return false;
             }
         }
         return true;
+    }
+
+    private boolean isAlienSorted(String a, String b) {
+        int i = 0;
+        int j = 0;
+        while(i<a.length()&&j<b.length()) {
+            int p1 = a.charAt(i)-'a';
+            int p2 = b.charAt(j)-'a';
+            if(prio[p1]<prio[p2]) {
+                return true;
+            }else if(prio[p1]>prio[p2]) {
+                return false;
+            }
+            i++;
+            j++;
+        }
+        return a.length()<=b.length();
     }
 
 }
