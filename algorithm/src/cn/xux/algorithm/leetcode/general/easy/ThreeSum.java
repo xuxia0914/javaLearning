@@ -6,15 +6,31 @@ import java.util.List;
 
 /**
  * 15. 三数之和
- * 给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，
- * 使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+ * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，
+ * 使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
+ *
  * 注意：答案中不可以包含重复的三元组。
- * 例如, 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
- * 满足要求的三元组集合为：
- * [
- *   [-1, 0, 1],
- *   [-1, -1, 2]
- * ]
+ *
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：nums = [-1,0,1,2,-1,-4]
+ * 输出：[[-1,-1,2],[-1,0,1]]
+ * 示例 2：
+ *
+ * 输入：nums = []
+ * 输出：[]
+ * 示例 3：
+ *
+ * 输入：nums = [0]
+ * 输出：[]
+ *
+ *
+ * 提示：
+ *
+ * 0 <= nums.length <= 3000
+ * -105 <= nums[i] <= 105
  */
 public class ThreeSum {
 
@@ -38,21 +54,21 @@ public class ThreeSum {
                     tmp.add(nums[left]);
                     tmp.add(nums[right]);
                     result.add(tmp);
-                    while(nums[left+1]==nums[left]) {
+                    while(left<right&&nums[left+1]==nums[left]) {
                         left++;
                     }
                     left++;
-                    while(nums[right-1]==nums[right]) {
+                    while(left<right&&nums[right-1]==nums[right]) {
                         right--;
                     }
                     right--;
                 }else if(nums[i]+nums[left]+nums[right]<0) {
-                    while(nums[left+1]==nums[left]) {
+                    while(left<right&&nums[left+1]==nums[left]) {
                         left++;
                     }
                     left++;
                 }else {
-                    while(nums[right-1]==nums[right]) {
+                    while(left<right&&nums[right-1]==nums[right]) {
                         right--;
                     }
                     right--;

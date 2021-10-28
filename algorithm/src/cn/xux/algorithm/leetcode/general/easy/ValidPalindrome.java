@@ -32,6 +32,8 @@ public class ValidPalindrome {
             if(left<right&&s.charAt(left)!=s.charAt(right)) {
                 return false;
             }
+            left++;
+            right--;
         }
         return true;
     }

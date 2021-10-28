@@ -18,6 +18,10 @@ import java.util.Map;
  * 示例 2:
  * 输入: [1,1,1,3,3,2,2,2]
  * 输出: [1,2]
+ *
+ * 提示：
+ * 1 <= nums.length <= 5 * 104
+ * -109 <= nums[i] <= 109
  */
 public class MajorityElementII {
 

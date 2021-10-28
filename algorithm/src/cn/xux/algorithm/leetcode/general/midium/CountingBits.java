@@ -13,6 +13,9 @@ package cn.xux.algorithm.leetcode.general.midium;
  * 输入: 5
  * 输出: [0,1,1,2,1,2]
  *
+ * 提示：
+ * 0 <= n <= 105
+ *
  * 进阶:
  * 给出时间复杂度为O(n*sizeof(integer))的解答非常容易。
  * 但你可以在线性时间O(n)内用一趟扫描做到吗？
