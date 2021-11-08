@@ -75,4 +75,39 @@ public class Lcp008 {
         return ans;
     }
 
+    public int countValidWords(String sentence) {
+        String[] tokens = sentence.split(" ");
+        int ans = 0;
+        for(String token : tokens) {
+            if(token.length()==0) {
+                continue;
+            }
+            int n = token.length();
+            boolean flag = true;
+            boolean minus = false;
+            for(int i=0;i<n;i++) {
+                char c = token.charAt(i);
+                if(c>='0'&&c<='9') {
+                    flag = false;
+                    break;
+                }
+                if(c=='-') {
+                    if(minus||i==0||i==n-1||token.charAt(i-1)<'a'||token.charAt(i-1)>'z'||token.charAt(i+1)<'a'||token.charAt(i+1)>'z') {
+                        flag = false;
+                        break;
+                    }
+                    minus = true;
+                }
+                if((c=='!'||c==','||c=='.')&&i!=n-1) {
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
 }
