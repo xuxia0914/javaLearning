@@ -1,5 +1,10 @@
 package cn.xux.algorithm.leetcode.general.hard;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+
 /**
  * 1505. 最多 K 次交换相邻数位后得到的最小整数
  * 给你一个字符串 num 和一个整数 k 。
@@ -42,12 +47,8 @@ public class MinimumPossibleIntegerAfterAtMostKAdjacentSwapsOnDigits {
                 .minInteger("4321", 4));
     }
 
-    public String minInteger(String num, int k) {
-        return null;
-    }
-
     //TLE
-    public String minInteger1(String num, int k) {
+    public String minInteger(String num, int k) {
         String ans = num;
         int len = num.length();
         int idx = 0;
