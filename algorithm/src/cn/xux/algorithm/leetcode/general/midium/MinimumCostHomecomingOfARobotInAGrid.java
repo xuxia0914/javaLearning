@@ -52,47 +52,27 @@ package cn.xux.algorithm.leetcode.general.midium;
  */
 public class MinimumCostHomecomingOfARobotInAGrid {
 
-    int[] rc;
-    int m;
-    int[] cc;
-    int n;
-    int[] hp;
-    int[][] costs;
-
-
     public int minCost(int[] startPos, int[] homePos, int[] rowCosts, int[] colCosts) {
-        rc = rowCosts;
-        m = rowCosts.length;
-        cc = colCosts;
-        n = colCosts.length;
-        hp = homePos;
-        costs = new int[m][n];
-        for(int i=0;i<m;i++) {
-            for(int j=0;j<n;j++) {
-                costs[i][j] = Integer.MAX_VALUE;
+        int ans = 0;
+        if(startPos[0]<homePos[0]) {
+            for(int i=startPos[0]+1;i<=homePos[0];i++) {
+                ans += rowCosts[i];
+            }
+        }else if(startPos[0]>homePos[0]) {
+            for(int i=startPos[0]-1;i>=homePos[0];i--) {
+                ans += rowCosts[i];
             }
         }
-        dfs(startPos[0], startPos[1], 0);
-        return costs[hp[0]][hp[1]];
-    }
-
-    private void dfs(int x, int y, int cost) {
-        costs[x][y] = cost;
-        if(x==hp[0]&&y==hp[1]) {
-            return;
+        if(startPos[1]<homePos[1]) {
+            for(int i=startPos[1]+1;i<=homePos[1];i++) {
+                ans += colCosts[i];
+            }
+        }else if(startPos[1]>homePos[1]) {
+            for(int i=startPos[1]-1;i>=homePos[1];i--) {
+                ans += colCosts[i];
+            }
         }
-        if(x>0&&cost+rc[x-1]<costs[x-1][y]) {
-            dfs(x-1, y, cost+rc[x-1]);
-        }
-        if(x<m-1&&cost+rc[x+1]<costs[x+1][y]) {
-            dfs(x+1, y, cost+rc[x+1]);
-        }
-        if(y>0&&cost+cc[y-1]<costs[x][y-1]) {
-            dfs(x, y-1, cost+cc[y-1]);
-        }
-        if(y<n-1&&cost+cc[y+1]<costs[x][y+1]) {
-            dfs(x, y+1, cost+cc[y+1]);
-        }
+        return ans;
     }
 
 }
