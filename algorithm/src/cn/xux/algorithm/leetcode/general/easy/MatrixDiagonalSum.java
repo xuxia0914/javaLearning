@@ -38,7 +38,7 @@ public class MatrixDiagonalSum {
             ans += mat[i][i];
             ans += mat[i][n-1-i];
         }
-        if(n%2==1) {
+        if((n&1)==1) {
             ans -= mat[n>>1][n>>1];
         }
         return ans;
