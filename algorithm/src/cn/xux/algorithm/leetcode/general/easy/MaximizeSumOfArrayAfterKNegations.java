@@ -30,33 +30,21 @@ import java.util.Arrays;
  */
 public class MaximizeSumOfArrayAfterKNegations {
 
-    public static void main(String[] args) {
-        System.out.println(new MaximizeSumOfArrayAfterKNegations()
-                .largestSumAfterKNegations(new int[]{2,-3,-1,5,-4}, 2));
-    }
-
-    public int largestSumAfterKNegations(int[] A, int K) {
-        Arrays.sort(A);
-        int n = A.length;
-        int i=0;
-        int k = K;
-        int sum = 0;
-        while(k>0&&i<n&&A[i]<0) {
-            sum += -A[i];
-            i++;
+    public int largestSumAfterKNegations(int[] nums, int k) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        int i = 0;
+        while(i<n&&nums[i]<0&&k>0) {
+            nums[i] = -nums[i++];
             k--;
         }
-        if(k%2==1) {
-            if(i>0&&i<n&&-A[i-1]<A[i]) {
-                sum += 2*A[i-1];
-            }else {
-                sum -= A[i++];
-            }
+        Arrays.sort(nums);
+        nums[0] = (k&1)==1?-nums[0]:nums[0];
+        int ans = 0;
+        for(int num : nums) {
+            ans += num;
         }
-        while(i<n) {
-            sum += A[i++];
-        }
-        return sum;
+        return ans;
     }
 
 }
