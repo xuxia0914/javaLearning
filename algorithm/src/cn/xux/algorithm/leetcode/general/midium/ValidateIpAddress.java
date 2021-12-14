@@ -43,4 +43,57 @@ public class ValidateIpAddress {
         }
     }
 
+    public String validIPAddress1(String IP) {
+        if(IP.indexOf('.') != -1) {
+            if(isIpv4(IP)) {
+                return "IPv4";
+            }
+        }
+        if(IP.indexOf(':') != -1) {
+            if(isIpv6(IP)) {
+                return "IPv6";
+            }
+        }
+        return "Neither";
+    }
+    public boolean isIpv6(String ip) {
+        if(ip.indexOf('.') != -1) return false;
+        if(ip.endsWith(".") || ip.endsWith(":")) return false;
+        String[] str = ip.split(":");
+        if(str.length != 8) return false;
+        for(int i = 0; i < str.length; i++) {
+            if(str[i].equals("")) return false;
+            char[] cur = str[i].toCharArray();
+            if(cur.length > 4) return false;
+            for(char c : cur) {
+                if((Character.isUpperCase(c) && c > 'F') || (Character.isLowerCase(c) && c > 'f')) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isIpv4(String str) {
+        if(str.indexOf(':') != -1) return false;
+        if(str.endsWith(".") || str.endsWith(":")) return false;
+        String[] strs = str.split("\\.");
+        if(strs.length != 4) {
+            return false;
+        }
+        for(int i = 0; i < strs.length; i++) {
+            if(strs[i].equals("")) return false;
+            int sum = 0;
+            for(char c : strs[i].toCharArray()) {
+                if(Character.isLetter(c)) return false;
+                sum = sum * 10 + c - '0';
+                if(sum >= 256) return false;
+            }
+            if(strs[i].length() != Integer.toString(sum).length()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

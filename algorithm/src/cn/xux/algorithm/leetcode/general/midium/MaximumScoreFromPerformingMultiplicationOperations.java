@@ -1,7 +1,5 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
-import java.util.Arrays;
-
 /**
  * 1770. 执行乘法运算的最大分数
  * 给你两个长度分别 n 和 m 的整数数组 nums 和 multipliers ，
