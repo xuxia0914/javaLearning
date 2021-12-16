@@ -1,119 +1,124 @@
 package cn.xux.algorithm.leetcode.general.hard;
 
+import java.util.*;
+
 /**
  * 493. 翻转对
  * 给定一个数组 nums ，如果 i < j 且 nums[i] > 2*nums[j] 我们就将 (i, j) 称作一个重要翻转对。
  * 你需要返回给定数组中的重要翻转对的数量。
- *
+ * <p>
  * 示例 1:
  * 输入: [1,3,2,3,1]
  * 输出: 2
- *
+ * <p>
  * 示例 2:
  * 输入: [2,4,3,5,1]
  * 输出: 3
- *
+ * <p>
  * 注意:
  * 给定数组的长度不会超过50000。
  * 输入数组中的所有数字都在32位整数的表示范围内。
  */
 public class ReversePairs {
 
-    //归并排序
+    int result_int;
+
     public int reversePairs(int[] nums) {
-        if(nums == null || nums.length == 0) return 0;
-        return mergeSort(nums,0,nums.length-1);
-    }
-
-    public int mergeSort(int[] nums,int left,int right){
-        if(right <= left ){
+        if (nums == null || nums.length < 2) {
             return 0;
         }
-        int mid = (left+right) >> 1;
-        int count = mergeSort(nums,left,mid)+mergeSort(nums,mid+1,right);
-        // 中间数组用于合并
-        int[] cache = new int[right-left+1];
-        int i = left, j = mid+1, k = 0, tmp = left;
-        while(j <= right){
-            while(tmp <= mid && nums[tmp] <= 2 * (long)nums[j]) tmp++;
-            while(i <= mid   &&  nums[i]  <   nums[j] ) cache[k++] = nums[i++];
-            cache[k++] = nums[j++];
-            count += mid - tmp + 1 ;
-        }
-        while(i <= mid) cache[k++] = nums[i++];
-        System.arraycopy(cache,0,nums,left,right- left +1);
-        return count;
+        result_int = 0;
+        mergeSort(nums, 0, nums.length - 1);
+        return result_int;
     }
 
-    //TLE
-    public int reversePairs1(int[] nums) {
-        if(nums==null||nums.length<2) {
-            return 0;
+    public void mergeSort(int[] nums, int start, int end) {
+        if (start >= end) {
+            return;
         }
-        int n = nums.length;
-        BTreeNode root = new BTreeNode(nums[0]);
-        int ans = 0;
-        for(int i=1;i<n;i++) {
-            if(nums[i]<Integer.MIN_VALUE/2) {
-                ans += i;
-            }else if(nums[i]<=Integer.MAX_VALUE/2) {
-                int tar = 2*nums[i];
-                BTreeNode curr = root;
-                while(curr!=null) {
-                    if(curr.val>tar) {
-                        ans += curr.cnt+curr.rightCnt;
-                        curr = curr.left;
-                    }else if(curr.val==tar) {
-                        ans += curr.rightCnt;
-                        break;
-                    }else {
-                        curr = curr.right;
-                    }
-                }
+        int left = start;
+        int right = end;
+        int mid = (left + right) / 2;
+        mergeSort(nums, start, mid);
+        mergeSort(nums, mid + 1, end);
+        int index1 = left;
+        int index2 = mid + 1;
+        int index = 0;
+        int[] tmp = new int[end - start + 1];
+        while (index < end - start + 1) {
+            if (index2 == end + 1) {
+                tmp[index++] = nums[index1++];
+            } else if (index1 == mid + 1) {
+                tmp[index++] = nums[index2++];
+            } else if (nums[index1] > nums[index2]) {
+                result_int += end - index2 + 1;
+                tmp[index++] = nums[index1++];
+            } else {
+                tmp[index++] = nums[index2++];
             }
-            add(root, nums[i]);
+        }
+        for (int i = start; i <= end; i++) {
+            nums[i] = tmp[i - start];
+        }
+    }
+
+    // 树状数组
+    public int reversePairs1(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+        int n = set.size();
+        int[] tmp = new int[n];
+        int idx = 0;
+        for (int num : set) {
+            tmp[idx++] = num;
+        }
+        Arrays.sort(tmp);
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            map.put(tmp[i], i);
+        }
+        TreeArray ta = new TreeArray(n + 2);
+        int ans = 0;
+        for (int num : nums) {
+            ans += ta.query(n + 1) - ta.query(map.get(num) + 1);
+            ta.add(map.get(num) + 1, 1);
         }
         return ans;
     }
 
-    private void add(BTreeNode root, int val) {
-        if(root.val==val) {
-            root.cnt++;
-        }else if(root.val>val) {
-            if(root.left==null) {
-                BTreeNode left = new BTreeNode(val);
-                root.left = left;
-            }else {
-                add(root.left, val);
-            }
-        }else {
-            root.rightCnt++;
-            if(root.right==null) {
-                BTreeNode right = new BTreeNode(val);
-                root.right = right;
-            }else {
-                add(root.right, val);
+    class TreeArray {
+
+        int[] tree;
+
+        int n;
+
+        public TreeArray(int n) {
+            this.n = n;
+            tree = new int[n];
+        }
+
+        public int lowBit(int x) {
+            return x & (-x);
+        }
+
+        public void add(int x, int v) {
+            while (x < n) {
+                tree[x] += v;
+                x += lowBit(x);
             }
         }
-    }
 
-}
+        public int query(int x) {
+            int ans = 0;
+            while (x > 0) {
+                ans += tree[x];
+                x -= lowBit(x);
+            }
+            return ans;
+        }
 
-class BTreeNode {
-
-    int val;
-    int cnt;
-    //右子树节点个数
-    int rightCnt;
-    BTreeNode left;
-    BTreeNode right;
-
-    BTreeNode(int val) {
-        this.val = val;
-        this.cnt = 1;
-        this.rightCnt = 0;
-        this.left = null;
-        this.right = null;
     }
 
 }
