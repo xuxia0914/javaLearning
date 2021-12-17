@@ -1,5 +1,9 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * 542. 01 矩阵
  * 给定一个由 0 和 1 组成的矩阵，找出每个元素到最近的 0 的距离。
@@ -31,6 +35,12 @@ package cn.xux.algorithm.leetcode.general.midium;
  * 矩阵中的元素只在四个方向上相邻: 上、下、左、右。
  */
 public class ZeroOneMatrix {
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(new ZeroOneMatrix().updateMatrix(
+                new int[][]{{0,0,0},{0,1,0},{0,0,0}}
+        )));
+    }
 
     public int[][] updateMatrix(int[][] matrix) {
         if(matrix==null||matrix.length==0||matrix[0].length==0) {
@@ -66,6 +76,38 @@ public class ZeroOneMatrix {
             }
         }
         return result;
+    }
+
+    public int[][] updateMatrix1(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        for(int i=0;i<m;i++) {
+            for(int j=0;j<n;j++) {
+                if(mat[i][j]==0) {
+                    queue.offer(new int[]{i, j});
+                }
+            }
+        }
+        int[][] ans = new int[m][n];
+        int level = 1;
+        int[][] neis = new int[][]{{-1, 0},{1, 0},{0, -1},{0, 1}};
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            while(size-->0) {
+                int[] curr = queue.poll();
+                for(int[] nei : neis) {
+                    int x = curr[0]+nei[0];
+                    int y = curr[1]+nei[1];
+                    if(x>=0&&x<m&&y>=0&&y<n&&mat[x][y]==1&&ans[x][y]==0) {
+                        ans[x][y] = level;
+                        queue.offer(new int[]{x, y});
+                    }
+                }
+            }
+            level++;
+        }
+        return ans;
     }
 
 }

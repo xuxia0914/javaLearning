@@ -41,25 +41,93 @@ public class Lintcode1766 {
     public static void main(String[] args) {
         //[1,2,3,4,5]
         //[3,0,0,0,0]
-        new Lintcode1766().getQueue(new int[]{1,2,3,4,5}, new int[]{3,0,0,0,0});
+        System.out.println(Arrays.toString(new Lintcode1766().getQueue(new int[]{1,2,3,4,5}, new int[]{3,0,0,0,0})));
+        System.out.println(Arrays.toString(new Lintcode1766().getQueue(new int[]{1,2,3,4,5}, new int[]{4,2,0,0,0})));
+        System.out.println(Arrays.toString(new Lintcode1766().getQueue(new int[]{1,3,7,6}, new int[]{0,0,0,0})));
     }
 
     /**
-     * TODO
+     * 按元素从小打到排列
+     * 树状数组存储位置是否已确定元素（确定了则置0）
+     * 按从小到大确定当前元素的位置（找出第一个位置，该位置对应的树状数组的前缀和等于当前元素左边的更大元素的个数+1）
      * @param arr1: The size
      * @param arr2: How many numbers bigger than itself
      * @return: The correct array
+     * o(n*(logn)^2)
      */
     public int[] getQueue(int[] arr1, int[] arr2) {
         // Write your code here
         if (arr1 == null || arr1.length == 0) {
             return new int[0];
         }
+        int n = arr1.length;
+        int[][] pairs = new int[n][2];
+        for(int i=0;i<n;i++) {
+            pairs[i][0] = arr1[i];
+            pairs[i][1] = arr2[i];
+        }
+        Arrays.sort(pairs, Comparator.comparingInt(o->o[0]));
+        // 用树状数组记录每个元素是否已经被确定
+        BIT bit = new BIT(n+1);
+        for(int i=1;i<=n;i++) {
+            bit.add(i, 1);
+        }
+        int[] ans = new int[n];
+        for(int i=0;i<n;i++) {
+            int tar = pairs[i][1]+1;
+            int left = 0;
+            int right = n-1;
+            while(left<right) {
+                int mid = (left+right)>>1;
+                if(bit.query(mid+1)>=tar) {
+                    right = mid;
+                }else {
+                    left = mid+1;
+                }
+            }
+            ans[left] = pairs[i][0];
+            bit.add(left+1, -1);
+        }
+        return ans;
+    }
 
-        return null;
+    class BIT {
+
+        int[] tree;
+
+        int n;
+
+        BIT(int n) {
+            this.n = n;
+            tree = new int[n];
+        }
+
+        private int lowBit(int x) {
+            return x&(-x);
+        }
+
+        public void add(int x, int y) {
+            while(x<n) {
+                tree[x] += y;
+                x += lowBit(x);
+            }
+        }
+
+        public int query(int x) {
+            int ans = 0;
+            while(x>0) {
+                ans += tree[x];
+                x -= lowBit(x);
+            }
+            return ans;
+        }
+
     }
 
     /**
+     * 将元素按前面更大元素的数量分组后再升序(小顶堆的数组)
+     * queues[i]表示前面还剩下的更大元素的数量为i的所有元素
+     * 每次取queues[0]的第一个元素，并更新所有后面的更小元素(剩余的更大元素-1.即元素当前在数组的索引-1)
      * @param arr1: The size
      * @param arr2: How many numbers bigger than itself
      * @return: The correct array
