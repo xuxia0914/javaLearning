@@ -4,41 +4,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 字符串中字母的大小写组合
- * Given a string S, we can transform every letter individually to be lowercase or uppercase to create another string.
- * Return a list of all possible strings we could create.
- * Examples:
- * Input: S = "a1b2"
- * Output: ["a1b2", "a1B2", "A1b2", "A1B2"]
- * Input: S = "3z4"
- * Output: ["3z4", "3Z4"]
- * Input: S = "12345"
- * Output: ["12345"]
+ * 784. 字母大小写全排列
+ * 给定一个字符串S，通过将字符串S中的每个字母转变大小写，我们可以获得一个新的字符串。返回所有可能得到的字符串集合。
+ * <p>
+ * <p>
+ * <p>
+ * 示例：
+ * 输入：S = "a1b2"
+ * 输出：["a1b2", "a1B2", "A1b2", "A1B2"]
+ * <p>
+ * 输入：S = "3z4"
+ * 输出：["3z4", "3Z4"]
+ * <p>
+ * 输入：S = "12345"
+ * 输出：["12345"]
+ * <p>
+ * <p>
+ * 提示：
+ * <p>
+ * S 的长度不超过12。
+ * S 仅由数字和字母组成。
  */
 public class LetterCasePermutation {
 
-    public List<String> letterCasePermutation(String S) {
-        List<String> result = new ArrayList<String>();
-        if(S==null||S.length()==0) {
-            return result;
-        }
-        helper(result, "", S);
-        return result;
+    List<String> ans;
+
+    String s;
+
+    public List<String> letterCasePermutation(String s) {
+        ans = new ArrayList<>();
+        this.s = s;
+        dfs("", 0);
+        return ans;
     }
 
-    public void helper(List<String> res, String curr, String S) {
-        if(curr.length()==S.length()) {
-            res.add(curr);
+    private void dfs(String curr, int i) {
+        if (i == s.length()) {
+            ans.add(curr);
             return;
         }
-        char c = S.charAt(curr.length());
-        helper(res, curr+c, S);
-        if(c>='a'&&c<='z') {
-            char tmp = (char)(c - ('a'-'A'));
-            helper(res, curr+tmp, S);
-        }else if(c>='A'&&c<='Z') {
-            char tmp = (char)(c + ('a'-'A'));
-            helper(res, curr+tmp, S);
+        char c = s.charAt(i);
+        dfs(curr + c, i + 1);
+        if (c >= 'a' && c <= 'z') {
+            dfs(curr + (char) (c - 32), i + 1);
+        } else if (c >= 'A' && c <= 'Z') {
+            dfs(curr + (char) (c + 32), i + 1);
         }
     }
 
