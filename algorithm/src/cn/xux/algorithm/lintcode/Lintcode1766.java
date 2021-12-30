@@ -49,7 +49,8 @@ public class Lintcode1766 {
     /**
      * 按元素从小打到排列
      * 树状数组存储位置是否已确定元素（确定了则置0）
-     * 按从小到大确定当前元素的位置（找出第一个位置，该位置对应的树状数组的前缀和等于当前元素左边的更大元素的个数+1）
+     * 按从小到大确定当前元素的位置（找出第一个位置，
+     * 该位置对应的树状数组的前缀和等于当前元素左边的更大元素的个数+1）
      * @param arr1: The size
      * @param arr2: How many numbers bigger than itself
      * @return: The correct array

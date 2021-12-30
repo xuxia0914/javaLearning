@@ -10,22 +10,22 @@ package cn.xux.algorithm.leetcode.general.midium;
  * 否则，A 可以给 B 发送好友请求。
  * 注意如果 A 向 B 发出了请求，不等于 B 也一定会向 A 发出请求。而且，人们不会给自己发送好友请求。
  * 求总共会发出多少份好友请求?
- *
+ * <p>
  * 示例 1:
  * 输入: [16,16]
  * 输出: 2
  * 解释: 二人可以互发好友申请。
- *
+ * <p>
  * 示例 2:
  * 输入: [16,17,18]
  * 输出: 2
  * 解释: 好友请求可产生于 17 -> 16, 18 -> 17.
- *
+ * <p>
  * 示例 3:
  * 输入: [20,30,100,110,120]
  * 输出: 3
  * 解释: 好友请求可产生于 110 -> 100, 120 -> 110, 120 -> 100.
- *
+ * <p>
  * 说明:
  * 1 <= ages.length <= 20000.
  * 1 <= ages[i] <= 120.
@@ -38,19 +38,18 @@ public class FriendsOfAppropriateAges {
 
     public int numFriendRequests(int[] ages) {
         int[] count = new int[121];
-        for (int age: ages) count[age]++;
-
+        for (int age : ages) count[age]++;
         int ans = 0;
-        for (int ageA = 0; ageA <= 120; ageA++) {
-            int countA = count[ageA];
-            for (int ageB = 0; ageB < ageA; ageB++) {
-                int countB = count[ageB];
-                if (ageA * 0.5 + 7 >= ageB) continue;
-                if (ageA < 100 && 100 < ageB) continue;
-                ans += countA * countB;
+        for (int ageA = 1; ageA < 121; ageA++)
+            if (count[ageA] > 0) {
+                int countA = count[ageA];
+                for (int ageB = 1; ageB <= ageA; ageB++)
+                    if (count[ageB] > 0) {
+                        int countB = count[ageB];
+                        if (ageA / 2 + 7 >= ageB) continue;
+                        ans += ageA == ageB ? (countA * (countA - 1)) : countA * countB;
+                    }
             }
-            ans += countA*(countA-1);
-        }
         return ans;
     }
 

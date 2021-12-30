@@ -1,9 +1,7 @@
 package cn.xux.algorithm.leetcode.general.midium;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 1743. 从相邻元素对还原数组
@@ -15,23 +13,23 @@ import java.util.Map;
  * 存在形式可能是 [nums[i], nums[i+1]] ，也可能是 [nums[i+1], nums[i]] 。
  * 这些相邻元素对可以 按任意顺序 出现。
  * 返回 原始数组 nums 。如果存在多种解答，返回 其中任意一个 即可。
- *
+ * <p>
  * 示例 1：
  * 输入：adjacentPairs = [[2,1],[3,4],[3,2]]
  * 输出：[1,2,3,4]
  * 解释：数组的所有相邻元素对都在 adjacentPairs 中。
  * 特别要注意的是，adjacentPairs[i] 只表示两个元素相邻，并不保证其 左-右 顺序。
- *
+ * <p>
  * 示例 2：
  * 输入：adjacentPairs = [[4,-2],[1,4],[-3,1]]
  * 输出：[-2,4,1,-3]
  * 解释：数组中可能存在负数。
  * 另一种解答是 [-3,1,4,-2] ，也会被视作正确答案。
- *
+ * <p>
  * 示例 3：
  * 输入：adjacentPairs = [[100000,-100000]]
  * 输出：[100000,-100000]
- *
+ * <p>
  * 提示：
  * nums.length == n
  * adjacentPairs.length == n - 1
@@ -44,31 +42,31 @@ public class RestoreTheArrayFromAdjacentPairs {
 
     public int[] restoreArray(int[][] adjacentPairs) {
         List<Integer>[] map = new List[200001];
-        for(int[] pair : adjacentPairs) {
-            if(map[pair[0]+100000]==null) {
-                map[pair[0]+100000] = new ArrayList<>();
+        for (int[] pair : adjacentPairs) {
+            if (map[pair[0] + 100000] == null) {
+                map[pair[0] + 100000] = new ArrayList<>();
             }
-            map[pair[0]+100000].add(pair[1]);
-            if(map[pair[1]+100000]==null) {
-                map[pair[1]+100000] = new ArrayList<>();
+            map[pair[0] + 100000].add(pair[1]);
+            if (map[pair[1] + 100000] == null) {
+                map[pair[1] + 100000] = new ArrayList<>();
             }
-            map[pair[1]+100000].add(pair[0]);
+            map[pair[1] + 100000].add(pair[0]);
         }
-        int n = adjacentPairs.length+1;
+        int n = adjacentPairs.length + 1;
         int[] res = new int[n];
-        for(int i=0;i<200001;i++) {
+        for (int i = 0; i < 200001; i++) {
             List<Integer> list = map[i];
-            if(list!=null&&list.size()==1) {
-                res[0] = i-100000;
+            if (list != null && list.size() == 1) {
+                res[0] = i - 100000;
                 res[1] = list.get(0);
             }
         }
-        for(int i=1;i<n-1;i++) {
-            List<Integer> next = map[res[i]+100000];
-            if(next.get(0)!=res[i-1]) {
-                res[i+1] = next.get(0);
-            }else {
-                res[i+1] = next.get(1);
+        for (int i = 1; i < n - 1; i++) {
+            List<Integer> next = map[res[i] + 100000];
+            if (next.get(0) != res[i - 1]) {
+                res[i + 1] = next.get(0);
+            } else {
+                res[i + 1] = next.get(1);
             }
         }
         return res;

@@ -35,47 +35,32 @@ import java.util.List;
 public class ThreeSum {
 
     public List<List<Integer>> threeSum(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        if(nums==null||nums.length<3) {
-            return result;
-        }
+        List<List<Integer>> ans = new ArrayList<>();
         Arrays.sort(nums);
-        int n = nums.length;
-        for(int i=0;i<n-2;i++) {
-            if(i>0&&nums[i]==nums[i-1]) {
-                continue;
-            }
+        int n = nums.length;    
+        for(int i=0;i<n-2;i++) if(i==0||nums[i]!=nums[i-1]) {
             int left = i+1;
             int right = n-1;
             while(left<right) {
-                if(nums[i]+nums[left]+nums[right]==0) {
-                    List<Integer> tmp = new ArrayList<>();
-                    tmp.add(nums[i]);
-                    tmp.add(nums[left]);
-                    tmp.add(nums[right]);
-                    result.add(tmp);
-                    while(left<right&&nums[left+1]==nums[left]) {
-                        left++;
-                    }
+                while(left<right&&left>i+1&&nums[left]==nums[left-1]) {
                     left++;
-                    while(left<right&&nums[right-1]==nums[right]) {
+                }
+                while(left<right&&right<n-1&&nums[right]==nums[right+1]) {
+                    right--;
+                }
+                if(left<right) {
+                    int sum = nums[i]+nums[left]+nums[right];
+                    if(sum==0) {
+                        ans.add(Arrays.asList(nums[i], nums[left++], nums[right--]));
+                    }else if(sum<0) {
+                        left++;
+                    }else {
                         right--;
                     }
-                    right--;
-                }else if(nums[i]+nums[left]+nums[right]<0) {
-                    while(left<right&&nums[left+1]==nums[left]) {
-                        left++;
-                    }
-                    left++;
-                }else {
-                    while(left<right&&nums[right-1]==nums[right]) {
-                        right--;
-                    }
-                    right--;
                 }
             }
         }
-        return result;
+        return ans;
     }
 
     public static void main(String[] args) {
