@@ -37,6 +37,7 @@ public class SuperEggDrop {
         if (N == 1) {
             return 1;
         }
+        // f[i][j]：i次操作 有j个鸡蛋时 可以确定多少层楼的F值
         int[][] f = new int[N + 1][K + 1];
         for (int i = 1; i <= K; ++i) {
             f[1][i] = 1;
