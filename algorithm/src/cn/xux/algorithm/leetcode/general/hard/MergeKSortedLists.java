@@ -1,6 +1,7 @@
 package cn.xux.algorithm.leetcode.general.hard;
 
 import cn.xux.algorithm.common.ListNode;
+import cn.xux.algorithm.common.TreeNode;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -17,6 +18,29 @@ import java.util.PriorityQueue;
  * Output: 1->1->2->3->4->4->5->6
  */
 public class MergeKSortedLists {
+
+    int ans = Integer.MIN_VALUE;
+
+    public int maxPathSum(TreeNode root) {
+        if(root==null) {
+            return 0;
+        }
+        int curr = root.val;
+        int left = dfs(root.left);
+        int right = dfs(root.right);
+        curr += Math.max(0, left)+ Math.max(0, right);
+        ans = Math.max(ans, curr);
+        maxPathSum(root.left);
+        maxPathSum(root.right);
+        return ans;
+    }
+
+    private int dfs(TreeNode node) {
+        if(node==null) {
+            return 0;
+        }
+        return Math.max(node.val, node.val+Math.max(dfs(node.left),dfs(node.right)));
+    }
 
     public ListNode mergeKLists(ListNode[] lists) {
         if(lists==null||lists.length==0) {
