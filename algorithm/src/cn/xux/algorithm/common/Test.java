@@ -16,6 +16,47 @@ public class Test {
 //        System.out.println(test.exist(new char[][]{{'a'}}, "ab"));
 //        System.out.println(Integer.MAX_VALUE);
 //        System.out.println(test.missingTwo(new int[]{1,2,3,4,6,7,9,10}));
+        System.out.println(test.func(3));
+        System.out.println(test.func(4));
+        System.out.println(test.func(5));
+        System.out.println(test.func(6));
+    }
+
+    /**
+     * 给出n，求长度为n的字符串(只包含0和1)且其中包含101这个子串的有多少个，（答案对1e9+7取余）
+     * n的范围3-10000
+     * 例如：n = 3
+     * 只有一种方案有 "101"
+     * n = 4
+     * 有4种方法： "0101" "1101" "1010" "1011"
+     */
+    int func(int n) {
+        // init[i] = 2^n % mod
+        long[] init = new long[n-2];
+        init[0] = 1;
+        for(int i=1;i<n-2;i++) {
+            int d = i/2;
+            init[i] = (init[d]*init[d]%mod)*((i&1)==1?2:1)%mod;
+        }
+        // dp[0] 表示不包含101并且以00结尾的字符串的个数
+        // dp[1] 表示不包含101并且以01结尾的字符串的个数...dp[2], dp[3]同理
+        long[] dp = new long[4];
+        // 初始化dp（n=2）
+        Arrays.fill(dp, 1);
+        long ans = 0;
+        for(int i=3;i<=n;i++) {
+            // 以10结尾的字符串后面填'1'就包含了101
+            // 后续剩余的位数(n-i)可以为0或1,有2^(n-i)种情况
+            ans = (ans+(dp[2]*init[n-i])%mod)%mod;
+            long[] newDp = new long[4];
+            newDp[0] = (dp[0]+dp[2])%mod;
+            // 注意这里不是(dp[0]+dp[2])%mod，因为10后面再+’1‘的字符串包含了101。
+            newDp[1] = dp[0]%mod;
+            newDp[2] = (dp[1]+dp[3])%mod;
+            newDp[3] = newDp[2];
+            dp = newDp;
+        }
+        return (int) ans;
     }
 
     /**
