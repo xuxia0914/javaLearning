@@ -7,164 +7,152 @@ import java.util.Set;
 
 /**
  * 432. 全 O(1) 的数据结构
- * 请你实现一个数据结构支持以下操作：
- * Inc(key) - 插入一个新的值为 1 的 key。或者使一个存在的 key 增加一，保证 key 不为空字符串。
- * Dec(key) - 如果这个 key 的值是 1，那么把他从数据结构中移除掉。否则使一个存在的 key 值减一。
- *              如果这个 key 不存在，这个函数不做任何事情。key 保证不为空字符串。
- * GetMaxKey() - 返回 key 中值最大的任意一个。如果没有元素存在，返回一个空字符串"" 。
- * GetMinKey() - 返回 key 中值最小的任意一个。如果没有元素存在，返回一个空字符串""。
- *
- * 挑战：
- * 你能够以 O(1) 的时间复杂度实现所有操作吗？
+ * 请你设计一个用于存储字符串计数的数据结构，并能够返回计数最小和最大的字符串。
+ * <p>
+ * 实现 AllOne 类：
+ * <p>
+ * AllOne() 初始化数据结构的对象。
+ * inc(String key) 字符串 key 的计数增加 1 。如果数据结构中尚不存在 key ，那么插入计数为 1 的 key 。
+ * dec(String key) 字符串 key 的计数减少 1 。如果 key 的计数在减少后为 0 ，那么需要将这个 key 从数据结构中删除。测试用例保证：在减少计数前，key 存在于数据结构中。
+ * getMaxKey() 返回任意一个计数最大的字符串。如果没有元素存在，返回一个空字符串 "" 。
+ * getMinKey() 返回任意一个计数最小的字符串。如果没有元素存在，返回一个空字符串 "" 。
+ * <p>
+ * <p>
+ * 示例：
+ * <p>
+ * 输入
+ * ["AllOne", "inc", "inc", "getMaxKey", "getMinKey", "inc", "getMaxKey", "getMinKey"]
+ * [[], ["hello"], ["hello"], [], [], ["leet"], [], []]
+ * 输出
+ * [null, null, null, "hello", "hello", null, "hello", "leet"]
+ * <p>
+ * 解释
+ * AllOne allOne = new AllOne();
+ * allOne.inc("hello");
+ * allOne.inc("hello");
+ * allOne.getMaxKey(); // 返回 "hello"
+ * allOne.getMinKey(); // 返回 "hello"
+ * allOne.inc("leet");
+ * allOne.getMaxKey(); // 返回 "hello"
+ * allOne.getMinKey(); // 返回 "leet"
+ * <p>
+ * <p>
+ * 提示：
+ * <p>
+ * 1 <= key.length <= 10
+ * key 由小写英文字母组成
+ * 测试用例保证：在每次调用 dec 时，数据结构中总存在 key
+ * 最多调用 inc、dec、getMaxKey 和 getMinKey 方法 5 * 104 次
  */
 public class AllOneDataStructure {
 
-    //["AllOne","inc","inc","inc","inc","inc","inc","dec", "dec","getMinKey","dec","getMaxKey","getMinKey"]
-    //[[],["a"],["b"],["b"],["c"],["c"],["c"],["b"],["b"],[],["a"],[],[]]
-    //[null,null,null,null,null,null,null,null,null,"a",null,"c","c"]
-    public static void main(String[] args) {
-        AllOne ao = new AllOne();
-        ao.inc("a");
-        ao.inc("b");
-        ao.inc("c");
-        ao.inc("c");
-        ao.inc("c");
-        ao.dec("b");
-        ao.dec("b");
-        System.out.println(ao.getMinKey());
-        ao.dec("a");
-        System.out.println(ao.getMaxKey());
-        System.out.println(ao.getMinKey());
+    class AllOne {
+
+        Node root;
+
+        Map<String, Node> nodes;
+
+        public AllOne() {
+            root = new Node();
+            root.pre = root;
+            // 初始化链表哨兵，下面判断节点的 next 若为 root，则表示 next 为空（prev 同理）
+            root.next = root;
+            nodes = new HashMap<String, Node>();
+        }
+
+        public void inc(String key) {
+            if (nodes.containsKey(key)) {
+                Node cur = nodes.get(key);
+                Node nxt = cur.next;
+                if (nxt == root || nxt.count > cur.count + 1) {
+                    nodes.put(key, cur.insert(new Node(key, cur.count + 1)));
+                } else {
+                    nxt.keys.add(key);
+                    nodes.put(key, nxt);
+                }
+                cur.keys.remove(key);
+                if (cur.keys.isEmpty()) {
+                    cur.remove();
+                }
+            } else {
+                // key 不在链表中
+                if (root.next == root || root.next.count > 1) {
+                    nodes.put(key, root.insert(new Node(key, 1)));
+                } else {
+                    root.next.keys.add(key);
+                    nodes.put(key, root.next);
+                }
+            }
+        }
+
+        public void dec(String key) {
+            Node cur = nodes.get(key);
+            // key 仅出现一次，将其移出 nodes
+            if (cur.count == 1) {
+                nodes.remove(key);
+            } else {
+                Node pre = cur.pre;
+                if (pre == root || pre.count < cur.count - 1) {
+                    nodes.put(key, cur.pre.insert(new Node(key, cur.count - 1)));
+                } else {
+                    pre.keys.add(key);
+                    nodes.put(key, pre);
+                }
+            }
+            cur.keys.remove(key);
+            if (cur.keys.isEmpty()) {
+                cur.remove();
+            }
+        }
+
+        public String getMaxKey() {
+            return root.pre != null ? root.pre.keys.iterator().next() : "";
+        }
+
+        public String getMinKey() {
+            return root.next != null ? root.next.keys.iterator().next() : "";
+        }
+
+    }
+
+    class Node {
+
+        Node pre;
+
+        Node next;
+
+        Set<String> keys;
+
+        int count;
+
+        public Node() {
+            this("", 0);
+        }
+
+        public Node(String key, int count) {
+            this.count = count;
+            keys = new HashSet<>();
+            keys.add(key);
+        }
+
+        // 在this后插入node
+        public Node insert(Node node) {
+            node.pre = this;
+            node.next = this.next;
+            node.pre.next = node;
+            node.next.pre = node;
+            return node;
+        }
+
+        public void remove() {
+            this.pre.next = this.next;
+            this.next.pre = this.pre;
+        }
+
     }
 
 }
 
-class AllOne {
-
-    Map<String, Integer> map;
-    TwoWayListNode head;
-    TwoWayListNode tail;
-    Map<Integer, TwoWayListNode> valToNode;
-
-    /** Initialize your data structure here. */
-    public AllOne() {
-        map = new HashMap<>();
-        head = null;
-        tail = null;
-        valToNode = new HashMap<>();
-    }
-
-    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
-    public void inc(String key) {
-        int val = map.getOrDefault(key, 0);
-        map.put(key, val+1);
-        if(valToNode.containsKey(val+1)) {
-            valToNode.get(val+1).keySet.add(key);
-        }else {
-            TwoWayListNode curr = new TwoWayListNode(val+1);
-            curr.keySet.add(key);
-            valToNode.put(val+1, curr);
-            if(val==0) {
-                if(head==null) {
-                    head = curr;
-                    tail = curr;
-                }else {
-                    curr.next = head;
-                    head.pre = curr;
-                    head = curr;
-                }
-            }else {
-                TwoWayListNode pre = valToNode.get(val);
-                if(pre==tail) {
-                    pre.next = curr;
-                    curr.pre = pre;
-                    tail = curr;
-                }else {
-                    curr.next = pre.next;
-                    curr.next.pre = curr;
-                    curr.pre = pre;
-                    pre.next = curr;
-                }
-            }
-        }
-        if(val==0) {
-            return;
-        }
-        remove(val, key);
-    }
-
-    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
-    public void dec(String key) {
-        if(!map.containsKey(key)) {
-            return;
-        }
-        int val = map.get(key);
-        if(val==1) {
-            map.remove(key);
-        }else {
-            map.put(key, val-1);
-        }
-        if(valToNode.containsKey(val-1)) {
-            valToNode.get(val-1).keySet.add(key);
-        }else if(val>1) {
-            TwoWayListNode curr = valToNode.get(val);
-            TwoWayListNode pre = new TwoWayListNode(val-1);
-            valToNode.put(val-1, pre);
-            pre.keySet.add(key);
-            if(curr==head) {
-                curr.pre = pre;
-                pre.next = curr;
-                head = pre;
-            }else {
-                curr.pre.next = pre;
-                pre.pre = curr.pre;
-                pre.next = curr;
-                curr.pre = pre;
-            }
-        }
-        remove(val, key);
-    }
-
-    private void remove(int val, String key) {
-        TwoWayListNode curr = valToNode.get(val);
-        if(curr.keySet.size()>1) {
-            curr.keySet.remove(key);
-        }else {
-            valToNode.remove(val);
-            if(curr==head) {
-                head = head.next;
-                if(head!=null) {
-                    head.pre = null;
-                }
-            }else if(curr==tail) {
-                tail.pre.next = null;
-                tail = tail.pre;
-            }else {
-                curr.pre.next = curr.next;
-                curr.next.pre = curr.pre;
-            }
-        }
-    }
-
-    /** Returns one of the keys with maximal value. */
-    public String getMaxKey() {
-        if(tail!=null) {
-            return tail.keySet.iterator().next();
-        }else {
-            return "";
-        }
-    }
-
-    /** Returns one of the keys with Minimal value. */
-    public String getMinKey() {
-        if(head!=null) {
-            return head.keySet.iterator().next();
-        }else {
-            return "";
-        }
-    }
-
-}
 
 /**
  * Your AllOne object will be instantiated and called as such:
@@ -174,18 +162,3 @@ class AllOne {
  * String param_3 = obj.getMaxKey();
  * String param_4 = obj.getMinKey();
  */
-
-//双向链表
-class TwoWayListNode {
-
-    int val;
-    Set<String> keySet;
-    TwoWayListNode pre;
-    TwoWayListNode next;
-
-    TwoWayListNode(int val) {
-        this.val = val;
-        keySet = new HashSet<>();
-    }
-
-}

@@ -36,7 +36,7 @@ public class RangeSumQueryMutable {
  * 又以其发明者命名为Fenwick树，
  * 最早由Peter M. Fenwick于1994年以A New Data Structure for Cumulative Frequency Tables为题发表在SOFTWARE PRACTICE AND EXPERIENCE。
  * 其初衷是解决数据压缩里的累积频率（Cumulative Frequency）的计算问题，
- * 现多用于高效计算数列的前缀和， 区间和。
+ * 现多用于高效计算可变数组的前缀和， 区间和。
  * O(logn), O(logn)
  */
 class NumArray {
@@ -87,7 +87,7 @@ class NumArray {
 /**
  * 线段树
  * 线段树是一种非常灵活的数据结构，它可以用于解决多种范围查询问题，
- * 比如在对数时间内从数组中找到最小值、最大值、总和、最大公约数、最小公倍数等
+ * 比如在对数时间内从可变数组中找到最小值、最大值、总和、最大公约数、最小公倍数等
  * O(logn), O(logn)
  */
 class NumArray1 {

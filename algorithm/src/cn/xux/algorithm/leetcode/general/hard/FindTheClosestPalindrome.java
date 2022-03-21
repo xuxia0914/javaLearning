@@ -16,7 +16,11 @@ package cn.xux.algorithm.leetcode.general.hard;
 public class FindTheClosestPalindrome {
 
     public static void main(String[] args) {
-        System.out.println(new FindTheClosestPalindrome().nearestPalindromic("10"));
+        // [1,555,2,555,3,555,2]
+        //555
+        System.out.println(new FindTheClosestPalindrome().mostFrequent(
+                new int[]{1,555,2,555,3,555,2}, 555
+        ));
     }
 
     public String nearestPalindromic(String n) {
@@ -60,6 +64,21 @@ public class FindTheClosestPalindrome {
         }else {
             return left + new StringBuilder(left).reverse().toString();
         }
+    }
+
+    public int mostFrequent(int[] nums, int key) {
+        int[] map = new int[1001];
+        int ans = 0;
+        int cnt = 0;
+        map[nums[nums.length-1]]++;
+        for(int i=nums.length-2;i>=0;i--) {
+            if(nums[i]==key&&map[nums[i+1]]>cnt) {
+                ans = nums[i+1];
+                cnt = map[nums[i+1]];
+            }
+            map[nums[i]]++;
+        }
+        return ans;
     }
 
 }
