@@ -4,85 +4,86 @@ import java.util.*;
 
 /**
  * 310. 最小高度树
- * 对于一个具有树特征的无向图，我们可选择任何一个节点作为根。
- * 图因此可以成为树，在所有可能的树中，具有最小高度的树被称为最小高度树。
- * 给出这样的一个图，写出一个函数找到所有的最小高度树并返回他们的根节点。
+ * 树是一个无向图，其中任何两个顶点只通过一条路径连接。
+ * 换句话说，一个任何没有简单环路的连通图都是一棵树。
  *
- * 格式
- * 该图包含 n 个节点，标记为 0 到 n - 1。给定数字 n 和一个无向边 edges 列表（每一个边都是一对标签）。
- * 你可以假设没有重复的边会出现在 edges 中。由于所有的边都是无向边， [0, 1]和 [1, 0] 是相同的，因此不会同时出现在 edges 里。
+ * 给你一棵包含 n 个节点的树，标记为 0 到 n - 1 。
+ * 给定数字 n 和一个有 n - 1 条无向边的 edges 列表（每一个边都是一对标签），
+ * 其中 edges[i] = [ai, bi] 表示树中节点 ai 和 bi 之间存在一条无向边。
  *
- * 示例 1:
- * 输入: n = 4, edges = [[1, 0], [1, 2], [1, 3]]
- *         0
- *         |
- *         1
- *        / \
- *       2   3
- * 输出: [1]
+ * 可选择树中任何一个节点作为根。当选择节点 x 作为根节点时，设结果树的高度为 h 。
+ * 在所有可能的树中，具有最小高度的树（即，min(h)）被称为 最小高度树 。
  *
- * 示例 2:
- * 输入: n = 6, edges = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4]]
- *      0  1  2
- *       \ | /
- *         3
- *         |
- *         4
- *         |
- *         5
- * 输出: [3, 4]
+ * 请你找到所有的 最小高度树 并按 任意顺序 返回它们的根节点标签列表。
  *
- * 说明:
- * 根据树的定义，树是一个无向图，其中任何两个顶点只通过一条路径连接。 换句话说，一个任何没有简单环路的连通图都是一棵树。
- * 树的高度是指根节点和叶子节点之间最长向下路径上边的数量。
+ * 树的 高度 是指根节点和叶子节点之间最长向下路径上边的数量。
+ *
+ *
+ * 示例 1：
+ *
+ *
+ * 输入：n = 4, edges = [[1,0],[1,2],[1,3]]
+ * 输出：[1]
+ * 解释：如图所示，当根是标签为 1 的节点时，树的高度是 1 ，这是唯一的最小高度树。
+ * 示例 2：
+ *
+ *
+ * 输入：n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]
+ * 输出：[3,4]
+ *
+ *
+ * 提示：
+ *
+ * 1 <= n <= 2 * 104
+ * edges.length == n - 1
+ * 0 <= ai, bi < n
+ * ai != bi
+ * 所有 (ai, bi) 互不相同
+ * 给定的输入 保证 是一棵树，并且 不会有重复的边
  */
 public class MinimumHeightTrees {
 
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
-        List<Integer> res = new LinkedList<>();
-        if(n==0) {
-            return res;
+        List<Integer> ans = new ArrayList<Integer>();
+        if (n == 1) {
+            ans.add(0);
+            return ans;
         }
-        if(n==1) {
-            res.add(0);
-            return res;
+        int[] degree = new int[n];
+        List<Integer>[] adj = new List[n];
+        for (int i = 0; i < n; i++) {
+            adj[i] = new ArrayList<Integer>();
         }
-        if(n==2) {
-            res.add(0);
-            res.add(1);
-            return res;
+        for (int[] edge : edges) {
+            adj[edge[0]].add(edge[1]);
+            adj[edge[1]].add(edge[0]);
+            degree[edge[0]]++;
+            degree[edge[1]]++;
         }
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        int[] cnts = new int[n];
-        for(int[] edge : edges) {
-            if(!map.containsKey(edge[0])) {
-                map.put(edge[0], new LinkedList<>());
+        Queue<Integer> queue = new ArrayDeque<Integer>();
+        for (int i = 0; i < n; i++) {
+            if (degree[i] == 1) {
+                queue.offer(i);
             }
-            if(!map.containsKey(edge[1])) {
-                map.put(edge[1], new LinkedList<>());
-            }
-            map.get(edge[0]).add(edge[1]);
-            cnts[edge[0]]++;
-            map.get(edge[1]).add(edge[0]);
-            cnts[edge[1]]++;
         }
-        while(map.keySet().size()>2) {
-            Set<Integer> keys = new HashSet<>(map.keySet());
-            int[] tmpCnts = cnts.clone();
-            for(Integer i : keys) {
-                if(cnts[i]==1) {
-                    map.get(map.get(i).get(0)).remove(new Integer(i));
-                    tmpCnts[map.get(i).get(0)]--;
-                    map.remove(new Integer(i));
-                    tmpCnts[i]--;
+        int remainNodes = n;
+        while (remainNodes > 2) {
+            int sz = queue.size();
+            remainNodes -= sz;
+            while (sz-->0) {
+                int curr = queue.poll();
+                for (int v : adj[curr]) {
+                    degree[v]--;
+                    if (degree[v] == 1) {
+                        queue.offer(v);
+                    }
                 }
             }
-            cnts = tmpCnts;
         }
-        for(Integer i : map.keySet()) {
-            res.add(i);
+        while (!queue.isEmpty()) {
+            ans.add(queue.poll());
         }
-        return res;
+        return ans;
     }
 
     public static void main(String[] args) {
